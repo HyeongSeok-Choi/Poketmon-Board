@@ -6,6 +6,8 @@ import com.boot.tsamo.entity.Users;
 import com.boot.tsamo.repository.BoardRepository;
 import com.boot.tsamo.repository.UsersRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -53,5 +55,13 @@ public class BoardService {
        Board board = boardRepository.findById(id).get();
 
        return board;
+    }
+
+    public Page<Board> findAll(Pageable pageable){
+        return boardRepository.findAll(pageable);
+    }
+
+    public Page<Board> findAllByTitle(Pageable pageable, String title){
+        return boardRepository.findByTitleContaining(title,pageable);
     }
 }
