@@ -32,6 +32,19 @@ dependencies {
     runtimeOnly 'com.mysql:mysql-connector-j'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    //유효성 검사
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+    // Thymeleaf 관련
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
+
+
+
+    //스프링 시큐리티(Spring security 시작하고 쓰기 !!!!)
+    //implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
+    //implementation 'org.springframework.boot:spring-boot-starter-security'
 }
 
 tasks.named('test') {
