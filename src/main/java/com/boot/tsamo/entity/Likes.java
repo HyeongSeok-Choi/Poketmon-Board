@@ -1,6 +1,7 @@
 package com.boot.tsamo.entity;
 
 
+import com.boot.tsamo.config.multikey;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,6 +15,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class Likes {
 
+    /*
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
@@ -26,6 +28,9 @@ public class Likes {
     @JoinColumn(name = "user_id")
     private Users userId;
 
+    */
 
+    @EmbeddedId
+    private multikey multikey;
 
 }
