@@ -42,15 +42,12 @@
         <div class="input-form col-md-12 mx-auto">
 
 
-            <h4 class="mb-3">게시물 등록</h4>
-            <form class="validation-form"  method="get" th:action="@{/modifyBoard(id=${board.id})}">
-
+            <h4 class="mb-3">게시물 조회</h4>
                     <!--제목 입력-->
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="title">제목</label>
                             <input type="text" class="form-control" id="title" name="title" th:value="${board.title}" readonly>
-                            <div class="err" >Name ERROR</div>
                         </div>
                     </div>
 
@@ -60,16 +57,14 @@
                     <textarea class="form-control" id="content" name="content" placeholder="프로젝트 내용을 입력해주세요" th:text="${board.content}" readonly></textarea>
                 </div>
 
-                    <!--첨부파일 설정
-                    <div class="mb-3">
-                        <label for="profileImgUrl">첨부파일<span class="text-muted">&nbsp;(필수 아님)</span></label>
-                        <input type="file" class="form-control" id="profileImgUrl"  name="portpolioimg">
-                    </div>
-                    -->
-
                 <hr class="mb-4">
+            <form class="validation-form"  method="post" th:action="@{/modifyBoard(id=${board.id})}">
                 <button class="btn btn-primary btn-lg btn-block" type="submit" >수정</button>
             </form>
+            <form class="validation-form"  method="post" th:action="@{/deleteBoard(id=${board.id})}">
+                <button class="btn btn-primary btn-lg btn-block" type="submit" >삭제</button>
+            </form>
+
         </div>
     </div>
 </div>

@@ -2,9 +2,11 @@ package com.boot.tsamo.controller;
 
 
 import com.boot.tsamo.dto.addBoardDTO;
+import com.boot.tsamo.dto.attachAttributeDTO;
 import com.boot.tsamo.entity.Board;
 import com.boot.tsamo.entity.Users;
 import com.boot.tsamo.service.BoardService;
+import com.boot.tsamo.service.FileAttributeService;
 import com.boot.tsamo.service.FileService;
 import com.boot.tsamo.service.HashTagService;
 import lombok.RequiredArgsConstructor;
@@ -35,30 +37,52 @@ public class TestController {
     private final FileService fileService;
     //HashTag서비스
     private final HashTagService hashTagService;
+    //attachAttribute서비스
+    private final FileAttributeService fileAttributeService;
 
+    //test뷰(없어도 됨)
     @GetMapping(value = "/test")
     public String test() {
-
 
         return "test";
     }
 
+    //test뷰(없어도 됨)
+    @GetMapping(value = "/admin")
+    public String admin() {
 
+        return "adminpage";
+    }
 
+    //게시물 목록(main페이지) 검색, 페이징 기능 포함
     @GetMapping(value = "/")
-    public String main(Model model,@PageableDefault(page=0,size = 10,sort = "id", direction = Sort.Direction.DESC) Pageable pageable,String title) {
+    public String main(Model model,@PageableDefault(page=0,size = 1,sort = "id", direction = Sort.Direction.DESC) Pageable pageable,String searchvalue,String searchtype) {
 
 
             Page<Board> Boards ;
 
-            if(title == null){
+            if(searchvalue == null){
                 Boards = boardService.findAll(pageable);
 
             }else{
                 //제목으로 검색하기
-                Boards = boardService.findAllByTitle(pageable,title);
-            }
+                if(searchtype.equals("title")){
+                    Boards = boardService.findAllByTitle(pageable,searchvalue);
+                }else if(searchtype.equals("content")){
+                    //본문으로 검색하기
+                    Boards = boardService.findAllByContent(pageable,searchvalue);
+                }else if(searchtype.equals("userid")){
+                    //작성자으로 검색하기
+                    Boards = boardService.findAllByUserId(pageable,searchvalue);
+                }
 
+                else{
+
+                    Boards = boardService.findAllByHashTag(pageable,searchvalue);
+                    //Boards = boardService.findAll(pageable);
+                }
+
+            }
 
             int nowPage = Boards.getPageable().getPageNumber()+1;
             int startPage=Math.max(nowPage-4,1);
@@ -71,17 +95,22 @@ public class TestController {
                 model.addAttribute("nowPage", nowPage);
                 model.addAttribute("startPage", startPage);
                 model.addAttribute("endPage", endPage);
+                model.addAttribute("searchvalue", searchvalue);
+                model.addAttribute("searchtype", searchtype);
                 return "main";
             }
 
             model.addAttribute("nowPage", null);
             model.addAttribute("startPage", null);
             model.addAttribute("endPage", null);
+            model.addAttribute("searchvalue", searchvalue);
+            model.addAttribute("searchtype", searchtype);
 
             return "main";
         }
 
 
+    //게시물 등록 뷰
     @GetMapping(value = "/createBoard")
     public String createBoard(Model model) {
 
@@ -90,6 +119,7 @@ public class TestController {
         return "createBoard";
     }
 
+    //게시물 등록
     @PostMapping(value = "/createBoard")
     public String createBoardRequest(@ModelAttribute addBoardDTO addBoarddto,
                                      @RequestParam("uploadFiles") List<MultipartFile> files,
@@ -103,15 +133,15 @@ public class TestController {
         hashTagService.saveHashTags(hashTagValue,board);
 
 
-
-        return "test";
+        return "redirect:/";
     }
 
 
-    @GetMapping(value = "/BoardDetailView/{boardId}")
-    public String boardDetailView(Model model,@PathVariable Long boardId) {
+    //게시물 상세보기
+    @GetMapping(value = "/BoardDetailView")
+    public String boardDetailView(Model model,@RequestParam Long id) {
 
-        Board detailBoard = boardService.findById(boardId);
+        Board detailBoard = boardService.findById(id);
 
 
         model.addAttribute("board", detailBoard);
@@ -119,17 +149,41 @@ public class TestController {
         return "boardDetail";
     }
 
-    /*
+
     @GetMapping(value = "/modifyBoard")
-    public String modifyBoard(Model model,@PathVariable Long Id) {
+    public String modifyBoard(Model model,@RequestParam Long id) {
 
-        Board detailBoard = boardService.findById(Id);
-
+        Board detailBoard = boardService.findById(id);
 
         model.addAttribute("board", detailBoard);
 
         return "createBoard";
     }
 
-    */
+    @PostMapping(value = "/deleteBoard")
+    public String deleteBoard(Model model,@RequestParam Long id) {
+
+        boardService.deleteById(id);
+
+        return"redirect:/";
+    }
+
+    @PostMapping(value = "/attachatt")
+    public String attachatt(@RequestParam List<String> extension, int maxcnt,int maxsize) {
+
+        System.out.println(extension);
+        System.out.println(maxcnt);
+        System.out.println(maxsize);
+
+        attachAttributeDTO attachAttributeDTO = new attachAttributeDTO();
+        attachAttributeDTO.setExtension(extension);
+        attachAttributeDTO.setMaxsize(maxsize);
+        attachAttributeDTO.setMaxcnt(maxcnt);
+
+        fileAttributeService.attachFileAttribute(attachAttributeDTO);
+
+        return"redirect:/";
+    }
+
+
 }

@@ -23,13 +23,19 @@
         <div id="board-search">
             <div class="container">
                 <div class="search-window">
-                    <form action="">
                         <div class="search-wrap">
-                            <label for="title" class="blind">공지사항 내용 검색</label>
-                            <input id="title" name="title" type="search" placeholder="검색어를 입력해주세요." value="">
+                            <label for="searchvalue" class="blind">공지사항 내용 검색</label>
+                            <div>
+                                <select name ="searchtype">
+                                    <option value="title" th:selected="${searchtype} == 'title'">제목으로 검색</option>
+                                    <option value="content" th:selected="${searchtype} == 'content'">본문으로 검색</option>
+                                    <option value="userid" th:selected="${searchtype} == 'userid'">작성자로 검색</option>
+                                    <option value="hashTag" th:selected="${searchtype} == 'hashTag'">해시태그로 검색</option>
+                                </select>
+                            </div>
+                            <input id="searchvalue" name="searchvalue" type="search" placeholder="검색어를 입력해주세요." th:value="${searchvalue}">
                             <button type="submit" class="btn btn-dark">검색</button>
                         </div>
-                    </form>
                 </div>
             </div>
         </div>
@@ -48,24 +54,31 @@
                 </thead>
                 <tbody>
                 <!--게시물 목록 생성-->
-                <tr th:each="board : ${boards}">
+                <tr th:if="${boards == null}"><td></td><td>등록된 게시물이 없습니다.</td><td></td></tr>
+                <tr th:each="board : ${boards}" >
                     <td th:text="${board.id}" >1</td>
-                    <td><a th:href="@{/BoardDetailView/${board.id}}" th:text="*{board.title}">환영합니다. 자유롭게 글을 작성해주세요</a></td>
+                    <td><a th:href="@{/BoardDetailView(id=${board.id})}" th:text="*{board.title}">환영합니다. 자유롭게 글을 작성해주세요</a></td>
                     <td th:text="*{board.createdAt}"></td>
                 </tr>
                 </tbody>
             </table>
             <!--페이징 처리 부분 -->
             <div class="d-flex justify-content-center" th:if="${startPage != null && endPage != null && nowPage != null}" >
+
+                <!--이전 버튼-->
+                <li><a th:if="${nowPage > 1}" th:href="@{/(page=${nowPage - 2})}">[이전]</a></li>
+
                 <li class="btn btn btn-primary" th:each="page : ${#numbers.sequence(startPage, endPage)}">
                     <a class="page-link" th:if="${page != nowPage}" th:href="@{/(page = ${page - 1},title=${param.title})}" th:text="${page}"></a>
                     <strong  th:if="${page == nowPage}" th:text="${page}" style="color: red "></strong>
                 </li>
 
+                <!--다음 버튼-->
+                <li><a th:if="${nowPage != endPage && endPage > 1} " th:href="@{/(page=${nowPage})}">[다음]</a></li>
             </div>
+                 <button class="btn btn-dark" onclick="location.href='/createBoard'">등록</button>
         </div>
     </div>
-
 
 </section>
 

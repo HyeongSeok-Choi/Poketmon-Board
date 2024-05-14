@@ -19,15 +19,16 @@ public class HashTagService {
 
         for (int i = 0; i < arr.length; i++) {
             HashTag hashTag = new HashTag();
-            String hash = arr[i].substring(1);
-            System.out.println(hash+"이거보드레이"+i);
+            if (arr[i].length() > 0) {
+                String hash = arr[i].substring(1);
+                System.out.println(hash + "이거보드레이" + i);
 
-            hashTag.setHashTag_content(hash);
-            hashTag.setBoardId(board);
+                hashTag.setHashTagContent(hash);
+                hashTag.setBoardId(board);
 
-            hashTagRepository.save(hashTag);
+                hashTagRepository.save(hashTag);
 
-
+            }
         }
     }
 }
