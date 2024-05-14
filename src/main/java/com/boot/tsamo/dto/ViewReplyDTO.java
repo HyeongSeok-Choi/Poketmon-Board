@@ -5,4 +5,7 @@ import lombok.Data;
 @Data
 public class ViewReplyDTO {
 
+    private String userid;
+    private String content;
+
 }

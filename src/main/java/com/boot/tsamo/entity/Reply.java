@@ -23,7 +23,7 @@ public class Reply {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="reply_id")
+    @Column(name = "reply_id")
     private Long replyId;
 
     @ManyToOne
@@ -39,11 +39,19 @@ public class Reply {
 
     @CreationTimestamp // INSERT 시 자동으로 값을 채워줌
     @Column(name = "created_at")
-    private LocalDateTime createdAt = LocalDateTime.now();
+    private final LocalDateTime createdAt = LocalDateTime.now();
 
     @Column(name = "updated_at")
     @UpdateTimestamp // UPDATE 시 자동으로 값을 채워줌
-    private LocalDateTime updatedAt = LocalDateTime.now();
+    private final LocalDateTime updatedAt = LocalDateTime.now();
 
+
+
+
+    public void update(Board boardId, Users userid, String content) {
+        this.boardId = boardId;
+        this.userid = userid;
+        this.content = content;
+    }
 
 }
