@@ -1,7 +1,7 @@
 package com.boot.tsamo.controller;
 
 import com.boot.tsamo.dto.AttachFileFormDto;
-import com.boot.tsamo.service.FileService;
+import com.boot.tsamo.service.AttachFileService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -18,7 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AttachFileController {
 
-    private final FileService fileService;
+    private final AttachFileService fileService;
 
     @GetMapping(value = "/attachFile")
     public String attachFileForm(Model model){

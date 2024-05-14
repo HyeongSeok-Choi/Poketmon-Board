@@ -1,6 +1,5 @@
 package com.boot.tsamo.service;
 
-import com.boot.tsamo.dto.AttachFileFormDto;
 import com.boot.tsamo.entity.AttachFile;
 import com.boot.tsamo.repository.AttachFileRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +19,7 @@ import java.util.UUID;
 @RequiredArgsConstructor //
 @Log
 @Transactional
-public class FileService {
+public class AttachFileService {
 
     @Value("${attachFileLocation}")
     private String attachFileLocation;
