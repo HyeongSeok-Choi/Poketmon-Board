@@ -4,10 +4,7 @@ package com.boot.tsamo.controller;
 import com.boot.tsamo.dto.addBoardDTO;
 import com.boot.tsamo.dto.attachAttributeDTO;
 import com.boot.tsamo.entity.Board;
-import com.boot.tsamo.service.BoardService;
-import com.boot.tsamo.service.FileAttributeService;
-import com.boot.tsamo.service.AttachFileService;
-import com.boot.tsamo.service.HashTagService;
+import com.boot.tsamo.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -28,7 +26,7 @@ public class TestController {
     //board서비스
     private final BoardService boardService;
     //File서비스
-    private final AttachFileService fileService;
+    private final FileService fileService;
     //HashTag서비스
     private final HashTagService hashTagService;
     //attachAttribute서비스

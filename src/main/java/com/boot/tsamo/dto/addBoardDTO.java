@@ -5,11 +5,16 @@ import com.boot.tsamo.entity.Board;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 public class addBoardDTO {
 
     private String title;
+
+    private List<AttachFileShowDto> attachFileShowList;
 
     private String content;
 
