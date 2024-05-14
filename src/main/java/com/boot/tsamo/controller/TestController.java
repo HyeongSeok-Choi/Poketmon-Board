@@ -171,6 +171,10 @@ public class TestController {
     @PostMapping(value = "/attachatt")
     public String attachatt(@RequestParam List<String> extension, int maxcnt,int maxsize) {
 
+        if(extension == null){
+            extension = new ArrayList<>();
+        }
+
         System.out.println(extension);
         System.out.println(maxcnt);
         System.out.println(maxsize);
