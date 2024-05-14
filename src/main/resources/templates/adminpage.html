@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      layout:decorate="~{common/layouts/defaultLayout}"
+      layout:fragment="Content" >
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="container">
+    <div class="input-form-backgroud row">
+        <div class="input-form col-md-12 mx-auto">
+
+
+            <h4 class="mb-3">첨부파일 설정</h4>
+            <form class="validation-form"  method="post" action="/attachatt">
+
+                <!--사이즈 입력-->
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="maxsize">업로드 사이즈(최대500MB)</label>
+                        <input type="number" class="form-control" id="maxsize" name="maxsize" max="500" placeholder="최대 업로드 사이즈를 입력해주세요">
+                    </div>
+                </div>
+
+                <!--갯수 입력-->
+                <div class="col-md-6 mb-3">
+                    <label for="maxcnt">업로드 갯수(최대 갯수 5개)</label>
+                    <input class="form-control" type="number" id="maxcnt" name="maxcnt"  max="5" placeholder="최대 업로드 갯수를 입력해주세요">
+                </div>
+
+                <!--확장자-->
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <p>허용 확장자</p>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="jpg" value="jpg" name="extension">
+                            <label class="form-check-label" for="jpg">jpg</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="avi" value="avi" name="extension">
+                            <label class="form-check-label" for="avi">avi</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="pdf" value="pdf" name="extension">
+                            <label class="form-check-label" for="pdf">pdf</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="hwp" value="hwp" name="extension">
+                            <label class="form-check-label" for="hwp">hwp</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="mp4" value="mp4" name="extension">
+                            <label class="form-check-label" for="mp4">mp4</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="gif" value="gif" name="extension">
+                            <label class="form-check-label" for="gif">gif</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="jpeg" value="jpeg" name="extension">
+                            <label class="form-check-label" for="jpeg">jpeg</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="ppt" value="ppt" name="extension">
+                            <label class="form-check-label" for="ppt">ppt</label>
+                        </div>
+                </div>
+                </div>
+
+                <hr class="mb-4">
+                <button class="btn btn-primary btn-lg btn-block" type="submit" >설정</button>
+            </form>
+
+        </div>
+    </div>
+</div>
+</body>
+</html>

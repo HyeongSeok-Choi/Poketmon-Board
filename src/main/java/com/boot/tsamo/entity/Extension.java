@@ -13,7 +13,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @AllArgsConstructor
 @Entity
 @Builder
-@EntityListeners(AuditingEntityListener.class)
 public class Extension {
 
 
