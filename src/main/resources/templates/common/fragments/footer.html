@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<!-- Thymeleaf 선언 / FooterFragment 임을 선언-->
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      th:fragment="FooterFragment">
+<style>
+    footer{
+        border-top: 1px solid #e4e4e4;
+        background-color:#f8f9fa;
+        padding:1rem 0;
+        margin:1rem 0;
+    }
+
+    .footer-message{
+        font-weight: bold;
+        font-size:0.9rem;
+        color:#545e6f;
+        margin-bottom:0.3rem;
+        margin:0 0 0 0.6rem;
+    }
+    .footer-contact{
+        font-size:0.9rem;
+        color:#545e6f;
+        margin:0.6rem;
+    }
+    .footer-copyright{
+        font-size:0.9rem;
+        color:#545e6f;
+        margin:0.6rem;
+    }
+</style>
+<footer>
+    <div class="inner">
+        <div class="footer-message">게시판 만들기는 참 어렵군요</div>
+        <div class="footer-contact">qnftlstm@naver.com</div>
+        <div class="footer-copyright">Copyrigh 2024 All ⓒ rights reserved</div>
+    </div>
+</footer>
+<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+</html>

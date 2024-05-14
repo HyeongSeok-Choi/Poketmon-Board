@@ -22,7 +22,7 @@ public class HashTag {
     @JoinColumn(name = "board_id")
     private Board boardId;
 
-    private String HashTag_content;
+    private String hashTagContent;
 
 
 }
