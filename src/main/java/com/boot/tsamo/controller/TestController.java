@@ -2,9 +2,11 @@ package com.boot.tsamo.controller;
 
 
 import com.boot.tsamo.dto.addBoardDTO;
+import com.boot.tsamo.dto.attachAttributeDTO;
 import com.boot.tsamo.entity.Board;
 import com.boot.tsamo.entity.Users;
 import com.boot.tsamo.service.BoardService;
+import com.boot.tsamo.service.FileAttributeService;
 import com.boot.tsamo.service.FileService;
 import com.boot.tsamo.service.HashTagService;
 import lombok.RequiredArgsConstructor;
@@ -35,12 +37,21 @@ public class TestController {
     private final FileService fileService;
     //HashTag서비스
     private final HashTagService hashTagService;
+    //attachAttribute서비스
+    private final FileAttributeService fileAttributeService;
 
     //test뷰(없어도 됨)
     @GetMapping(value = "/test")
     public String test() {
 
         return "test";
+    }
+
+    //test뷰(없어도 됨)
+    @GetMapping(value = "/admin")
+    public String admin() {
+
+        return "adminpage";
     }
 
     //게시물 목록(main페이지) 검색, 페이징 기능 포함
@@ -149,6 +160,23 @@ public class TestController {
     public String deleteBoard(Model model,@RequestParam Long id) {
 
         boardService.deleteById(id);
+
+        return"redirect:/";
+    }
+
+    @PostMapping(value = "/attachatt")
+    public String attachatt(@RequestParam List<String> extension, int maxcnt,int maxsize) {
+
+        System.out.println(extension);
+        System.out.println(maxcnt);
+        System.out.println(maxsize);
+
+        attachAttributeDTO attachAttributeDTO = new attachAttributeDTO();
+        attachAttributeDTO.setExtension(extension);
+        attachAttributeDTO.setMaxsize(maxsize);
+        attachAttributeDTO.setMaxcnt(maxcnt);
+
+        fileAttributeService.attachFileAttribute(attachAttributeDTO);
 
         return"redirect:/";
     }
