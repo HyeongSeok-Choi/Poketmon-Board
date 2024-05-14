@@ -169,7 +169,12 @@ public class TestController {
     }
 
     @PostMapping(value = "/attachatt")
-    public String attachatt(@RequestParam List<String> extension, int maxcnt,int maxsize) {
+    public String attachatt(@RequestParam(required = false) List<String> extension, int maxcnt, int maxsize) {
+
+        //null처리
+        if(extension == null){
+            extension = new ArrayList<>();
+        }
 
         if(extension == null){
             extension = new ArrayList<>();
