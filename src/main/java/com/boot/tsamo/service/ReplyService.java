@@ -9,6 +9,7 @@ import com.boot.tsamo.repository.ReplyRepository;
 import com.boot.tsamo.repository.UsersRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -66,10 +67,18 @@ public class ReplyService {
     }
 
     //댓글 수정
-
+//    @Transactional
+//    public Reply update(long id, UpdateReplyRequest) {
+//        Reply reply = replyRepository.findById(id)
+//                .orElseThrow(() -> new IllegalArgumentException("not found: " + id));
+//
+//        reply.update(re);
+//        return reply;
+//    }
 
     //댓글 삭제
     public void deleteById(Long id){ replyRepository.deleteById(id); }
+
 
 
 }
