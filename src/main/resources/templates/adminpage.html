@@ -21,15 +21,15 @@
                 <!--사이즈 입력-->
                 <div class="row">
                     <div class="col-md-6 mb-3">
-                        <label for="maxsize">업로드 사이즈</label>
-                        <input type="number" class="form-control" id="maxsize" name="maxsize" placeholder="최대 업로드 사이즈를 입력해주세요">
+                        <label for="maxsize">업로드 사이즈(최대500MB)</label>
+                        <input type="number" class="form-control" id="maxsize" name="maxsize" max="500" placeholder="최대 업로드 사이즈를 입력해주세요">
                     </div>
                 </div>
 
                 <!--갯수 입력-->
                 <div class="col-md-6 mb-3">
-                    <label for="maxcnt">업로드 갯수</label>
-                    <input class="form-control" type="number" id="maxcnt" name="maxcnt" placeholder="최대 업로드 갯수를 입력해주세요">
+                    <label for="maxcnt">업로드 갯수(최대 갯수 5개)</label>
+                    <input class="form-control" type="number" id="maxcnt" name="maxcnt"  max="5" placeholder="최대 업로드 갯수를 입력해주세요">
                 </div>
 
                 <!--확장자-->

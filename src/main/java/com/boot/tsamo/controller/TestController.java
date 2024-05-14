@@ -95,12 +95,16 @@ public class TestController {
                 model.addAttribute("nowPage", nowPage);
                 model.addAttribute("startPage", startPage);
                 model.addAttribute("endPage", endPage);
+                model.addAttribute("searchvalue", searchvalue);
+                model.addAttribute("searchtype", searchtype);
                 return "main";
             }
 
             model.addAttribute("nowPage", null);
             model.addAttribute("startPage", null);
             model.addAttribute("endPage", null);
+            model.addAttribute("searchvalue", searchvalue);
+            model.addAttribute("searchtype", searchtype);
 
             return "main";
         }
