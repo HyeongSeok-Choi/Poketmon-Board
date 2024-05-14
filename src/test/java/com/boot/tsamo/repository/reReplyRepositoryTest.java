@@ -1,0 +1,69 @@
+package com.boot.tsamo.repository;
+
+import com.boot.tsamo.entity.Board;
+import com.boot.tsamo.entity.Reply;
+import com.boot.tsamo.entity.Users;
+import com.boot.tsamo.entity.reReply;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
+
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+@SpringBootTest
+@TestPropertySource(locations = "classpath:application-test.properties")
+class reReplyRepositoryTest {
+    @Autowired
+    ReplyRepository replyRepository;
+
+    @Autowired
+    reReplyRepository reReplyRepository;
+
+    @Autowired
+    UsersRepository usersRepository;
+
+    @Autowired
+    BoardRepository boardRepository;
+
+    @Test
+    @DisplayName("save 기능 테스트")
+    public void replySave() {
+        Users user = new Users();
+        user.setUserId("aaa");
+        user.setPassword("1234");
+        user.setEmail("aaa@aaa.aaa");
+        user.setNickName("aaa");
+        usersRepository.save(user);
+
+        for (int i = 0; i <= 5; i++) {
+            Board board = new Board();
+            board.setTitle("제목" + i);
+            board.setContent("내용" + i);
+            board.setUserid(user);
+            boardRepository.save(board);
+
+            Reply reply = new Reply();
+            reply.setUserid(user);
+            reply.setBoardId(board);
+            reply.setContent("댓글" + i);
+            replyRepository.save(reply);
+
+            System.out.println(reply.toString());
+
+            reReply rereply = new reReply();
+            rereply.setUserid(user);
+            rereply.setReplyId(reply);
+            rereply.setContent("대댓글" + i);
+            reReplyRepository.save(rereply);
+
+            System.out.println(rereply.toString());
+        }
+    }
+
+    
+
+}

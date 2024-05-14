@@ -48,7 +48,7 @@ class ReplyRepositoryTest {
             Reply reply = new Reply();
             reply.setUserid(user);
             reply.setBoardId(board);
-            reply.setContent("댓글"+i);
+            reply.setContent("댓글" + i);
             replyRepository.save(reply);
 
             System.out.println(reply.toString());
@@ -57,11 +57,84 @@ class ReplyRepositoryTest {
 
     @Test
     @DisplayName("댓글 조회 기능 테스트")
-    public void findByReplyTest(){
+    public void findByReplyTest() {
         this.replySave();
         List<Reply> replyList = replyRepository.findAll();
         for (Reply reply : replyList) {
             System.out.println(reply.toString());
         }
     }
+
+    @Test
+    @DisplayName("댓글 수정 기능 테스트")
+    public void replyUpdateTest() {
+        // 사용자 생성 및 저장
+        Users user = new Users();
+        user.setUserId("testUser");
+        user.setPassword("1234");
+        user.setEmail("test@user.com");
+        user.setNickName("tester");
+        usersRepository.save(user);
+
+        // 게시글 생성 및 저장
+        Board board = new Board();
+        board.setTitle("Test Title");
+        board.setContent("Test Content");
+        board.setUserid(user);
+        boardRepository.save(board);
+
+        // 댓글 생성 및 저장
+        Reply reply = new Reply();
+        reply.setUserid(user);
+        reply.setBoardId(board);
+        reply.setContent("Original Content");
+        replyRepository.save(reply);
+
+        // 댓글 수정
+        reply.setContent("Updated Content");
+        replyRepository.save(reply);
+
+        // 수정된 댓글 조회 및 검증
+        Reply updatedReply = replyRepository.findById(reply.getReplyId()).orElse(null);
+        assertNotNull(updatedReply);
+        assertEquals("Updated Content", updatedReply.getContent());
+
+        System.out.println(updatedReply.toString());
+    }
+    @Test
+    @DisplayName("댓글 삭제 기능 테스트")
+    public void replyDeleteTest() {
+        // 사용자 생성 및 저장
+        Users user = new Users();
+        user.setUserId("testUser");
+        user.setPassword("1234");
+        user.setEmail("test@user.com");
+        user.setNickName("tester");
+        usersRepository.save(user);
+
+        // 게시글 생성 및 저장
+        Board board = new Board();
+        board.setTitle("Test Title");
+        board.setContent("Test Content");
+        board.setUserid(user);
+        boardRepository.save(board);
+
+        // 댓글 생성 및 저장
+        Reply reply = new Reply();
+        reply.setUserid(user);
+        reply.setBoardId(board);
+        reply.setContent("Content to be deleted");
+        replyRepository.save(reply);
+
+        // 댓글 삭제
+        replyRepository.delete(reply);
+
+        // 댓글 조회 및 검증
+        Reply deletedReply = replyRepository.findById(reply.getReplyId()).orElse(null);
+        assertNull(deletedReply);
+
+        System.out.println("Reply successfully deleted");
+    }
+
+
 }
