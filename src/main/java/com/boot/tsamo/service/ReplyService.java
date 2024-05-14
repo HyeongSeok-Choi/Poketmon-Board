@@ -27,7 +27,7 @@ public class ReplyService {
 //
 //    }
 
-    //더미 데이터
+    //더미 데이터 생성
     public Reply save(Reply reply) {
 
         Users users = new Users();
@@ -58,11 +58,18 @@ public class ReplyService {
         return reply;
     }
 
-    //모든 댓글 출력
+    //모든 댓글 조회
     public List<Reply> findAll() {
         List<Reply> replies = replyRepository.findAll();
 
         return replies;
     }
+
+    //댓글 수정
+
+
+    //댓글 삭제
+    public void deleteById(Long id){ replyRepository.deleteById(id); }
+
 
 }

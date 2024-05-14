@@ -81,5 +81,25 @@ public class ReplyServiceTest {
     }
 
 
+    @Test
+    @DisplayName("댓글 삭제 기능 테스트")
+    public void replyDeleteTest() {
+        // Given: Reply 객체 생성 및 초기 설정
+        Reply reply = new Reply();
+        reply.setContent("댓글 내용");
+
+        // When: ReplyService의 save 메서드 호출
+        Reply savedReply = replyService.save(reply);
+
+        // 댓글 삭제
+        replyRepository.delete(reply);
+
+        // 댓글 조회 및 검증
+        Reply deletedReply = replyRepository.findById(reply.getReplyId()).orElse(null);
+        assertNull(deletedReply);
+
+        System.out.println("Reply successfully deleted");
+    }
+
 
 }
