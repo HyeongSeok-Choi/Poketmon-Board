@@ -1,12 +1,8 @@
 package com.boot.tsamo.controller;
 
-import com.boot.tsamo.dto.ReplyDto;
-import com.boot.tsamo.service.ReplyService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 
 @Slf4j

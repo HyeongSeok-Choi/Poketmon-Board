@@ -135,6 +135,4 @@ class ReplyRepositoryTest {
 
         System.out.println("Reply successfully deleted");
     }
-
-
 }
