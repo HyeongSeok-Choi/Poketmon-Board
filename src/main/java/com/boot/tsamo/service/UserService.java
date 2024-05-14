@@ -3,7 +3,7 @@ package com.boot.tsamo.service;
 
 import com.boot.tsamo.dto.addUserRequest;
 import com.boot.tsamo.entity.Users;
-import com.boot.tsamo.repository.UserRepository;
+import com.boot.tsamo.repository.UsersRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserService {
 
-    private final UserRepository userRepository;
+    private final UsersRepository userRepository;
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 

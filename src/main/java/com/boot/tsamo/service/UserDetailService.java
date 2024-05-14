@@ -1,7 +1,7 @@
 package com.boot.tsamo.service;
 
 import com.boot.tsamo.entity.Users;
-import com.boot.tsamo.repository.UserRepository;
+import com.boot.tsamo.repository.UsersRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserDetailService implements UserDetailsService {
 
-    private final UserRepository userRepository;
+    private final UsersRepository userRepository;
 
     @Override
     public Users loadUserByUsername(String userId) {
