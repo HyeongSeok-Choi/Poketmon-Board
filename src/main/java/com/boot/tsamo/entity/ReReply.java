@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 @Entity
 @Builder
 @EntityListeners(AuditingEntityListener.class)
-public class reReply {
+public class ReReply {
 
 
     @Id
@@ -43,7 +43,5 @@ public class reReply {
     @Column(name = "updated_at")
     @UpdateTimestamp // UPDATE 시 자동으로 값을 채워줌
     private LocalDateTime updatedAt = LocalDateTime.now();
-
-
 
 }
