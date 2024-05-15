@@ -48,6 +48,9 @@ dependencies {
     //H2
     implementation 'com.h2database:h2'
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+
+    //회원가입 유효성 검사
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
 }
 
 tasks.named('test') {

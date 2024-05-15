@@ -2,6 +2,7 @@ package com.boot.tsamo.entity;
 
 
 import com.boot.tsamo.constant.Role;
+import com.boot.tsamo.dto.UserFormDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +10,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Collection;
 import java.util.List;
@@ -19,7 +22,7 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 @Builder
-public class Users implements UserDetails {
+public class Users {
 
     @Id
     @Column(name = "user_id")
@@ -34,17 +37,19 @@ public class Users implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    public static Users createUser(UserFormDto userFormDto,
+                                   PasswordEncoder passwordEncoder) {
+        Users user = new Users();
+        user.setUserId(userFormDto.getUserId());
+        user.setEmail(userFormDto.getEmail());
+        String password = passwordEncoder.encode(userFormDto.getPassword());
+        user.setPassword(password);
+        user.setRole(Role.USER);
+        return user;
+    }
+}
 
-/*    @Builder
-    public Users(String userId, String password, String email, String nickName, Role role) {
-        this.userId = userId;
-        this.password = password;
-        this.email = email;
-        this.nickName = nickName;
-        this.role = role;
-    }*/
-
-    @Override
+/*    @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority("user"));
     }
@@ -78,4 +83,4 @@ public class Users implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
-}
+}*/

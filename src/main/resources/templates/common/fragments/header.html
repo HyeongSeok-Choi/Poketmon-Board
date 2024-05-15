@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en"
+<html lang="ko"
       xmlns:th="http://www.thymeleaf.org"
       th:fragment="HeaderFragment" xmlns:sec="http://www.w3.org/1999/xhtml">
 <style>
@@ -57,12 +57,15 @@
     </header>
 
     <nav class="headerNav">
-        <a href="#">Home</a>
-        <a href="#">
-            로그인
-         </a>
 
-        <a href="#">
+        <a href="/main">Home</a>
+
+            <a class="nav-link" sec:authorize="isAnonymous()" href="/users/login">로그인</a>
+
+            <a class="nav-link"  sec:authorize="isAuthenticated()" href="/users/logout">로그아웃</a>
+
+
+        <a href="/users/new">
             회원가입
         </a>
 

@@ -6,7 +6,7 @@ import com.boot.tsamo.entity.HashTag;
 import com.boot.tsamo.entity.Users;
 import com.boot.tsamo.repository.BoardRepository;
 import com.boot.tsamo.repository.HashTagRepository;
-import com.boot.tsamo.repository.UsersRepository;
+import com.boot.tsamo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -21,7 +21,7 @@ import java.util.List;
 public class BoardService {
 
     private final BoardRepository boardRepository;
-    private final UsersRepository usersRepository;
+    private final UserRepository userRepository;
     private final HashTagRepository hashTagRepository;
 
 
@@ -40,7 +40,7 @@ public class BoardService {
 
         users.setNickName("뿡뿡이");
 
-        usersRepository.save(users);
+        userRepository.save(users);
 
 
         board.setUserid(users);
@@ -88,9 +88,9 @@ public class BoardService {
 
     //작성자로 검색 -리스트 출력
     public Page<Board> findAllByUserId(Pageable pageable, String userId){
-       Users findedByUserid= usersRepository.findByUserIdContaining(userId);
+       Users findByUserIdContaining= userRepository.findByUserIdContaining(userId);
 
-        return boardRepository.findByUserid(findedByUserid,pageable);
+        return boardRepository.findByUserid(findByUserIdContaining,pageable);
     }
 
 

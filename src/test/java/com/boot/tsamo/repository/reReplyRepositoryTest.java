@@ -24,7 +24,7 @@ class reReplyRepositoryTest {
     reReplyRepository reReplyRepository;
 
     @Autowired
-    UsersRepository usersRepository;
+    UserRepository userRepository;
 
     @Autowired
     BoardRepository boardRepository;
@@ -37,7 +37,7 @@ class reReplyRepositoryTest {
         user.setPassword("1234");
         user.setEmail("aaa@aaa.aaa");
         user.setNickName("aaa");
-        usersRepository.save(user);
+        userRepository.save(user);
 
         for (int i = 0; i <= 5; i++) {
             Board board = new Board();

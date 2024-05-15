@@ -6,7 +6,7 @@ import com.boot.tsamo.entity.Reply;
 import com.boot.tsamo.entity.Users;
 import com.boot.tsamo.repository.BoardRepository;
 import com.boot.tsamo.repository.ReplyRepository;
-import com.boot.tsamo.repository.UsersRepository;
+import com.boot.tsamo.repository.UserRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +25,7 @@ public class ReplyServiceTest {
     private ReplyService replyService;
 
     @Autowired
-    private UsersRepository usersRepository;
+    private UserRepository userRepository;
 
     @Autowired
     private BoardRepository boardRepository;

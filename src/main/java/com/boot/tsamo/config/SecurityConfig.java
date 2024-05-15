@@ -1,7 +1,6 @@
 package com.boot.tsamo.config;
 
 
-import com.boot.tsamo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,19 +9,16 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import static org.springframework.boot.autoconfigure.security.servlet.PathRequest.toH2Console;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig {
+public class SecurityConfig   {
 
-    @Autowired
-    UserService usersService;
+/*    @Autowired
+    UserService userService;*/
 
     @Bean
     public WebSecurityCustomizer configure() {
@@ -37,16 +33,17 @@ public class SecurityConfig {
 
         http.formLogin((formLogin) ->
                         formLogin
-                                .loginPage("/login")
+                                .loginPage("/users/login")
                                 .defaultSuccessUrl("/main")
                                 .usernameParameter("id")
                                 .passwordParameter("password")
-                                .failureUrl("/login/error").permitAll())
+                                .passwordParameter("password")
+                                .failureUrl("/users/login/error").permitAll())
 
                 .logout((logoutCoinfig) ->
 
                         logoutCoinfig
-                                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                                .logoutRequestMatcher(new AntPathRequestMatcher("/users/logout"))
                                 .logoutSuccessUrl("/main"))
 
 
@@ -60,22 +57,6 @@ public class SecurityConfig {
                 );
 
         return http.build();
-
-  /*      return http
-                .authorizeRequests()
-                .requestMatchers("/login", "/signup", "/user").permitAll()
-                .anyRequest().authenticated()
-                .and()
-                .formLogin()
-                .loginPage("/login")
-                .defaultSuccessUrl("/articles")
-                .and()
-                .logout()
-                .logoutSuccessUrl("/login")
-                .invalidateHttpSession(true)
-                .and()
-                .csrf().disable()
-                .build();*/
     }
 
 
@@ -83,6 +64,10 @@ public class SecurityConfig {
 
     @Bean
     public static BCryptPasswordEncoder passwordEncoder() {
+
         return new BCryptPasswordEncoder();
     }
+
+
+
 }
