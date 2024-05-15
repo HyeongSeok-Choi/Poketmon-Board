@@ -27,7 +27,7 @@ public class SecurityConfig   {
                 .requestMatchers("/static/**");
     }
 
-
+//login에서 계속 도는데 어디가 문제인지 모르겠어서 내일 물어봐야겠음..
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 

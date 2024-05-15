@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-@RequestMapping("/users")
+@RequestMapping("/user")
 @Controller
 @RequiredArgsConstructor
 public class UserController {
@@ -24,7 +24,7 @@ public class UserController {
     @GetMapping(value = "/new")
     public String userForm(Model model) {
         model.addAttribute("userFormDto", new UserFormDto());
-        return "user/userForm";
+        return "/user/userForm";
     }
 
   /*  @PostMapping(value = "/new")
@@ -39,16 +39,28 @@ public class UserController {
     public String newUser(@Valid UserFormDto userFormDto,
                           BindingResult bindingResult, Model model){
         if(bindingResult.hasErrors()){
-            return "user/userForm";
+            return "/user/userForm";
         }
         try{
              Users user = Users.createUser(userFormDto, passwordEncoder);
              userService.saveUser(user);
         }catch(IllegalStateException e){
             model.addAttribute("errorMessage", e.getMessage());
-            return "user/userForm";
+            return "/user/userForm";
         }
 
         return "redirect:/main";
     }
+
+    @GetMapping(value = "/login")
+    public String loginUser(){
+        return "/user/userLoginForm";
+    }
+
+    @GetMapping(value = "/login/error")
+    public String loginError(Model model){
+        model.addAttribute("loginErrorMsg", "아이디 또는 비밀번호를 확인해주세요");
+        return "/user/userLoginForm";
+    }
+
 }
