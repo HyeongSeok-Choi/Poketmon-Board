@@ -4,30 +4,30 @@
       th:fragment="HeaderFragment" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-<style>
+    <style>
 
-    header {
-        background-color: #ffffff;
-        color: #AED284FF;
-        text-align: center;
-        width: 100%;
-    }
+        header {
+            background-color: #ffffff;
+            color: #AED284FF;
+            text-align: center;
+            width: 100%;
+        }
 
-    .headerNav {
-        background-color: #AED284FF;
-        padding: 3px;
-    }
+        .headerNav {
+            background-color: #AED284FF;
+            padding: 3px;
+        }
 
-    .headerNav a {
-        color: #fff;
-        text-decoration: none;
-        padding: 10px;
-        margin-right: 10px;
-        display: inline-block;
-    }
+        .headerNav a {
+            color: #fff;
+            text-decoration: none;
+            padding: 10px;
+            margin-right: 10px;
+            display: inline-block;
+        }
 
 
-</style>
+    </style>
 </head>
 <div>
     <nav class="headerNav">
@@ -36,11 +36,14 @@
 
         <a class="nav-link" sec:authorize="isAnonymous()" href="/user/login">로그인</a>
 
+<!--        &lt;!&ndash; 사용자가 로그인한 경우에만 환영 메시지 표시 &ndash;&gt;
+            <a class="nav-link" sec:authorize="isAuthenticated()" href="#" th:text="'환영합니다, ' + ${#authentication.principal.nickName} + '님'"></a>-->
+
         <a class="nav-link" sec:authorize="isAuthenticated()" href="/user/logout">로그아웃</a>
 
         <a class="nav-link" sec:authorize="isAnonymous()" href="/user/new">회원가입</a>
 
-       <!--<a class="nav-link" sec:authorize="hasAnyAuthority('ROLE_ADMIN')" href="/admin/">관리자 페이지</a>-->
+        <!--<a class="nav-link" sec:authorize="hasAnyAuthority('ROLE_ADMIN')" href="/admin/">관리자 페이지</a>-->
 
     </nav>
 
