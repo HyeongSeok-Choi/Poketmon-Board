@@ -25,7 +25,4 @@ public class attachAttributeDTO {
 
     private List<String> extension;
 
-
-
-
 }

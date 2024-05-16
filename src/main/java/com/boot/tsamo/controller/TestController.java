@@ -4,10 +4,7 @@ package com.boot.tsamo.controller;
 import com.boot.tsamo.dto.addBoardDTO;
 import com.boot.tsamo.dto.attachAttributeDTO;
 import com.boot.tsamo.entity.Board;
-import com.boot.tsamo.service.BoardService;
-import com.boot.tsamo.service.FileAttributeService;
-import com.boot.tsamo.service.FileService;
-import com.boot.tsamo.service.HashTagService;
+import com.boot.tsamo.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -51,11 +48,7 @@ public class TestController {
         return "test";
     }
 
-<<<<<<< Updated upstream
-    //관리자페이지
-=======
     //test뷰(없어도 됨)
->>>>>>> Stashed changes
     @GetMapping(value = "/admin")
     public String admin() {
 
@@ -178,7 +171,6 @@ public class TestController {
     }
 
     @PostMapping(value = "/attachatt")
-<<<<<<< Updated upstream
     public String attachatt(@RequestParam(required = false) List<String> extension, int maxcnt, int maxsize) {
 
         //null처리
@@ -189,9 +181,6 @@ public class TestController {
         if(extension == null){
             extension = new ArrayList<>();
         }
-=======
-    public String attachatt(@RequestParam List<String> extension, int maxcnt,int maxsize) {
->>>>>>> Stashed changes
 
         System.out.println(extension);
         System.out.println(maxcnt);
