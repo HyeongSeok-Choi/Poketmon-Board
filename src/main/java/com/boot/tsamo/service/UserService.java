@@ -30,7 +30,6 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    //책에는 오버라이드 사용해서 상속받는데 없어도 되는지 그리고 userBy 저거 저렇게 쓰면 되는지
     @Override
     public UserDetails loadUserByUsername(String userId) throws
             UsernameNotFoundException {
@@ -41,7 +40,7 @@ public class UserService implements UserDetailsService {
         }
 
         return User.builder()
-                .username(user.getUserId())//닉네임이랑 이메일 넣으려고하면 오류나는데 방법 알아보기
+                .username(user.getUserId())
                 .password(user.getPassword())
                 .roles(user.getRole().toString())
                 .build();

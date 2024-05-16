@@ -1,5 +1,6 @@
 package com.boot.tsamo.dto;
 
+import com.boot.tsamo.constant.Role;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
@@ -13,7 +14,7 @@ public class UserFormDto {
     private String userId;
 
     @NotBlank(message = "비밀번호는 필수 입력 값입니다.")
-    @Length(min=10, max=25, message = "비밀번호는 10자 이상, 25자 이하로 입력해주세요.")
+    @Length(min=5, max=25, message = "비밀번호는 5자 이상, 25자 이하로 입력해주세요.")
     private String password;
 
     @NotBlank(message = "이메일은 필수 입력 값입니다.")
@@ -22,4 +23,6 @@ public class UserFormDto {
 
     @NotBlank(message = "닉네임은 필수 입력 값입니다.")
     private String nickName;
+
+
 }
