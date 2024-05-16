@@ -22,9 +22,10 @@
         </div>
         <ul class="hidden" id="attachList">
             <li class="list-group-item" th:each="attachFile : ${attachFiles}">
-                <a th:href="@{'/getAttach/' + ${attachFile.boardId.id} + '/download/' + ${attachFile.id}}"
-                th:text="${attachFile.ori_fileName}">
-                </a>
+                <p th:text="${attachFile.ori_fileName}"></p>
+                <button th:href="@{'/getAttach/' + ${attachFile.boardId.id} + '/download/' + ${attachFile.id}}"
+                        type="button" class="btn sm btn-txt ico-go">다운로드</button>
+                <button type="button" class="btn sm btn-txt ico-go">바로보기</button>
             </li>
         </ul>
     </div>
