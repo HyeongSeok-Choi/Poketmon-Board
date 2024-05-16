@@ -39,18 +39,18 @@ public class SecurityConfig   {
                                 .passwordParameter("password")
                                 .failureUrl("/user/login/error").permitAll())
 
-                /*.logout((logoutCoinfig) ->
+                .logout((logoutCoinfig) ->
 
                         logoutCoinfig
                                 .logoutRequestMatcher(new AntPathRequestMatcher("/users/logout"))
-                                .logoutSuccessUrl("/main"))*/
+                                .logoutSuccessUrl("/main"))
 
 
                 .authorizeRequests((authorizeRequests) ->
                         authorizeRequests
                                 .requestMatchers("/css/**", "/js/**", "/Img/**").permitAll()
                                 .requestMatchers("/main","/","/user/**").permitAll()
-                                /*.requestMatchers("/admin/**").hasRole("ADMIN")*/
+                                .requestMatchers("/admin/**").hasRole("ADMIN")
                                 .anyRequest().authenticated()
 
                 );
