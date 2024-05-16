@@ -63,7 +63,6 @@ public class SecurityConfig   {
                 )
 
                 .oauth2Login(oauth2 -> oauth2
-
                         .redirectionEndpoint(endpoint -> endpoint.baseUri("/auth/kakao/*"))
                         .userInfoEndpoint(endpoint -> endpoint.userService(myOAuth2UserService))
                         .defaultSuccessUrl("/"));
