@@ -25,12 +25,17 @@ public class AttachFileService {
     private String attachFileLocation;
     private final AttachFileRepository attachFileRepository;
 
+
     public void saveAttachFileList(List<MultipartFile> attachFileList) throws Exception{
 
         for(int i=0; i<attachFileList.size(); i++){
             AttachFile attachFile = new AttachFile();
 //            attachFile.setBoardId(boardId);
-            saveAttachFile(attachFile, attachFileList.get(i));
+
+            //첨부하지 않은 첨부란은 파일정보가 DB에 저장되지 않도록 설정
+            if(!attachFileList.get(i).isEmpty()) {
+                saveAttachFile(attachFile, attachFileList.get(i));
+            }
         }
     }
 
