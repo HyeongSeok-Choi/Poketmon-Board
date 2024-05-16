@@ -2,7 +2,7 @@ package com.boot.tsamo.service;
 
 
 import com.boot.tsamo.entity.Users;
-import com.boot.tsamo.repository.UsersRepository;
+import com.boot.tsamo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
