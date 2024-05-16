@@ -43,7 +43,7 @@ public class AttachFileService {
 
         if(!StringUtils.isEmpty(oriImgName)){
             attachFileName = uploadFile(attachFileLocation, oriImgName, multipartFile.getBytes());
-            attachFileUrl = attachFileLocation + attachFileName;
+            attachFileUrl = attachFileLocation + "/" + attachFileName;
         }
 
         attachFile.updateItemImg(oriImgName, attachFileName, attachFileUrl);
@@ -71,4 +71,15 @@ public class AttachFileService {
         fos.close();
         return savedFileName;
     }
+
+    // 게시판의 첨부 파일 리스트를 불러오는 메서드
+    public List<AttachFile> getAttachFileByBoardId(Long boardId) {
+        return attachFileRepository.findByBoardIdId(boardId);
+    }
+
+    public AttachFile getAttachFile(Long fno, Long boardId) {
+        return attachFileRepository.findByIdAndBoardIdId(fno, boardId);
+    }
+
+
 }
