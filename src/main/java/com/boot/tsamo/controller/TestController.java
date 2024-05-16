@@ -51,7 +51,11 @@ public class TestController {
         return "test";
     }
 
+<<<<<<< Updated upstream
     //관리자페이지
+=======
+    //test뷰(없어도 됨)
+>>>>>>> Stashed changes
     @GetMapping(value = "/admin")
     public String admin() {
 
@@ -174,6 +178,7 @@ public class TestController {
     }
 
     @PostMapping(value = "/attachatt")
+<<<<<<< Updated upstream
     public String attachatt(@RequestParam(required = false) List<String> extension, int maxcnt, int maxsize) {
 
         //null처리
@@ -184,6 +189,9 @@ public class TestController {
         if(extension == null){
             extension = new ArrayList<>();
         }
+=======
+    public String attachatt(@RequestParam List<String> extension, int maxcnt,int maxsize) {
+>>>>>>> Stashed changes
 
         System.out.println(extension);
         System.out.println(maxcnt);
