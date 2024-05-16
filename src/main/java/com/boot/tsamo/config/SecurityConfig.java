@@ -55,7 +55,9 @@ public class SecurityConfig   {
                 .authorizeRequests((authorizeRequests) ->
                         authorizeRequests
                                 .requestMatchers("/css/**", "/js/**", "/img/**").permitAll()
-                                .requestMatchers("/main","/","/user/**","/createBoard","/BoardDetailView").permitAll()
+                                .requestMatchers("/main","/","/user/**","/createBoard","/BoardDetailView","/reply","/posts","/createBoard" +
+                                                ""
+                                        ).permitAll()
                                 .requestMatchers("/admin/**").hasRole("ADMIN")
                                 .anyRequest().authenticated()
                 )

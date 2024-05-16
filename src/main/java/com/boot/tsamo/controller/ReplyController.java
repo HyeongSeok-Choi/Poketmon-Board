@@ -1,40 +1,41 @@
 package com.boot.tsamo.controller;
 
+import com.boot.tsamo.dto.AddReplyDTO;
+import com.boot.tsamo.entity.Reply;
 import com.boot.tsamo.service.ReplyService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
-
-@Slf4j
 @RestController
 @RequiredArgsConstructor
 public class ReplyController {
     private final ReplyService replyService;
 
-    //댓글 리스트 조회
-    @GetMapping(value = "/reply")
-    public String reply() {
+    // 신규 댓글 생성
+    @PostMapping("/posts/{boardId}/comments")
+    public ResponseEntity<Reply> saveComment(@PathVariable Long boardId,
+                                      @RequestParam String content, Principal principal) {
 
-        return "ReplyView";
+        //작성자
+        String author = principal.getName();
+
+        AddReplyDTO addReplyDTO = new AddReplyDTO();
+
+        addReplyDTO.setUserid(author);
+        addReplyDTO.setContent(content);
+        addReplyDTO.setBoardId(boardId);
+
+
+        Reply savedReply = replyService.addReply(addReplyDTO,boardId);
+
+        return ResponseEntity.ok().body(savedReply);
     }
 
-//    // 신규 댓글 생성
-//    @PostMapping("/posts/{postId}/replys")
-//    public ReplyDto saveComment(@PathVariable final Long postId,
-//                                final ReplyDto dto, @LoginUser UserSessionDto userDto) {
-//
-//        dto.setCrtId(userDto.getUserId());
-//        dto.setMdfId(userDto.getUserId());
-//
-//        log.debug("BoardDto :: {}", dto);
-//
-//        ReplyDto saveComment = replyService.saveReply(dto);
-//        return saveComment;
-//    }
-//
 //    //기존 댓글 수정
 //    @PatchMapping("/posts/{postId}/comments/{id}")
 //    public CommentDto updateComment(@PathVariable final Long postId, @PathVariable final Long id,

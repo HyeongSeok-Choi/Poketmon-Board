@@ -1,6 +1,7 @@
 package com.boot.tsamo.service;
 
 import com.boot.tsamo.constant.Role;
+import com.boot.tsamo.dto.AddReplyDTO;
 import com.boot.tsamo.entity.Board;
 import com.boot.tsamo.entity.Reply;
 import com.boot.tsamo.entity.Users;
@@ -58,6 +59,24 @@ public class ReplyService {
 
         return reply;
     }
+
+
+
+    public Reply addReply(AddReplyDTO addReplyDTO, Long boardId){
+
+           Board board = boardRepository.findById(boardId).get();
+           Users user = userRepository.findById(addReplyDTO.getUserid()).get();
+
+           Reply addreply= new Reply();
+
+           addreply.setContent(addReplyDTO.getContent());
+           addreply.setUserid(user);
+           addreply.setBoardId(board);
+
+        return addreply;
+    }
+
+
 
     //모든 댓글 조회
     public List<Reply> findAll(Long id) {
