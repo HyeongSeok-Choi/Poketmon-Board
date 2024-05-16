@@ -4,14 +4,11 @@ package com.boot.tsamo.controller;
 import com.boot.tsamo.dto.addBoardDTO;
 import com.boot.tsamo.dto.attachAttributeDTO;
 import com.boot.tsamo.entity.Board;
-import com.boot.tsamo.entity.Users;
 import com.boot.tsamo.service.BoardService;
 import com.boot.tsamo.service.FileAttributeService;
 import com.boot.tsamo.service.FileService;
 import com.boot.tsamo.service.HashTagService;
 import lombok.RequiredArgsConstructor;
-import org.apache.catalina.User;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -21,14 +18,21 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
 public class TestController {
+
+    //댓글 리스트 조회
+    @GetMapping(value = "/reply")
+
+    public String reply() {
+
+        return "ReplyView";
+    }
+
 
 
     //board서비스
@@ -47,7 +51,7 @@ public class TestController {
         return "test";
     }
 
-    //test뷰(없어도 됨)
+    //관리자페이지
     @GetMapping(value = "/admin")
     public String admin() {
 
@@ -56,7 +60,8 @@ public class TestController {
 
     //게시물 목록(main페이지) 검색, 페이징 기능 포함
     @GetMapping(value = "/")
-    public String main(Model model,@PageableDefault(page=0,size = 1,sort = "id", direction = Sort.Direction.DESC) Pageable pageable,String searchvalue,String searchtype) {
+    public String main(Model model,@PageableDefault(page=0,size = 1,sort = "id",
+            direction = Sort.Direction.DESC) Pageable pageable, String searchvalue, String searchtype) {
 
 
             Page<Board> Boards ;
@@ -120,7 +125,7 @@ public class TestController {
     }
 
     //게시물 등록
-    @PostMapping(value = "/createBoard")
+    @PostMapping(value = "/createBoard2")
     public String createBoardRequest(@ModelAttribute addBoardDTO addBoarddto,
                                      @RequestParam("uploadFiles") List<MultipartFile> files,
                                      @RequestParam("hashTagValue")String hashTagValue) {
@@ -139,7 +144,7 @@ public class TestController {
 
     //게시물 상세보기
     @GetMapping(value = "/BoardDetailView")
-    public String boardDetailView(Model model,@RequestParam Long id) {
+    public String BoardDetailView(Model model,@RequestParam Long id) {
 
         Board detailBoard = boardService.findById(id);
 

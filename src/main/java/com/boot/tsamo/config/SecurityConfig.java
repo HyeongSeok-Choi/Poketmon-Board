@@ -1,7 +1,8 @@
 package com.boot.tsamo.config;
 
 
-import com.boot.tsamo.service.UserService;
+import com.boot.tsamo.config.oauth.MyOAuth2UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,19 +11,21 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 
 import static org.springframework.boot.autoconfigure.security.servlet.PathRequest.toH2Console;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig {
+@RequiredArgsConstructor
+public class SecurityConfig   {
 
-    @Autowired
-    UserService usersService;
+
+/*    @Autowired
+    UserService userService;*/
+
+    private final MyOAuth2UserService myOAuth2UserService;
 
     @Bean
     public WebSecurityCustomizer configure() {
@@ -31,51 +34,43 @@ public class SecurityConfig {
                 .requestMatchers("/static/**");
     }
 
-
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
+        http.csrf(AbstractHttpConfigurer::disable);
+
         http.formLogin((formLogin) ->
                         formLogin
-                                .loginPage("/login")
-                                .defaultSuccessUrl("/main")
+                                .loginPage("/user/login")
+                                .defaultSuccessUrl("/")
                                 .usernameParameter("id")
                                 .passwordParameter("password")
-                                .failureUrl("/login/error").permitAll())
+                                .defaultSuccessUrl("/").permitAll()
+                                .failureUrl("/user/login/error").permitAll())
 
-                .logout((logoutCoinfig) ->
+                .logout((logoutConfig) ->
+                        logoutConfig
+                                .logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))
+                                .logoutSuccessUrl("/"))
 
-                        logoutCoinfig
-                                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                                .logoutSuccessUrl("/main"))
-
-
-                .authorizeRequests((authorizeRequests) ->
+                .authorizeHttpRequests((authorizeRequests) ->
                         authorizeRequests
-                                .requestMatchers("/css/**", "/js/**", "/Img/**").permitAll()
-                                .requestMatchers("/").permitAll()
+
+
+                                .requestMatchers("/css/**", "/js/**", "/img/**").permitAll()
+                                .requestMatchers("/main","/","/user/**","/createBoard","/BoardDetailView","/reply","/posts","/createBoard","createBoard2"
+                                        ,"/api/addComment").permitAll()
                                 .requestMatchers("/admin/**").hasRole("ADMIN")
                                 .anyRequest().authenticated()
 
-                );
+                )
+
+                .oauth2Login(oauth2 -> oauth2
+                        .redirectionEndpoint(endpoint -> endpoint.baseUri("/auth/kakao/*"))
+                        .userInfoEndpoint(endpoint -> endpoint.userService(myOAuth2UserService))
+                        .defaultSuccessUrl("/"));
 
         return http.build();
-
-  /*      return http
-                .authorizeRequests()
-                .requestMatchers("/login", "/signup", "/user").permitAll()
-                .anyRequest().authenticated()
-                .and()
-                .formLogin()
-                .loginPage("/login")
-                .defaultSuccessUrl("/articles")
-                .and()
-                .logout()
-                .logoutSuccessUrl("/login")
-                .invalidateHttpSession(true)
-                .and()
-                .csrf().disable()
-                .build();*/
     }
 
 
@@ -83,6 +78,10 @@ public class SecurityConfig {
 
     @Bean
     public static BCryptPasswordEncoder passwordEncoder() {
+
         return new BCryptPasswordEncoder();
     }
+
+
+
 }

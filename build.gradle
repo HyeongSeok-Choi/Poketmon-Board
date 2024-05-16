@@ -48,6 +48,17 @@ dependencies {
     //H2
     implementation 'com.h2database:h2'
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+
+    //회원가입 유효성 검사
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    //시큐리티 테스트
+    testImplementation 'org.springframework.security:spring-security-test'
+
+    //oauth2
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+
+    //gson
+    implementation 'com.google.code.gson:gson:2.9.0'
 }
 
 tasks.named('test') {

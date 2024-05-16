@@ -1,13 +1,16 @@
 package com.boot.tsamo.service;
 
 import com.boot.tsamo.constant.Role;
+import com.boot.tsamo.dto.AddReplyDTO;
+import com.boot.tsamo.dto.UserFormDto;
 import com.boot.tsamo.entity.Board;
 import com.boot.tsamo.entity.Reply;
 import com.boot.tsamo.entity.Users;
 import com.boot.tsamo.repository.BoardRepository;
 import com.boot.tsamo.repository.ReplyRepository;
-import com.boot.tsamo.repository.UsersRepository;
+import com.boot.tsamo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,7 +20,17 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ReplyService {
 
-    private final UsersRepository usersRepository;
+    public Users createUser(){
+        UserFormDto userFormDto = new UserFormDto();
+        userFormDto.setUserId("test02");
+        userFormDto.setPassword(passwordEncoder.encode("12341234"));
+        userFormDto.setEmail("test02@gmail.com");
+        userFormDto.setNickName("test02");
+        return Users.createUser(userFormDto, passwordEncoder);
+    }
+
+    private final PasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
     private final BoardRepository boardRepository;
     private final ReplyRepository replyRepository;
 
@@ -43,7 +56,7 @@ public class ReplyService {
 
         users.setNickName("뿡뿡이");
 
-        usersRepository.save(users);
+        userRepository.save(users);
 
         Board board = new Board();
         board.setTitle("제목");
@@ -59,26 +72,58 @@ public class ReplyService {
         return reply;
     }
 
+
+
+    public Reply addReply(AddReplyDTO addReplyDTO, Long boardId){
+
+           Board board = boardRepository.findById(1L).get();
+
+           //Users user = userRepository.findById(addReplyDTO.getUserid()).get();
+
+           Reply addreply= new Reply();
+
+           addreply.setContent(addReplyDTO.getContent());
+           Users user =new Users();
+            user.setUserId("qnftlstm78");
+           addreply.setUserid(user);
+
+           addreply.setBoardId(board);
+
+           replyRepository.save(addreply);
+
+        return addreply;
+    }
+
+
+
     //모든 댓글 조회
-    public List<Reply> findAll() {
-        List<Reply> replies = replyRepository.findAll();
+    public List<Reply> findAll(Long id) {
+
+        Board board = boardRepository.findById(id).get();
+
+        List<Reply> replies = board.getReplies();
 
         return replies;
     }
 
     //댓글 수정
-//    @Transactional
-//    public Reply update(long id, UpdateReplyRequest) {
-//        Reply reply = replyRepository.findById(id)
-//                .orElseThrow(() -> new IllegalArgumentException("not found: " + id));
-//
-//        reply.update(re);
-//        return reply;
-//    }
+    @Transactional
+    public Reply update(long id, String content) {
+
+        Reply reply = replyRepository.findById(id).get();
+
+        reply.update(content);
+
+        Reply updateReply = replyRepository.save(reply);
+
+        return updateReply;
+
+    }
 
     //댓글 삭제
-    public void deleteById(Long id){ replyRepository.deleteById(id); }
-
+    public void deleteById(Long id) {
+        replyRepository.deleteById(id);
+    }
 
 
 }

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layouts/defaultLayout}"
+      layout:fragment="Content">
+<head>
+    <meta charset="UTF-8"> <!-- 수정: meta 태그를 head 태그 안으로 이동 -->
+    <title>댓글 시스템</title>
+</head>
+<body>
+
+    <!-- 댓글 작성 -->
+    <div class="cm_write">
+        <fieldset>
+            <legend class="skipinfo">댓글 입력</legend>
+            <div class="cm_input">
+                <p><textarea id="contents" name="contents" cols="90" rows="4"
+                             placeholder="댓글을 입력해 주세요."></textarea></p>
+                <span><button type="button" class="btns" onclick="saveComment();">등 록</button></span>
+                <span><button type="button" class="btns" onclick="updateComment();">수정</button></span>
+                <span><button type="button" class="btns" onclick="deleteComment();">삭제</button></span>
+            </div>
+        </fieldset>
+    </div>
+
+    <!-- 댓글 렌더링 영역 -->
+    <div class="cm_list"></div>
+
+ <script>
+
+        // 댓글 저장
+        function saveComment() {
+            const contents = document.getElementById('contents').value;
+            console.log(contents);
+
+
+            const boardId = 1;  // 테스트용 ID <!-- 수정: 템플릿 표현식 주석으로 변경 -->
+
+
+            fetch("/api/addComment", {
+                headers:{
+                    "Content-Type": "application/json",
+                },
+                method: 'POST',
+                body: JSON.stringify({
+                    content: contents,
+                    boardId:boardId,
+                    userid:"qnftlstm",
+
+                })
+
+            }).then(res => {
+                console.log("되노");
+            })
+
+
+
+        }
+
+
+    </script>
+
+</body>
+</html>

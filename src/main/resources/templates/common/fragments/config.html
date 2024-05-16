@@ -2,6 +2,7 @@
 <!--Thymeleaf, ConfigFragment 선언-->
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       th:fragment="ConfigFragment">
 <head>
     <!--Common Head-->
@@ -23,5 +24,7 @@
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <script src="/js/bootstrap.min.js"></script>
 
+    <th:block layout:fragment="script"></th:block>
+    <th:block layout:fragment="css"></th:block>
 </head>
 </html>

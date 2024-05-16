@@ -2,17 +2,15 @@ package com.boot.tsamo.entity;
 
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -30,7 +28,7 @@ public class Reply {
     @JoinColumn(name = "board_id")
     private Board boardId;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private Users userid;
 
@@ -48,9 +46,7 @@ public class Reply {
 
 
 
-    public void update(Board boardId, Users userid, String content) {
-        this.boardId = boardId;
-        this.userid = userid;
+    public void update(  String content) {
         this.content = content;
     }
 
