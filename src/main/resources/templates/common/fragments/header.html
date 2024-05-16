@@ -8,14 +8,14 @@
 
     header {
         background-color: #ffffff;
-        color: #3586ff;
+        color: #AED284FF;
         text-align: center;
         width: 100%;
     }
 
     .headerNav {
-        background-color: #6f963e;
-        padding: 10px;
+        background-color: #AED284FF;
+        padding: 3px;
     }
 
     .headerNav a {
@@ -26,36 +26,13 @@
         display: inline-block;
     }
 
-    .search {
-        position: relative;
-        width: 300px;
-        display: inline-block;
-        float: right;
-    }
-
-    .searchButton {
-        width: 80%;
-        border: 1px solid #bbb;
-        border-radius: 8px;
-        padding: 10px 12px;
-        font-size: 14px;
-    }
-
-    .searchIcon {
-        position: absolute;
-        width: 17px;
-        top: 10px;
-        right: 12px;
-        margin: 0;
-    }
-
 
 </style>
 </head>
 <div>
     <nav class="headerNav">
 
-        <a style ="text-align:center"; href="/"><img src="/static/img/home.png"></a>
+        <a href="/"><img src="/static/img/home.png"></a>
 
         <a class="nav-link" sec:authorize="isAnonymous()" href="/user/login">로그인</a>
 
@@ -63,7 +40,7 @@
 
         <a class="nav-link" sec:authorize="isAnonymous()" href="/user/new">회원가입</a>
 
-       <!--<a class="nav-link" sec:authorize="hasAnyAuthority('ROLE_ADMIN')" href="/admin/">상품 관리</a>-->
+       <!--<a class="nav-link" sec:authorize="hasAnyAuthority('ROLE_ADMIN')" href="/admin/">관리자 페이지</a>-->
 
     </nav>
 

@@ -26,6 +26,7 @@ public class UserService implements UserDetailsService {
     private void validateDuplicateUser(Users user) {
         Users findUser = userRepository.findByUserIdContaining(user.getUserId());
         if (findUser != null) {
+            System.out.println("11111 : " + findUser);
             throw new UsernameNotFoundException("이미 가입된 회원입니다.");
         }
     }

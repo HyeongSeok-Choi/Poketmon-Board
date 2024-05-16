@@ -39,20 +39,17 @@ public class SecurityConfig   {
                                 .defaultSuccessUrl("/").permitAll()
                                 .failureUrl("/user/login/error").permitAll())
 
-                .logout((logoutCoinfig) ->
-
-                        logoutCoinfig
+                .logout((logoutConfig) ->
+                        logoutConfig
                                 .logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))
                                 .logoutSuccessUrl("/"))
 
-
-                .authorizeRequests((authorizeRequests) ->
+                .authorizeHttpRequests((authorizeRequests) ->
                         authorizeRequests
-                                .requestMatchers("/css/**", "/js/**", "/Img/**").permitAll()
+                                .requestMatchers("/css/**", "/js/**", "/img/**").permitAll()
                                 .requestMatchers("/","/user/**","/error","/").permitAll()
                                 .requestMatchers("/admin/**").hasRole("ADMIN")
                                 .anyRequest().authenticated()
-
                 );
 
         return http.build();

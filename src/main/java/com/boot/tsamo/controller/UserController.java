@@ -5,6 +5,7 @@ import com.boot.tsamo.entity.Users;
 import com.boot.tsamo.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -36,12 +37,13 @@ public class UserController {
         try{
              Users user = Users.createUser(userFormDto, passwordEncoder);
              userService.saveUser(user);
-        }catch(IllegalStateException e){
+        }catch(UsernameNotFoundException e){
             model.addAttribute("errorMessage", e.getMessage());
+            System.out.println("2222222 : "  + e.getMessage());
             return "/user/userForm";
         }
 
-        return "redirect:/user/userLoginForm";
+        return "redirect:/user/login";
     }
 
     @GetMapping(value = "/login")
