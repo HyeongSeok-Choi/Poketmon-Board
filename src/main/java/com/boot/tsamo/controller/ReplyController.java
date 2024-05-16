@@ -1,16 +1,19 @@
 package com.boot.tsamo.controller;
 
 import com.boot.tsamo.dto.AddReplyDTO;
+import com.boot.tsamo.dto.ViewReplyDTO;
 import com.boot.tsamo.entity.Reply;
 import com.boot.tsamo.service.ReplyService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -38,17 +41,20 @@ public class ReplyController {
 
     // 댓글 조회
     @GetMapping("/api/allcomments")
-    public ResponseEntity<List<Reply>> getAllComments(Long id) {
+    public ResponseEntity<List<ViewReplyDTO>> getAllComments(Long id, Pageable pageable) {
 
         id = 1L;
 
         List<Reply> replieList = replyService.findAll(id);
 
-        System.out.println(replieList.get(0).getReplyId()+"여기이이ㅣ이이이");
-        System.out.println(replieList.get(0).getContent()+"여기이이ㅣ이이이");
-        
+        List<ViewReplyDTO> replyDTOS = replieList.stream()
+                        .map(a -> new ViewReplyDTO(a))
+                        .collect(Collectors.toList());
 
-        return ResponseEntity.ok().body(replieList);
+
+
+
+        return ResponseEntity.ok().body(replyDTOS);
 
     }
 
