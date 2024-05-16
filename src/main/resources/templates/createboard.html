@@ -71,11 +71,19 @@
                     </div>
                 </div>
 
+                <ul class='test' id='test' style="list-style-type: none">
+                    <li>테스트요1</li>
+                    <li>테스트요2</li>
+                    <li>테스트요3</li>
+                    <li>테스트요4</li>
+
+                </ul>
+
                 <!--해시 태그 입력-->
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="addValue">해시태그</label>
-                        <ul id='hashTag' style="list-style-type: none"></ul>
+                        <ul class='hashTag' id='hashTag' style="list-style-type: none"></ul>
 
                         <input type='text' id='addValue' />
                         <input class="btn btn-primary btn-lg btn-block" type='button' value='추가' onclick='addList()' />
@@ -91,6 +99,22 @@
     </div>
 </div>
 <script>
+
+
+    $(function (){
+        $(".hashTag li").on("click",function (){
+            $(this).remove();
+        })
+    })
+
+
+    $(".test li").click(function(){
+        alert("아아");
+        $(this).remove();
+    });
+
+
+
     const hashtag = []
 
 
@@ -106,8 +130,6 @@
             // 2-1. 추가할 li element 생성
             const li = document.createElement("li");
 
-            // 2-2. li에 id 속성 추가
-            li.setAttribute('id', addValue);
 
             // 2-3. li에 text node 추가
             const textNode = document.createTextNode('#'+addValue);
@@ -135,6 +157,11 @@
 
         document.getElementById("hashTagValue").value = hashtag;
     }
+
+
+
+
+
 </script>
 
 </body>

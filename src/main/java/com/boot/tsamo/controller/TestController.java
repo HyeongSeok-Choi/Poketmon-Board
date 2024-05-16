@@ -47,7 +47,7 @@ public class TestController {
         return "test";
     }
 
-    //test뷰(없어도 됨)
+    //관리자페이지
     @GetMapping(value = "/admin")
     public String admin() {
 
@@ -56,7 +56,8 @@ public class TestController {
 
     //게시물 목록(main페이지) 검색, 페이징 기능 포함
     @GetMapping(value = "/")
-    public String main(Model model,@PageableDefault(page=0,size = 1,sort = "id", direction = Sort.Direction.DESC) Pageable pageable,String searchvalue,String searchtype) {
+    public String main(Model model,@PageableDefault(page=0,size = 1,sort = "id",
+            direction = Sort.Direction.DESC) Pageable pageable, String searchvalue, String searchtype) {
 
 
             Page<Board> Boards ;

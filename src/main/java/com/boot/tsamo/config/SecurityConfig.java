@@ -1,6 +1,8 @@
 package com.boot.tsamo.config;
 
 
+import com.boot.tsamo.config.oauth.MyOAuth2UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,10 +17,13 @@ import static org.springframework.boot.autoconfigure.security.servlet.PathReques
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig   {
 
 /*    @Autowired
     UserService userService;*/
+
+    private final MyOAuth2UserService myOAuth2UserService;
 
     @Bean
     public WebSecurityCustomizer configure() {
@@ -50,7 +55,13 @@ public class SecurityConfig   {
                                 .requestMatchers("/","/user/**","/error","/").permitAll()
                                 .requestMatchers("/admin/**").hasRole("ADMIN")
                                 .anyRequest().authenticated()
-                );
+
+                )
+
+                .oauth2Login(oauth2 -> oauth2
+                        .redirectionEndpoint(endpoint -> endpoint.baseUri("/auth/kakao/*"))
+                        .userInfoEndpoint(endpoint -> endpoint.userService(myOAuth2UserService))
+                        .defaultSuccessUrl("/"));
 
         return http.build();
     }
