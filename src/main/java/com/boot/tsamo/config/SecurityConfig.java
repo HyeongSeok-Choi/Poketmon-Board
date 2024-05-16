@@ -33,25 +33,24 @@ public class SecurityConfig   {
 
         http.formLogin((formLogin) ->
                         formLogin
-                                .loginPage("/users/login")
+                                .loginPage("/user/login")
                                 .defaultSuccessUrl("/main")
                                 .usernameParameter("id")
                                 .passwordParameter("password")
-                                .passwordParameter("password")
-                                .failureUrl("/users/login/error").permitAll())
+                                .failureUrl("/user/login/error").permitAll())
 
-                .logout((logoutCoinfig) ->
+                /*.logout((logoutCoinfig) ->
 
                         logoutCoinfig
                                 .logoutRequestMatcher(new AntPathRequestMatcher("/users/logout"))
-                                .logoutSuccessUrl("/main"))
+                                .logoutSuccessUrl("/main"))*/
 
 
                 .authorizeRequests((authorizeRequests) ->
                         authorizeRequests
                                 .requestMatchers("/css/**", "/js/**", "/Img/**").permitAll()
-                                .requestMatchers("/main").permitAll()
-                                .requestMatchers("/admin/**").hasRole("ADMIN")
+                                .requestMatchers("/main","/","/user/**").permitAll()
+                                /*.requestMatchers("/admin/**").hasRole("ADMIN")*/
                                 .anyRequest().authenticated()
 
                 );

@@ -49,7 +49,7 @@ public class UserController {
             return "/user/userForm";
         }
 
-        return "redirect:/main";
+        return "redirect:/";
     }
 
     @GetMapping(value = "/login")
