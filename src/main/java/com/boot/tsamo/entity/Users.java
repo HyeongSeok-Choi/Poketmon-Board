@@ -22,7 +22,37 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 @Builder
-public class Users {
+public class Users implements UserDetails {
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of();
+    }
+
+    @Override
+    public String getUsername() {
+        return "";
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return false;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return false;
+    }
 
     @Id
     @Column(name = "user_id")
@@ -37,6 +67,7 @@ public class Users {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    //일반 유저 생성
     public static Users createUser(UserFormDto userFormDto,
                                    PasswordEncoder passwordEncoder) {
         Users user = new Users();
@@ -47,40 +78,17 @@ public class Users {
         user.setRole(Role.USER);
         return user;
     }
+
+    //카카오 계정 db저장
+    public Users(String userId, String email){
+        this.email = email;
+        this.userId = userId;
+        this.role = Role.ADMIN;
+        this.password="chltest";
+
+    }
+
 }
 
-/*    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("user"));
-    }
 
-    @Override
-    public String getUsername() {
-        return userId;
-    }
 
-    @Override
-    public String getPassword() {
-        return password;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
-}*/
