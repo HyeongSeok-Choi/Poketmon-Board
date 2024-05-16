@@ -1,10 +1,12 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-     >
-<meta charset="UTF-8">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8"> <!-- 수정: meta 태그를 head 태그 안으로 이동 -->
+    <title>댓글 시스템</title>
+</head>
+<body>
 <th:block layout:fragment="replyView">
-
-    <!--/* 댓글 작성 */-->
+    <!-- 댓글 작성 -->
     <div class="cm_write">
         <fieldset>
             <legend class="skipinfo">댓글 입력</legend>
@@ -18,13 +20,8 @@
         </fieldset>
     </div>
 
-    <!--/* 댓글 렌더링 영역 */-->
-    <div class="cm_list">
-
-    </div>
-    </section>
-    </div> <!--/* .content */-->
-
+    <!-- 댓글 렌더링 영역 -->
+    <div class="cm_list"></div>
 </th:block>
 
 <th:block layout:fragment="script">
@@ -32,14 +29,12 @@
         /*<![CDATA[*/
 
         window.onload = () => {
-            findAllComment();
+            findAllReply(); <!-- 수정: findAllComment()에서 findAllReply()로 변경 -->
         }
-
 
         // 전체 댓글 조회
         function findAllReply() {
-
-            const postId = [[ ${result.id}]];
+            const postId = /*[[${result.id}]]*/ 1;  // 테스트용 ID <!-- 수정: 템플릿 표현식 주석으로 변경 -->
 
             $.ajax({
                 url: `/posts/${postId}/comments`,
@@ -47,7 +42,6 @@
                 dataType: 'json',
                 async: false,
                 success: function (result) {
-
                     // 1. 조회된 데이터가 없는 경우
                     if (!result.length) {
                         document.querySelector('.cm_list').innerHTML = '<div class="cm_none"><p>등록된 댓글이 없습니다.</p></div>';
@@ -61,7 +55,7 @@
                     result.forEach(row => {
                         commentHtml += `
                                 <div>
-                                    <span class="writer_img"><img src="/images/default_profile.png" width="30" height="30" alt="기본 프로필 이미지"/></span>
+
                                     <p class="writer">
                                         <em>${row.crtId}</em>
                                         <span class="date">${dayjs(row.createdDate).format('YYYY-MM-DD HH:mm')}</span>
@@ -69,11 +63,11 @@
                                     <div class="cont"><div class="txt_con">${row.contents}</div></div>
                                     <p class="func_btns">
                                         <button type="button" onclick="openCommentUpdatePopup(${row.id});" class="btns"><span class="icons icon_modify">수정</span></button>
-                                        <button type="button" class="btns"><span class="icons icon_del">삭제</span></button>
+                                        <button type="button" onclick="deleteComment(${row.id});" class="btns"><span class="icons icon_del">삭제</span></button> <!-- 수정: deleteComment 함수 호출 추가 -->
                                     </p>
                                 </div>
                             `;
-                    })
+                    });
 
                     // 4. class가 "cm_list"인 요소를 찾아 HTML을 렌더링
                     document.querySelector('.cm_list').innerHTML = commentHtml;
@@ -86,23 +80,19 @@
 
         // 댓글 저장
         function saveComment() {
-
             const contents = document.getElementById('contents');
             isValid(contents, '댓글');
 
-            const postId = [[ ${result.id}]];
+            const postId = /*[[${result.id}]]*/ 1;  // 테스트용 ID <!-- 수정: 템플릿 표현식 주석으로 변경 -->
             const params = {
                 postId: postId,
                 contents: contents.value,
                 writer: '홍길동'
             }
-//console.log(params);
+
             $.ajax({
                 url: `/posts/${postId}/comments`,
                 type: 'post',
-                //contentType : 'application/json; charset=utf-8',
-                //dataType : 'json',
-                //data : JSON.stringify(params),
                 dataType: 'text',
                 data: params,
                 async: false,
@@ -110,7 +100,7 @@
                     alert('저장되었습니다.');
                     contents.value = '';
                     document.getElementById('counter').innerText = '0/300자';
-                    findAllComment();
+                    findAllReply(); <!-- 수정: findAllComment()에서 findAllReply()로 변경 -->
                 },
                 error: function (request, status, error) {
                     console.log(error)
@@ -120,13 +110,12 @@
 
         // 댓글 수정
         function updateComment(id) {
-
             const writer = document.getElementById('modalWriter');
             const contents = document.getElementById('modalContent');
             isValid(writer, '작성자');
             isValid(contents, '수정할 내용');
 
-            const postId = [[ ${result.id}]];
+            const postId = /*[[${result.id}]]*/ 1;  // 테스트용 ID <!-- 수정: 템플릿 표현식 주석으로 변경 -->
             const params = {
                 id: id,
                 postId: postId,
@@ -144,7 +133,7 @@
                 success: function (result) {
                     alert('수정되었습니다.');
                     closeCommentUpdatePopup();
-                    findAllComment();
+                    findAllReply(); <!-- 수정: findAllComment()에서 findAllReply()로 변경 -->
                 },
                 error: function (request, status, error) {
                     console.log(error)
@@ -152,6 +141,8 @@
             })
         }
 
+        /*]]>*/
     </script>
 </th:block>
+</body>
 </html>

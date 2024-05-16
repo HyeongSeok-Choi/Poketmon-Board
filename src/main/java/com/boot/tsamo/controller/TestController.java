@@ -140,7 +140,7 @@ public class TestController {
 
     //게시물 상세보기
     @GetMapping(value = "/BoardDetailView")
-    public String boardDetailView(Model model,@RequestParam Long id) {
+    public String BoardDetailView(Model model,@RequestParam Long id) {
 
         Board detailBoard = boardService.findById(id);
 

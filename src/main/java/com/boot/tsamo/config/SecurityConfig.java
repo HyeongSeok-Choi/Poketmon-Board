@@ -44,6 +44,7 @@ public class SecurityConfig   {
                                 .passwordParameter("password")
                                 .failureUrl("/user/login/error").permitAll())
 
+
                 .logout((logoutCoinfig) ->
 
                         logoutCoinfig
@@ -54,7 +55,7 @@ public class SecurityConfig   {
                 .authorizeRequests((authorizeRequests) ->
                         authorizeRequests
                                 .requestMatchers("/css/**", "/js/**", "/img/**").permitAll()
-                                .requestMatchers("/main","/","/user/**","/createBoard").permitAll()
+                                .requestMatchers("/main","/","/user/**","/createBoard","/BoardDetailView").permitAll()
                                 .requestMatchers("/admin/**").hasRole("ADMIN")
                                 .anyRequest().authenticated()
                 )

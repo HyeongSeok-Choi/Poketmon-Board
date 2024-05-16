@@ -25,7 +25,7 @@ public class ReplyServiceTest {
     private ReplyService replyService;
 
     @Autowired
-    private UserRepository userRepository;
+    private UserRepository usersRepository;
 
     @Autowired
     private BoardRepository boardRepository;
