@@ -23,7 +23,7 @@ class ReplyRepositoryTest {
     ReplyRepository replyRepository;
 
     @Autowired
-    UsersRepository usersRepository;
+    UserRepository userRepository;
 
     @Autowired
     BoardRepository boardRepository;
@@ -36,7 +36,7 @@ class ReplyRepositoryTest {
         user.setPassword("1234");
         user.setEmail("aaa@aaa.aaa");
         user.setNickName("aaa");
-        usersRepository.save(user);
+        userRepository.save(user);
 
         for (int i = 0; i <= 5; i++) {
             Board board = new Board();
@@ -74,7 +74,7 @@ class ReplyRepositoryTest {
         user.setPassword("1234");
         user.setEmail("test@user.com");
         user.setNickName("tester");
-        usersRepository.save(user);
+        userRepository.save(user);
 
         // 게시글 생성 및 저장
         Board board = new Board();
@@ -110,7 +110,7 @@ class ReplyRepositoryTest {
         user.setPassword("1234");
         user.setEmail("test@user.com");
         user.setNickName("tester");
-        usersRepository.save(user);
+        userRepository.save(user);
 
         // 게시글 생성 및 저장
         Board board = new Board();

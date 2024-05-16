@@ -6,7 +6,7 @@ import com.boot.tsamo.entity.Reply;
 import com.boot.tsamo.entity.Users;
 import com.boot.tsamo.repository.BoardRepository;
 import com.boot.tsamo.repository.ReplyRepository;
-import com.boot.tsamo.repository.UsersRepository;
+import com.boot.tsamo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,7 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ReplyService {
 
-    private final UsersRepository usersRepository;
+    private final UserRepository userRepository;
     private final BoardRepository boardRepository;
     private final ReplyRepository replyRepository;
 
@@ -43,7 +43,7 @@ public class ReplyService {
 
         users.setNickName("뿡뿡이");
 
-        usersRepository.save(users);
+        userRepository.save(users);
 
         Board board = new Board();
         board.setTitle("제목");

@@ -42,8 +42,17 @@ dependencies {
     runtimeOnly 'com.h2database:h2'
 
     //스프링 시큐리티(Spring security 시작하고 쓰기 !!!!)
-    //implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
-    //implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+
+    //H2
+    implementation 'com.h2database:h2'
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+
+    //회원가입 유효성 검사
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    //시큐리티 테스트
+    testImplementation 'org.springframework.security:spring-security-test'
 }
 
 tasks.named('test') {
