@@ -44,6 +44,7 @@ public class Users {
         user.setEmail(userFormDto.getEmail());
         String password = passwordEncoder.encode(userFormDto.getPassword());
         user.setPassword(password);
+        user.setNickName(userFormDto.getNickName());
         user.setRole(Role.USER);
         return user;
     }

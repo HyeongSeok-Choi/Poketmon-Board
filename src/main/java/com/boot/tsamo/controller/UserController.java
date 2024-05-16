@@ -27,14 +27,6 @@ public class UserController {
         return "/user/userForm";
     }
 
-  /*  @PostMapping(value = "/new")
-    public String userForm(UserFormDto userFormDto){
-        Users user = Users.createUser(userFormDto, passwordEncoder);
-        userService.saveUser(user);
-
-        return "redirect:/";
-    }*/
-
     @PostMapping(value = "/new")
     public String newUser(@Valid UserFormDto userFormDto,
                           BindingResult bindingResult, Model model){
@@ -49,7 +41,7 @@ public class UserController {
             return "/user/userForm";
         }
 
-        return "redirect:/";
+        return "redirect:/user/userLoginForm";
     }
 
     @GetMapping(value = "/login")
