@@ -53,14 +53,13 @@ public class SecurityConfig   {
 
                 .authorizeRequests((authorizeRequests) ->
                         authorizeRequests
-                                .requestMatchers("/css/**", "/js/**", "/Img/**").permitAll()
+                                .requestMatchers("/css/**", "/js/**", "/img/**").permitAll()
                                 .requestMatchers("/","/user/**","/error","/").permitAll()
                                 .requestMatchers("/admin/**").hasRole("ADMIN")
                                 .anyRequest().authenticated()
                 )
 
                 .oauth2Login(oauth2 -> oauth2
-
                         .redirectionEndpoint(endpoint -> endpoint.baseUri("/auth/kakao/*"))
                         .userInfoEndpoint(endpoint -> endpoint.userService(myOAuth2UserService))
                         .defaultSuccessUrl("/"));
