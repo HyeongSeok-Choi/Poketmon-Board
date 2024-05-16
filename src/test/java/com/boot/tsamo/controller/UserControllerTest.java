@@ -43,10 +43,6 @@ class UserControllerTest {
         Users user = Users.createUser(userFormDto, passwordEncoder);
         return userService.saveUser(user);
     }
-//테스트 코드가
-// 이 때 주의할 점이 org.junit.Test 를 맞춰주는 것이다.
-//  import org.junit.jupiter.api.Test;  로 import 가 되어있으면 테스트가 실행이 안된다.
-//이거 임포트 해둬서 그런건지
     @Test
     @DisplayName("로그인 성공 테스트")
     public void loginSuccessTest() throws Exception {

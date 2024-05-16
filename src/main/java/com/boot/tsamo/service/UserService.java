@@ -35,7 +35,7 @@ public class UserService implements UserDetailsService {
             UsernameNotFoundException {
         Users user = userRepository.findByUserIdContaining(userId);
 
-        if(user == null) {
+        if (user == null) {
             throw new UsernameNotFoundException(userId);
         }
 
@@ -46,3 +46,4 @@ public class UserService implements UserDetailsService {
                 .build();
     }
 }
+

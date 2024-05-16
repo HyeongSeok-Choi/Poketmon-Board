@@ -81,14 +81,21 @@ public class Users implements UserDetails {
     }
 
     //카카오 계정 db저장
-    public Users(String userId, String email){
+    public Users(String userId, String email) {
         this.email = email;
         this.userId = userId;
         this.role = Role.ADMIN;
-        this.password="chltest";
+        this.password = "chltest";
 
     }
 
+    public void updatePassword(String password) {
+        this.password = password;
+    }
+
+    public void updateNickName(String nickName) {
+        this.nickName = nickName;
+    }
 }
 
 
