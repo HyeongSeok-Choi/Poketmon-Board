@@ -15,7 +15,7 @@ public class addBoardDTO {
 
     private String userid;
 
-
+    //
     public Board toEntity(){
 
         Board board = new Board();

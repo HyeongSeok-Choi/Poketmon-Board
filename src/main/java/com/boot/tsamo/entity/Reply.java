@@ -46,5 +46,4 @@ public class Reply {
     private LocalDateTime updatedAt = LocalDateTime.now();
 
 
-
 }

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en"
+<html lang="ko"
       xmlns:th="http://www.thymeleaf.org"
       th:fragment="HeaderFragment" xmlns:sec="http://www.w3.org/1999/xhtml">
 <style>
@@ -40,13 +40,12 @@
     }
 
     .searchIcon {
-        position : absolute;
+        position: absolute;
         width: 17px;
         top: 10px;
         right: 12px;
         margin: 0;
     }
-
 
 
 </style>
@@ -57,14 +56,14 @@
     </header>
 
     <nav class="headerNav">
-        <a href="#">Home</a>
-        <a href="#">
-            로그인
-         </a>
 
-        <a href="#">
-            회원가입
-        </a>
+        <a href="/">Home</a>
+
+        <a class="nav-link" sec:authorize="isAnonymous()" href="/user/login">로그인</a>
+
+        <a class="nav-link" sec:authorize="isAuthenticated()" href="/user/logout">로그아웃</a>
+
+        <a class="nav-link" href="/user/new">회원가입</a>
 
     </nav>
 

@@ -1,0 +1,68 @@
+package com.boot.tsamo.service;
+
+import com.boot.tsamo.constant.Role;
+import com.boot.tsamo.entity.Board;
+import com.boot.tsamo.entity.Reply;
+import com.boot.tsamo.entity.Users;
+import com.boot.tsamo.repository.BoardRepository;
+import com.boot.tsamo.repository.ReplyRepository;
+import com.boot.tsamo.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+@RequiredArgsConstructor
+public class ReplyService {
+
+    private final UserRepository userRepository;
+    private final BoardRepository boardRepository;
+    private final ReplyRepository replyRepository;
+
+//    public void register(ReplyDto replyDto){
+//        // 1 : ReplyDto -> Reply 변환
+//
+//        // 2 : repository의 save 메소드를 통해 엔티티 db로 저장
+//
+//    }
+
+    //더미 데이터
+    public Reply save(Reply reply) {
+
+        Users users = new Users();
+
+        users.setUserId("qnftlstm");
+
+        users.setEmail("qnftlstm@naver.com");
+
+        users.setRole(Role.pUSER);
+
+        users.setPassword("chl153");
+
+        users.setNickName("뿡뿡이");
+
+        userRepository.save(users);
+
+        Board board = new Board();
+        board.setTitle("제목");
+        board.setContent("내용");
+        board.setUserid(users);
+        boardRepository.save(board);
+
+        reply.setUserid(users);
+        reply.setBoardId(board);
+        reply.setContent("댓글 내용");
+        replyRepository.save(reply);
+
+        return reply;
+    }
+
+    //모든 댓글 출력
+    public List<Reply> findAll() {
+        List<Reply> replies = replyRepository.findAll();
+
+        return replies;
+    }
+
+}
