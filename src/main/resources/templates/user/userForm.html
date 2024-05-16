@@ -11,20 +11,23 @@
         .fieldError {
             color: #bd2130;
         }
+
     </style>
 
-    <!-- 사용자 스크립트 추가 -->
+</head>
+<!-- 사용자 스크립트 추가 -->
+<th:block layout:fragment="script">
     <script th:inline="javascript">
         $(document).ready(function(){
-            var errorMessage = /*[[${errorMessage}]]*/ '';
-            if(errorMessage != ''){
+            var errorMessage = [[${errorMessage}]];
+            console.log(errorMessage);
+            if(errorMessage){
                 alert(errorMessage);
             }
         });
     </script>
-</head>
+</th:block>
 <body>
-
 <div layout:fragment="Content">
     <form action="/user/new" role="form" method="post" th:object="${userFormDto}">
         <div class="form-group">

@@ -48,15 +48,12 @@ public class SecurityConfig   {
                                 .defaultSuccessUrl("/").permitAll()
                                 .failureUrl("/user/login/error").permitAll())
 
-
-                .logout((logoutCoinfig) ->
-
-                        logoutCoinfig
+                .logout((logoutConfig) ->
+                        logoutConfig
                                 .logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))
                                 .logoutSuccessUrl("/"))
 
-
-                .authorizeRequests((authorizeRequests) ->
+                .authorizeHttpRequests((authorizeRequests) ->
                         authorizeRequests
 
                                 .requestMatchers("/css/**", "/js/**", "/img/**").permitAll()
@@ -64,6 +61,7 @@ public class SecurityConfig   {
                                         ,"/api/addComment").permitAll()
                                 .requestMatchers("/admin/**").hasRole("ADMIN")
                                 .anyRequest().authenticated()
+
                 )
 
                 .oauth2Login(oauth2 -> oauth2

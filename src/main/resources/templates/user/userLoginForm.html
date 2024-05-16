@@ -8,13 +8,20 @@
 </head>
 <th:block layout:fragment="css">
     <style>
+
         .error {
             color: #bd2130;
         }
+        .main{
+            width: 100%;
+            justify-content: center;
+            align-items: center;
+        }
+
     </style>
 </th:block>
 
-
+<div class="main">
 <div layout:fragment="Content">
 
     <form role="form" method="post" action="/user/login">
@@ -40,5 +47,5 @@
     </form>
 
 </div>
-
+</div>
 </html>
