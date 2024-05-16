@@ -33,6 +33,66 @@ public class ReplyServiceTest {
     @Autowired
     private ReplyRepository replyRepository;
 
+
+    public void based(){
+
+        Users user = new Users();
+        user.setUserId("aaa");
+        user.setPassword("1234");
+        user.setEmail("aaa@aaa.aaa");
+        user.setNickName("aaa");
+        usersRepository.save(user);
+
+        for (int i = 0; i <= 5; i++) {
+            Board board = new Board();
+            board.setTitle("제목" + i);
+            board.setContent("내용" + i);
+            board.setUserid(user);
+            boardRepository.save(board);
+
+            Reply reply = new Reply();
+            reply.setUserid(user);
+            reply.setBoardId(board);
+            reply.setContent("댓글" + i);
+            replyRepository.save(reply);
+
+
+        }
+
+        Board board = boardRepository.findById(1L).get();
+
+        Reply reply = new Reply();
+        reply.setUserid(user);
+        reply.setBoardId(board);
+        reply.setContent("댓글 2번째");
+        replyRepository.save(reply);
+
+        this.testSaveReply();
+        List<Reply> replyList = replyService.findAll(1L);
+        System.out.println(replyList.get(1).getBoardId().getId());
+        System.out.println(replyList.get(0).getContent());
+        System.out.println(replyList.get(0).getReplyId());
+        System.out.println(replyList.get(0).getUserid());
+        System.out.println(replyList.get(0).getUpdatedAt());
+        System.out.println(replyList.get(0).getCreatedAt());
+
+        System.out.println(replyList.get(1).getContent());
+        System.out.println(replyList.get(1).getReplyId());
+        System.out.println(replyList.get(1).getUserid());
+        System.out.println(replyList.get(1).getUpdatedAt());
+        System.out.println(replyList.get(1).getCreatedAt());
+
+
+        replyList.get(0).setContent("수정된 댓글입니다.");
+        replyRepository.save(replyList.get(0));
+
+        System.out.println(replyList.get(0).getContent());
+
+    }
+
+
+
+
     @Test
     @DisplayName("댓글 저장 기능 테스트")
     public void testSaveReply() {
@@ -73,17 +133,80 @@ public class ReplyServiceTest {
     @Test
     @DisplayName("댓글 조회 기능 테스트")
     public void findByReplyTest() {
-        this.testSaveReply();
-        List<Reply> replyList = replyRepository.findAll();
-        for (Reply reply : replyList) {
-            System.out.println(reply.toString());
+
+        Users user = new Users();
+        user.setUserId("aaa");
+        user.setPassword("1234");
+        user.setEmail("aaa@aaa.aaa");
+        user.setNickName("aaa");
+        usersRepository.save(user);
+
+        for (int i = 0; i <= 5; i++) {
+            Board board = new Board();
+            board.setTitle("제목" + i);
+            board.setContent("내용" + i);
+            board.setUserid(user);
+            boardRepository.save(board);
+
+            Reply reply = new Reply();
+            reply.setUserid(user);
+            reply.setBoardId(board);
+            reply.setContent("댓글" + i);
+            replyRepository.save(reply);
+
+
         }
+
+        Board board = boardRepository.findById(1L).get();
+
+        Reply reply = new Reply();
+        reply.setUserid(user);
+        reply.setBoardId(board);
+        reply.setContent("댓글 2번째");
+        replyRepository.save(reply);
+
+        this.testSaveReply();
+        List<Reply> replyList = replyService.findAll(1L);
+        System.out.println(replyList.get(1).getBoardId().getId());
+        System.out.println(replyList.get(0).getContent());
+        System.out.println(replyList.get(0).getReplyId());
+        System.out.println(replyList.get(0).getUserid());
+        System.out.println(replyList.get(0).getUpdatedAt());
+        System.out.println(replyList.get(0).getCreatedAt());
+
+        System.out.println(replyList.get(1).getContent());
+        System.out.println(replyList.get(1).getReplyId());
+        System.out.println(replyList.get(1).getUserid());
+        System.out.println(replyList.get(1).getUpdatedAt());
+        System.out.println(replyList.get(1).getCreatedAt());
+
+
+        replyList.get(0).setContent("수정된 댓글입니다.");
+        replyRepository.save(replyList.get(0));
+
+        System.out.println(replyList.get(0).getContent());
+
     }
 
+    @Test
+    @DisplayName("댓글 수정 기능 테스트")
+    public void replyServiceUpdateTest() {
+
+        based();
+
+       String beforeUpdated= replyRepository.findById(1L).get().getContent();
+
+       replyService.update(1,"1번을 수정했습니다");
+
+       String updatedreply =replyRepository.findById(1L).get().getContent();
+
+       assertNotEquals(beforeUpdated,updatedreply);
+
+    }
 
     @Test
     @DisplayName("댓글 삭제 기능 테스트")
-    public void replyDeleteTest() {
+    public void replyServiceDeleteTest() {
         // Given: Reply 객체 생성 및 초기 설정
         Reply reply = new Reply();
         reply.setContent("댓글 내용");
@@ -92,7 +215,7 @@ public class ReplyServiceTest {
         Reply savedReply = replyService.save(reply);
 
         // 댓글 삭제
-        replyRepository.delete(reply);
+        replyRepository.deleteById(1L);
 
         // 댓글 조회 및 검증
         Reply deletedReply = replyRepository.findById(reply.getReplyId()).orElse(null);

@@ -48,9 +48,7 @@ public class Reply {
 
 
 
-    public void update(Board boardId, Users userid, String content) {
-        this.boardId = boardId;
-        this.userid = userid;
+    public void update(  String content) {
         this.content = content;
     }
 

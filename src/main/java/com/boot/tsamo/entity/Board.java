@@ -43,5 +43,7 @@ public class Board {
     @UpdateTimestamp // UPDATE 시 자동으로 값을 채워줌
     private final LocalDateTime updatedAt = LocalDateTime.now();
 
-    
+    @OneToMany(mappedBy = "boardId",fetch = FetchType.EAGER)
+    private List<Reply>replies= new ArrayList<Reply>();
+
 }

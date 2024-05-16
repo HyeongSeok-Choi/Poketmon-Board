@@ -60,25 +60,33 @@ public class ReplyService {
     }
 
     //모든 댓글 조회
-    public List<Reply> findAll() {
-        List<Reply> replies = replyRepository.findAll();
+    public List<Reply> findAll(Long id) {
+
+        Board board = boardRepository.findById(id).get();
+
+        List<Reply> replies = board.getReplies();
 
         return replies;
     }
 
     //댓글 수정
-//    @Transactional
-//    public Reply update(long id, UpdateReplyRequest) {
-//        Reply reply = replyRepository.findById(id)
-//                .orElseThrow(() -> new IllegalArgumentException("not found: " + id));
-//
-//        reply.update(re);
-//        return reply;
-//    }
+    @Transactional
+    public Reply update(long id, String content) {
+
+        Reply reply = replyRepository.findById(id).get();
+
+        reply.update(content);
+
+        Reply updateReply = replyRepository.save(reply);
+
+        return updateReply;
+
+    }
 
     //댓글 삭제
-    public void deleteById(Long id){ replyRepository.deleteById(id); }
-
+    public void deleteById(Long id) {
+        replyRepository.deleteById(id);
+    }
 
 
 }
