@@ -29,6 +29,28 @@
 
  <script>
 
+     $( document ).ready(function() {
+
+
+         function request() {
+
+             fetch('http://localhost:8080/api/allcomments', {
+                 headers : {
+                     'Content-Type': 'application/json',
+                     'Accept': 'application/json'
+                 },
+                 method: 'GET',
+             })
+
+                 .then(response => response.json())
+                 .then(data => console.log(data.getData()))
+         }
+
+         request();
+     });
+
+
+
         // 댓글 저장
         function saveComment() {
             const contents = document.getElementById('contents').value;

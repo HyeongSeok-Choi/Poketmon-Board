@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -17,43 +18,37 @@ public class ReplyController {
     private final ReplyService replyService;
 
     // 신규 댓글 생성
-
     @PostMapping("/api/addComment")
     public ResponseEntity<Reply> saveComment(
-                                      @RequestBody AddReplyDTO contents) {
+                                      @RequestBody AddReplyDTO contents,Principal principal) {
 
-        System.out.println(contents.getContent()+"수정됨");
+        //Long boardId = contents.getBoardId();
 
-        System.out.println("여기 들어왔어");
-        System.out.println("여기 들어왔어");
-
-        System.out.println("여기 들어왔어"+contents);
-
-        System.out.println("여기 들어왔어"+contents);
-
-
-        Long boardId = 1L;
-
-/*
         //작성자
         String author = principal.getName();
+        contents.setUserid(author);
 
-*/
-        AddReplyDTO addReplyDTO = new AddReplyDTO();
-
-
-
-        addReplyDTO.setUserid("dds");
-        addReplyDTO.setContent(contents.getContent());
-        addReplyDTO.setBoardId(boardId);
-
-
-        Reply savedReply = replyService.addReply(addReplyDTO,boardId);
-
+        Reply savedReply = replyService.addReply(contents);
 
 
         return ResponseEntity.ok().body(new Reply());
 
+
+    }
+
+    // 댓글 조회
+    @GetMapping("/api/allcomments")
+    public ResponseEntity<List<Reply>> getAllComments(Long id) {
+
+        id = 1L;
+
+        List<Reply> replieList = replyService.findAll(id);
+
+        System.out.println(replieList.get(0).getReplyId()+"여기이이ㅣ이이이");
+        System.out.println(replieList.get(0).getContent()+"여기이이ㅣ이이이");
+        
+
+        return ResponseEntity.ok().body(replieList);
 
     }
 
