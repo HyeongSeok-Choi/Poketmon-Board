@@ -17,23 +17,44 @@ public class ReplyController {
     private final ReplyService replyService;
 
     // 신규 댓글 생성
-    @PostMapping("/posts/{boardId}/comments")
-    public ResponseEntity<Reply> saveComment(@PathVariable Long boardId,
-                                      @RequestParam String content, Principal principal) {
 
+    @PostMapping("/api/addComment")
+    public ResponseEntity<Reply> saveComment(
+                                      @RequestBody AddReplyDTO contents) {
+
+        System.out.println(contents.getContent()+"수정됨");
+
+        System.out.println("여기 들어왔어");
+        System.out.println("여기 들어왔어");
+
+        System.out.println("여기 들어왔어"+contents);
+
+        System.out.println("여기 들어왔어"+contents);
+
+
+        Long boardId = 1L;
+
+/*
         //작성자
         String author = principal.getName();
 
+*/
         AddReplyDTO addReplyDTO = new AddReplyDTO();
 
-        addReplyDTO.setUserid(author);
-        addReplyDTO.setContent(content);
+
+
+        addReplyDTO.setUserid("dds");
+        addReplyDTO.setContent(contents.getContent());
         addReplyDTO.setBoardId(boardId);
 
 
         Reply savedReply = replyService.addReply(addReplyDTO,boardId);
 
-        return ResponseEntity.ok().body(savedReply);
+
+
+        return ResponseEntity.ok().body(new Reply());
+
+
     }
 
 //    //기존 댓글 수정

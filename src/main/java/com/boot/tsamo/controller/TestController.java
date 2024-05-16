@@ -125,7 +125,7 @@ public class TestController {
     }
 
     //게시물 등록
-    @PostMapping(value = "/createBoard")
+    @PostMapping(value = "/createBoard2")
     public String createBoardRequest(@ModelAttribute addBoardDTO addBoarddto,
                                      @RequestParam("uploadFiles") List<MultipartFile> files,
                                      @RequestParam("hashTagValue")String hashTagValue) {

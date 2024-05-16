@@ -2,6 +2,7 @@ package com.boot.tsamo.service;
 
 import com.boot.tsamo.constant.Role;
 import com.boot.tsamo.dto.AddReplyDTO;
+import com.boot.tsamo.dto.UserFormDto;
 import com.boot.tsamo.entity.Board;
 import com.boot.tsamo.entity.Reply;
 import com.boot.tsamo.entity.Users;
@@ -9,6 +10,7 @@ import com.boot.tsamo.repository.BoardRepository;
 import com.boot.tsamo.repository.ReplyRepository;
 import com.boot.tsamo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +20,16 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ReplyService {
 
+    public Users createUser(){
+        UserFormDto userFormDto = new UserFormDto();
+        userFormDto.setUserId("test02");
+        userFormDto.setPassword(passwordEncoder.encode("12341234"));
+        userFormDto.setEmail("test02@gmail.com");
+        userFormDto.setNickName("test02");
+        return Users.createUser(userFormDto, passwordEncoder);
+    }
+
+    private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final BoardRepository boardRepository;
     private final ReplyRepository replyRepository;
@@ -64,14 +76,20 @@ public class ReplyService {
 
     public Reply addReply(AddReplyDTO addReplyDTO, Long boardId){
 
-           Board board = boardRepository.findById(boardId).get();
-           Users user = userRepository.findById(addReplyDTO.getUserid()).get();
+           Board board = boardRepository.findById(1L).get();
+
+           //Users user = userRepository.findById(addReplyDTO.getUserid()).get();
 
            Reply addreply= new Reply();
 
            addreply.setContent(addReplyDTO.getContent());
+           Users user =new Users();
+            user.setUserId("qnftlstm78");
            addreply.setUserid(user);
+
            addreply.setBoardId(board);
+
+           replyRepository.save(addreply);
 
         return addreply;
     }

@@ -31,28 +31,31 @@
 
         // 댓글 저장
         function saveComment() {
-            const contents = document.getElementById('contents');
+            const contents = document.getElementById('contents').value;
+            console.log(contents);
+
 
             const boardId = 1;  // 테스트용 ID <!-- 수정: 템플릿 표현식 주석으로 변경 -->
 
-            $.ajax({
-                url: `/posts/${boardId}/comments`,
-                type: 'post',
-                dataType: 'json',
-                data: JSON.stringify(
-                    {
-                        content: document.getElementById("contents")
-                    }
-                ),
-                success: function (result) {
-                    alert('저장되었습니다.');
-                    contents.value = '';
-                    document.getElementById('counter').innerText = '0/300자';
+
+            fetch("/api/addComment", {
+                headers:{
+                    "Content-Type": "application/json",
                 },
-                error: function (request, status, error) {
-                    console.log(error)
-                }
+                method: 'POST',
+                body: JSON.stringify({
+                    content: contents,
+                    boardId:boardId,
+                    userid:"qnftlstm",
+
+                })
+
+            }).then(res => {
+                console.log("되노");
             })
+
+
+
         }
 
 

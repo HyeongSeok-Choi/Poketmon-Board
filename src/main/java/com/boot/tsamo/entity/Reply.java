@@ -28,7 +28,7 @@ public class Reply {
     @JoinColumn(name = "board_id")
     private Board boardId;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private Users userid;
 
