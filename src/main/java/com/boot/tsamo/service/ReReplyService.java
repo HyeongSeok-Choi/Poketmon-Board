@@ -59,21 +59,17 @@ public class ReReplyService {
         return rereplies;
     }
 
-//    //댓글 수정
+    //대댓글 수정
 //    @Transactional
-//    public Reply update(long id, String content) {
+//    public ReReply update(long id, String content) {
 //
-//        Reply reply = replyRepository.findById(id).get();
+//        ReReply reReply = rereplyRepository.findById(id).get();
 //
-//        reply.update(content);
-//
-//        Reply updateReply = replyRepository.save(reply);
-//
-//        return updateReply;
+//      return
 //
 //    }
 
-    //댓글 삭제
+    //대댓글 삭제
     public void deleteById(Long id) {
         rereplyRepository.deleteById(id);
     }

@@ -1,7 +1,9 @@
 package com.boot.tsamo.dto;
 
 import com.boot.tsamo.entity.Reply;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
@@ -16,6 +18,8 @@ public class ViewReplyDTO {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
+    public ViewReplyDTO(){}
+
 
 
     /* entity -> dto*/
@@ -27,4 +31,5 @@ public class ViewReplyDTO {
         this.createdAt = reply.getCreatedAt();
         this.updatedAt = reply.getUpdatedAt();
     }
+
 }

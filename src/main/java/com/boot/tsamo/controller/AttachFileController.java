@@ -1,6 +1,7 @@
 package com.boot.tsamo.controller;
 
 import com.boot.tsamo.dto.AttachFileFormDto;
+import com.boot.tsamo.dto.ViewReplyDTO;
 import com.boot.tsamo.service.AttachFileService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,8 @@ public class AttachFileController {
 
         model.addAttribute("attachFileFormDto", new AttachFileFormDto());
         return "attachFile/attachFile";
+
+
     }
 
     // 상품등록

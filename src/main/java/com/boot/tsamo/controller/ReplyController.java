@@ -52,8 +52,6 @@ public class ReplyController {
                         .collect(Collectors.toList());
 
 
-
-
         return ResponseEntity.ok().body(replyDTOS);
 
     }

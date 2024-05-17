@@ -36,7 +36,7 @@ class ReReplyServiceTest {
 
     @Autowired
     private ReReplyRepository rereplyRepository;
-
+//더미 데이터
     public void based() {
 
         Users user = new Users();
@@ -68,6 +68,18 @@ class ReReplyServiceTest {
         }
 
     }
+
+
+    @Test
+    @DisplayName("대댓글 생성 기능 테스트")
+    public void saveReReplyTest() {
+
+        this.based();
+
+
+
+    }
+
 
     @Test
     @DisplayName("대댓글 조회 기능 테스트")
