@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+    <form role="form" method="post" enctype="multipart/form-data" th:object="${attachFileFormDto}">
+        <div th:if="${#lists.isEmpty(attachFileFormDto.attachFileDtoList)}">
+            <div class="form-group" th:each="num: ${#numbers.sequence(1,5)}">
+                <div class="custom-file img-div">
+                    <input type="file" class="custom-file-input" name="attachFile">
+                    <label class="custom-file-label" th:text="첨부파일 + ${num}"></label>
+                </div>
+            </div>
+        </div>
+
+        <div th:if = "${not #lists.isEmpty(attachFileFormDto.attachFileDtoList)}">
+            <div class="form-group" th:each="attachFileDto, status: ${attachFileFormDto.attachFileDtoList}">
+                <div class="custom-file img-div">
+                    <input type="file" class="custom-file-input" name="attachFile">
+                    <input type="hidden" name="attachFileIds" th:value="${attachFileDto.id}">
+                    <label class="custom-file-label" th:text="${not #strings.isEmpty(attachFileDto.ori_fileName)} ? ${attachFileDto.ori_fileName} : '상품이미지' + ${status.index+1}"></label>
+                </div>
+            </div>
+        </div>
+
+        <div th:if="${#strings.isEmpty(attachFileFormDto.id)}" style="text-align: center">
+            <button th:formaction="@{/attachFile}" type="submit" class="btn btn-primary">저장</button>
+        </div>
+    </form>
+
+</body>
+</html>

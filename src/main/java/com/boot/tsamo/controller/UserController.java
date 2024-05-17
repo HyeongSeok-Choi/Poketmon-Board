@@ -43,10 +43,15 @@ public class UserController {
         if (bindingResult.hasErrors()) {
             return "/user/userForm";
         }
-        try {
-            Users user = Users.createUser(userFormDto, passwordEncoder);
-            userService.saveUser(user);
-        } catch (UsernameNotFoundException e) {
+        if (!userFormDto.getPassword().equals(userFormDto.getCheckPassword())) {
+            bindingResult.rejectValue("checkPassword", "passwordInCorrect",
+                    "2개의 패스워드가 일치하지 않습니다.");
+            return "/user/userForm";
+        }
+        try{
+             Users user = Users.createUser(userFormDto, passwordEncoder);
+             userService.saveUser(user);
+        }catch(UsernameNotFoundException e){
             model.addAttribute("errorMessage", e.getMessage());
             return "/user/userForm";
         }

@@ -2,10 +2,7 @@ package com.boot.tsamo.entity;
 
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -14,7 +11,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -37,11 +35,13 @@ public class Board {
 
     @CreationTimestamp // INSERT 시 자동으로 값을 채워줌
     @Column(name = "created_at")
-    private LocalDateTime createdAt = LocalDateTime.now();
+    private final LocalDateTime createdAt = LocalDateTime.now();
 
     @Column(name = "updated_at")
     @UpdateTimestamp // UPDATE 시 자동으로 값을 채워줌
-    private LocalDateTime updatedAt = LocalDateTime.now();
+    private final LocalDateTime updatedAt = LocalDateTime.now();
 
-    
+    @OneToMany(mappedBy = "boardId",fetch = FetchType.EAGER)
+    private List<Reply>replies= new ArrayList<Reply>();
+
 }

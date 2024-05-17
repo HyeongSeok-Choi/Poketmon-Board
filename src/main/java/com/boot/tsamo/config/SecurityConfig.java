@@ -13,13 +13,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-
 import static org.springframework.boot.autoconfigure.security.servlet.PathRequest.toH2Console;
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig   {
+
 
 /*    @Autowired
     UserService userService;*/
@@ -54,8 +54,11 @@ public class SecurityConfig   {
 
                 .authorizeHttpRequests((authorizeRequests) ->
                         authorizeRequests
+
+
                                 .requestMatchers("/css/**", "/js/**", "/img/**").permitAll()
-                                .requestMatchers("/","/user/**","/error","/").permitAll()
+                                .requestMatchers("/main","/","/user/**","/createBoard","/BoardDetailView","/reply","/posts","/createBoard","createBoard2"
+                                        ,"/api/addComment").permitAll()
                                 .requestMatchers("/admin/**").hasRole("ADMIN")
                                 .anyRequest().authenticated()
 

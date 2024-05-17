@@ -1,6 +1,8 @@
 package com.boot.tsamo.service;
 
 import com.boot.tsamo.constant.Role;
+import com.boot.tsamo.dto.AddReplyDTO;
+import com.boot.tsamo.dto.UserFormDto;
 import com.boot.tsamo.entity.Board;
 import com.boot.tsamo.entity.Reply;
 import com.boot.tsamo.entity.Users;
@@ -8,7 +10,9 @@ import com.boot.tsamo.repository.BoardRepository;
 import com.boot.tsamo.repository.ReplyRepository;
 import com.boot.tsamo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -16,6 +20,16 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ReplyService {
 
+    public Users createUser(){
+        UserFormDto userFormDto = new UserFormDto();
+        userFormDto.setUserId("test02");
+        userFormDto.setPassword(passwordEncoder.encode("12341234"));
+        userFormDto.setEmail("test02@gmail.com");
+        userFormDto.setNickName("test02");
+        return Users.createUser(userFormDto, passwordEncoder);
+    }
+
+    private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final BoardRepository boardRepository;
     private final ReplyRepository replyRepository;
@@ -27,7 +41,7 @@ public class ReplyService {
 //
 //    }
 
-    //더미 데이터
+    //더미 데이터 생성
     public Reply save(Reply reply) {
 
         Users users = new Users();
@@ -58,11 +72,56 @@ public class ReplyService {
         return reply;
     }
 
-    //모든 댓글 출력
-    public List<Reply> findAll() {
-        List<Reply> replies = replyRepository.findAll();
+
+
+    public Reply addReply(AddReplyDTO addReplyDTO){
+
+            //각 Entity들의 객체 얻기
+           Board board = boardRepository.findById(addReplyDTO.getBoardId()).get();
+           Users user = userRepository.findById(addReplyDTO.getUserid()).get();
+
+           Reply addreply= new Reply();
+
+           //reply객체 값 저장
+           addreply.setContent(addReplyDTO.getContent());
+
+           addreply.setUserid(user);
+
+           addreply.setBoardId(board);
+
+           replyRepository.save(addreply);
+
+        return addreply;
+    }
+
+    //모든 댓글 조회
+    public List<Reply> findAll(Long id) {
+
+        Board board = boardRepository.findById(id).get();
+
+        List<Reply> replies = board.getReplies();
 
         return replies;
     }
+
+    //댓글 수정
+    @Transactional
+    public Reply update(long id, String content) {
+
+        Reply reply = replyRepository.findById(id).get();
+
+        reply.update(content);
+
+        Reply updateReply = replyRepository.save(reply);
+
+        return updateReply;
+
+    }
+
+    //댓글 삭제
+    public void deleteById(Long id) {
+        replyRepository.deleteById(id);
+    }
+
 
 }

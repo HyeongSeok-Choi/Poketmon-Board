@@ -1,44 +1,66 @@
 package com.boot.tsamo.controller;
 
+import com.boot.tsamo.dto.AddReplyDTO;
+import com.boot.tsamo.dto.ViewReReplyDTO;
+import com.boot.tsamo.dto.ViewReplyDTO;
+import com.boot.tsamo.entity.ReReply;
+import com.boot.tsamo.entity.Reply;
+import com.boot.tsamo.service.ReReplyService;
+import com.boot.tsamo.service.ReplyService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
-@Slf4j
 @RestController
 @RequiredArgsConstructor
 public class ReplyController {
-//    private final ReplyService replyService;
+    private final ReplyService replyService;
+    private final ReReplyService reReplyService;
 
-    // 댓글 리스트 조회
-//    @GetMapping("/posts/{postId}/comments")
-//    public List<ReplyService> findAllComment(@PathVariable final Long postId) {
-//        return replyService.findAllReply(postId);
-//    }
-//
-//    // 댓글 상세정보 조회
-//    @GetMapping("/posts/{postId}/comments/{id}")
-//    public ReplyDto findCommentById(@PathVariable final Long postId,
-//                                    @PathVariable final Long id) {
-//        return replyService.findReplyById(id);
-//    }
+    // 신규 댓글 생성
+    @PostMapping("/api/addComment")
+    public ResponseEntity<Reply> saveComment(
+                                      @RequestBody AddReplyDTO contents,Principal principal) {
 
-//    // 신규 댓글 생성
-//    @PostMapping("/posts/{postId}/replys")
-//    public ReplyDto saveComment(@PathVariable final Long postId,
-//                                  final ReplyDto dto, @LoginUser UserSessionDto userDto) {
-//
-//        dto.setCrtId(userDto.getUserId());
-//        dto.setMdfId(userDto.getUserId());
-//
-//        log.debug("BoardDto :: {}", dto);
-//
-//        ReplyDto saveComment = replyService.saveReply(dto);
-//        return saveComment;
-//    }
+        //Long boardId = contents.getBoardId();
 
-    // 기존 댓글 수정
+        //작성자
+        String author = principal.getName();
+        contents.setUserid(author);
+
+        Reply savedReply = replyService.addReply(contents);
+
+
+        return ResponseEntity.ok().body(new Reply());
+
+
+    }
+
+    // 댓글 조회
+    @GetMapping("/api/allcomments")
+    public ResponseEntity<List<ViewReplyDTO>> getAllComments(Long id, Pageable pageable) {
+
+        id = 1L;
+
+        List<Reply> replieList = replyService.findAll(id);
+
+        List<ViewReplyDTO> replyDTOS = replieList.stream()
+                        .map(a -> new ViewReplyDTO(a))
+                        .collect(Collectors.toList());
+
+
+        return ResponseEntity.ok().body(replyDTOS);
+
+    }
+
+//    //기존 댓글 수정
 //    @PatchMapping("/posts/{postId}/comments/{id}")
 //    public CommentDto updateComment(@PathVariable final Long postId, @PathVariable final Long id,
 //                                    @RequestBody final CommentDto dto, @LoginUser UserSessionDto userDto) {
@@ -49,4 +71,23 @@ public class ReplyController {
 //        commentService.updateComment(dto);
 //        return commentService.findCommentById(id);
 //    }
+
+
+    // 대댓글 조회
+    @GetMapping("/api/allrecomments")
+    public ResponseEntity<List<ViewReReplyDTO>> getAllReComments(Long id, Pageable pageable) {
+
+        id = 1L;
+
+        List<ReReply> reReplieList = reReplyService.findAll(id);
+
+        List<ViewReReplyDTO> reReplyDTOS = reReplieList.stream()
+                .map(b -> new ViewReReplyDTO(b))
+                .collect(Collectors.toList());
+
+
+        return ResponseEntity.ok().body(reReplyDTOS);
+
+    }
+
 }
