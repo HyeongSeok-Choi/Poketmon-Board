@@ -28,22 +28,20 @@
 
     <!-- 댓글 렌더링 영역 -->
     <hr/>
-
+    <div id="Parent">
     <div id="replySelectAll"> <!-- 댓글 리스트 조회 되는 부분 -->
 
     </div>
-
+    </div>
     <hr/>
 
  <script>
-
-     var comment ;
      //댓글 조회 기능
-
-         request();
-
-
+        request();
          function request() {
+
+             $('#replySelectAll').empty();
+             console.log("노드가 삭제 ?");
 
              fetch('http://localhost:8080/api/allcomments', {
                  headers: {
@@ -55,33 +53,31 @@
 
                  .then(response => response.json())
                  .then(data => {
+                     var comment='';
 
                      $.each(data, function (i) {
                          console.log(data);
                          console.log(data[i].boardId);
                          console.log(data[i].content);
+                         console.log(data[i].userid+"언디파인드?");
 
-                         comment += `
-                        <div>
+
+
+                         comment +=`<div class="comments">
+                            <input type="hidden" value="${data[i].replyId}">
                             <span class="writer_img"><img src="/img/BBANG.jpg" width="30" height="30" alt="기본 프로필 이미지"/></span>
                             <p class="writer">
                                 <em>${data[i].userid}</em>
                                 <span class="date">${data[i].createdAt}</span>
                             </p>
-                            <div class="cont"><div class="txt_con">${data[i].content}</div></div>
+                            <div class="cont"><input  class="txt_con" value="${data[i].content}" readonly></div>
                             <p class="func_btns">
-                                <button type="button" class="btns"><span class="icons icon_modify">수정</span></button>
-                                <button type="button" class="btns"><span class="icons icon_del">삭제</span></button>
+                                <button type="button" class="btns-modify" ><span class="icons icon_modify" onclick="modifyComment()">수정</span></button>
+                                <button type="button" id="${data[i].replyId} class="btns"><span class="icons icon_del">삭제</span></button>
                             </p>
-                        </div>
-                    `;
-
-
-                         $('#replySelectAll').append(comment);
+                        </div>`;
                      })
-
-
-
+                     $('#replySelectAll').append(comment);
                  });
 
          }
@@ -89,6 +85,7 @@
 
          // 댓글 저장
          function saveComment() {
+
              const contents = document.getElementById('contents').value;
              console.log(contents);
 
@@ -110,12 +107,22 @@
 
              }).then(res => {
                  console.log("되노");
-                 $('#contents').val("");
+                 request();
              })
 
 
          }
 
+           function modifyComment(){}
+
+                $('#reply-content').attr('readonly',false);
+
+
+
+     $(document).on("click", ".btns-modify", function(e) {
+         ids = $(this).val();
+
+     })
 
 
     </script>
