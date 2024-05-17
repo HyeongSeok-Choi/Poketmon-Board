@@ -49,8 +49,18 @@ public class ReReplyService {
     }
 
 
-    //모든 대댓글 조회
-    public List<ReReply> findAll(Long id) {
+//    //모든 대댓글 조회
+//    public List<ReReply> findAll(Long id) {
+//
+//        Reply reply = replyRepository.findById(id).get();
+//
+//        List<ReReply> rereplies = reply.getRereplies();
+//
+//        return rereplies;
+//    }
+
+    // 대댓글 상세 조회
+    public List<ReReply> findByReplyId(Long id) {
 
         Reply reply = replyRepository.findById(id).get();
 
