@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -56,7 +57,7 @@ public class TestController {
 
     //게시물 목록(main페이지) 검색, 페이징 기능 포함
     @GetMapping(value = "/")
-    public String main(Model model,@PageableDefault(page=0,size = 1,sort = "id",
+    public String main(Model model, @PageableDefault(page=0,size = 1,sort = "id",
             direction = Sort.Direction.DESC) Pageable pageable, String searchvalue, String searchtype) {
 
 

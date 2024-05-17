@@ -4,21 +4,21 @@ import com.boot.tsamo.dto.UserFormDto;
 import com.boot.tsamo.entity.Users;
 import com.boot.tsamo.repository.UserRepository;
 import com.boot.tsamo.service.UserService;
-import jakarta.servlet.http.HttpSession;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.PathVariable; // import PathVariable
+import org.springframework.web.bind.annotation.RequestParam; // import RequestParam for update
+
 
 import java.security.Principal;
 
@@ -39,44 +39,66 @@ public class UserController {
 
     @PostMapping(value = "/new")
     public String newUser(@Valid UserFormDto userFormDto,
-                          BindingResult bindingResult, Model model){
-        if(bindingResult.hasErrors()){
+                          BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
             return "/user/userForm";
         }
-        try{
-             Users user = Users.createUser(userFormDto, passwordEncoder);
-             userService.saveUser(user);
-        }catch(UsernameNotFoundException e){
+        try {
+            Users user = Users.createUser(userFormDto, passwordEncoder);
+            userService.saveUser(user);
+        } catch (UsernameNotFoundException e) {
             model.addAttribute("errorMessage", e.getMessage());
-            System.out.println("2222222 : "  + e.getMessage());
             return "/user/userForm";
         }
 
         return "redirect:/user/login";
+
+        //redirect:/user/login 로 하면 에러 500
     }
 
+/*    @PostMapping(value = "/new")
+    public String userIdcheck(@Valid UserFormDto userFormDto,
+                          BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            return "/user/userForm";
+        }
+        try {
+            Users user = Users.createUser(userFormDto, passwordEncoder);
+            userService.saveUser(user);
+        } catch (UsernameNotFoundException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            return "/user/userForm";
+        }
+        return "/user/userForm";
+    }*/
+
     @GetMapping(value = "/login")
-    public String loginUser(){
+    public String loginUser() {
         return "/user/userLoginForm";
     }
 
     @GetMapping(value = "/login/error")
-    public String loginError(Model model){
+    public String loginError(Model model) {
         model.addAttribute("loginErrorMsg", "아이디 또는 비밀번호를 확인해주세요");
         return "/user/userLoginForm";
     }
 
- /*   @GetMapping("/update")
-    public String updateUsername(@Valid MemberUsernameUpdateDTO memberUsernameUpdateDTO, Errors errors, Model model, Authentication authentication) {
-        if (errors.hasErrors()) {
-            model.addAttribute("member", memberUsernameUpdateDTO);
-            globalService.messageHandling(errors, model);
-            return "/user/updateUsername";
+    @GetMapping("/loginInfo/{userId}")
+    public String updateUserInfo(@PathVariable("userId") String userId, Model model) {
+        try {
+            // userService.getUserDetails(userId)를 호출합니다.
+            UserFormDto userFormDto = userService.getUserDetails(userId);
+
+            // 모델에 사용자 정보를 추가합니다.
+            model.addAttribute("user", userFormDto);
+        } catch (EntityNotFoundException e) {
+            // 사용자가 존재하지 않을 때 처리합니다.
+            model.addAttribute("errorMessage", "존재하지 않는 아이디입니다.");
+            model.addAttribute("userFormDto", new UserFormDto());
+            return "/user/userLoginInfo";
         }
-
-        memberService.updateMemberUsername(memberUsernameUpdateDTO);
-
-        return "redirect:/user/userInfo";
-    }*/
+        // 수정 페이지를 반환합니다.
+        return "/user/userLoginInfo";
+    }
 
 }
