@@ -34,6 +34,11 @@ public class UserController {
         if(bindingResult.hasErrors()){
             return "/user/userForm";
         }
+        if (!userFormDto.getPassword().equals(userFormDto.getCheckPassword())) {
+            bindingResult.rejectValue("checkPassword", "passwordInCorrect",
+                    "2개의 패스워드가 일치하지 않습니다.");
+            return "/user/userForm";
+        }
         try{
              Users user = Users.createUser(userFormDto, passwordEncoder);
              userService.saveUser(user);
@@ -45,6 +50,7 @@ public class UserController {
 
         return "redirect:/user/login";
     }
+
 
     @GetMapping(value = "/login")
     public String loginUser(){

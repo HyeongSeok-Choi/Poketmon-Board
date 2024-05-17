@@ -14,8 +14,11 @@ public class UserFormDto {
     private String userId;
 
     @NotBlank(message = "비밀번호는 필수 입력 값입니다.")
-    @Length(min=5, max=25, message = "비밀번호는 5자 이상, 25자 이하로 입력해주세요.")
+    @Length(min = 5, max = 25, message = "비밀번호는 5자 이상, 25자 이하로 입력해주세요.")
     private String password;
+
+    @NotBlank(message = "비밀번호 확인은 필수 입력 값입니다")
+    private String checkPassword;
 
     @NotBlank(message = "이메일은 필수 입력 값입니다.")
     @Email(message = "이메일 형식으로 입력해주세요.")

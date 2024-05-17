@@ -44,4 +44,8 @@ public class ReReply {
     @UpdateTimestamp // UPDATE 시 자동으로 값을 채워줌
     private final LocalDateTime updatedAt = LocalDateTime.now();
 
+    public void reReplyupdate(  String content) {
+        this.content = content;
+    }
+
 }

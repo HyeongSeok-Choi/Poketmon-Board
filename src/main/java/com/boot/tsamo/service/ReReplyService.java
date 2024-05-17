@@ -28,13 +28,13 @@ public class ReReplyService {
     private final ReReplyRepository rereplyRepository;
 
     //대댓글 생성
-    public ReReply addReReply(AddReReplyDTO addReReplyDTO){
+    public ReReply addReReply(AddReReplyDTO addReReplyDTO) {
 
         //각 Entity들의 객체 얻기
         Reply reply = replyRepository.findById(addReReplyDTO.getReplyId()).get();
         Users user = userRepository.findById(addReReplyDTO.getUserid()).get();
 
-        ReReply addreReply= new ReReply();
+        ReReply addreReply = new ReReply();
 
         //reply객체 값 저장
         addreReply.setContent(addReReplyDTO.getContent());
@@ -60,14 +60,18 @@ public class ReReplyService {
     }
 
     //대댓글 수정
-//    @Transactional
-//    public ReReply update(long id, String content) {
-//
-//        ReReply reReply = rereplyRepository.findById(id).get();
-//
-//      return
-//
-//    }
+    @Transactional
+    public ReReply update(long id, String content) {
+
+        ReReply reReply = rereplyRepository.findById(id).get();
+
+        reReply.reReplyupdate(content);
+
+        ReReply updateReReplyResult = rereplyRepository.save(reReply);
+
+        return updateReReplyResult;
+
+    }
 
     //대댓글 삭제
     public void deleteById(Long id) {
