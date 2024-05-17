@@ -55,9 +55,8 @@ public class SecurityConfig   {
                 .authorizeHttpRequests((authorizeRequests) ->
                         authorizeRequests
 
-
                                 .requestMatchers("/css/**", "/js/**", "/img/**").permitAll()
-                                .requestMatchers("/main","/","/user/**","/createBoard","/BoardDetailView","/reply","/posts","/createBoard","createBoard2"
+                                .requestMatchers("/","/user/**","/createBoard","/BoardDetailView","/reply","/posts","/createBoard","createBoard2"
                                         ,"/api/addComment").permitAll()
                                 .requestMatchers("/admin/**").hasRole("ADMIN")
                                 .anyRequest().authenticated()

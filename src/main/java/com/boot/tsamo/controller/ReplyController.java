@@ -2,17 +2,16 @@ package com.boot.tsamo.controller;
 
 import com.boot.tsamo.dto.AddReplyDTO;
 import com.boot.tsamo.dto.ViewReplyDTO;
+import com.boot.tsamo.dto.modifyReplyDTO;
 import com.boot.tsamo.entity.Reply;
 import com.boot.tsamo.service.ReplyService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -23,7 +22,7 @@ public class ReplyController {
     // 신규 댓글 생성
     @PostMapping("/api/addComment")
     public ResponseEntity<Reply> saveComment(
-                                      @RequestBody AddReplyDTO contents,Principal principal) {
+            @RequestBody AddReplyDTO contents, Principal principal) {
 
         //Long boardId = contents.getBoardId();
 
@@ -33,9 +32,7 @@ public class ReplyController {
 
         Reply savedReply = replyService.addReply(contents);
 
-
         return ResponseEntity.ok().body(new Reply());
-
 
     }
 
@@ -48,25 +45,21 @@ public class ReplyController {
         List<Reply> replieList = replyService.findAll(id);
 
         List<ViewReplyDTO> replyDTOS = replieList.stream()
-                        .map(a -> new ViewReplyDTO(a))
-                        .collect(Collectors.toList());
-
-
+                .map(a -> new ViewReplyDTO(a))
+                .collect(Collectors.toList());
 
 
         return ResponseEntity.ok().body(replyDTOS);
 
     }
 
-//    //기존 댓글 수정
-//    @PatchMapping("/posts/{postId}/comments/{id}")
-//    public CommentDto updateComment(@PathVariable final Long postId, @PathVariable final Long id,
-//                                    @RequestBody final CommentDto dto, @LoginUser UserSessionDto userDto) {
-//
-//        dto.setMdfId(userDto.getUserId());
-//        log.debug("BoardDto :: {}", dto);
-//
-//        commentService.updateComment(dto);
-//        return commentService.findCommentById(id);
-//    }
+    //기존 댓글 수정
+    @PostMapping("/api/modify")
+    public ResponseEntity<modifyReplyDTO> updateComment(@RequestBody modifyReplyDTO dto) {
+
+        replyService.update(dto);
+
+        return ResponseEntity.ok().body(dto);
+    }
+
 }

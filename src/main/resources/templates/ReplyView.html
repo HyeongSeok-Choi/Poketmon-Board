@@ -36,23 +36,10 @@
     <hr/>
 
  <script>
-     //댓글 조회 기능
+
         request();
 
-     $(document).on('click','.modify',function(){
-
-         console.log("모디파이");
-
-         var id = $(this).attr("id");
-
-         console.log(id+"아이디는 들어온다");
-
-         $('#'+id).attr('readonly',false);
-
-     });
-
-
-
+        //댓글 조회 기능
      function request() {
 
              $('#replySelectAll').empty();
@@ -85,7 +72,7 @@
                                 <em>${data[i].userid}</em>
                                 <span class="date">${data[i].createdAt}</span>
                             </p>
-                            <div class="cont"><input  class="txt_con" value="${data[i].content}" readonly></div>
+                            <div class="cont"><input id="${data[i].replyId}input"  class="txt_con" value="${data[i].content}" readonly></div>
                             <p class="func_btns">
                                 <button type="button" id="${data[i].replyId}" class="modify"><span class="icons icon_modify">수정</span></button>
                                 <button type="button"  class="btns"><span class="icons icon_del">삭제</span></button>
@@ -121,13 +108,72 @@
                  })
 
              }).then(res => {
+
+                 $('#contents').val('')
                  console.log("되노");
                  request();
              })
 
 
          }
-    </script>
+
+
+
+        $(document).on('blur','.txt_con',function(){
+
+            console.log("포커스 아웃");
+
+            $('.txt_con').attr('readonly',true);
+
+        });
+
+
+        $(document).on('click','.modify',function(){
+
+
+            var id = $(this).attr("id");
+
+            if($(this).html() == "저장") {
+                console.log("저장");
+
+
+                const content = document.getElementById(id + 'input').value;
+                console.log(content);
+
+
+                fetch("/api/modify", {
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    method: 'POST',
+                    body: JSON.stringify({
+                        content: content,
+                        id:id
+                    })
+
+                }).then(res => {
+
+                    $(this).html('수정');
+                    request();
+
+                })
+            }else{
+
+                $(this).html('저장')
+
+                console.log("모디파이");
+
+                var id = $(this).attr("id");
+
+                console.log(id+"아이디는 들어온다");
+
+                $('#'+id+'input').attr('readonly',false).focus();
+
+
+            }
+        })
+
+ </script>
 
 </body>
 </html>

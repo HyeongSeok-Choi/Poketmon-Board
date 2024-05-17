@@ -3,6 +3,7 @@ package com.boot.tsamo.service;
 import com.boot.tsamo.constant.Role;
 import com.boot.tsamo.dto.AddReplyDTO;
 import com.boot.tsamo.dto.UserFormDto;
+import com.boot.tsamo.dto.modifyReplyDTO;
 import com.boot.tsamo.entity.Board;
 import com.boot.tsamo.entity.Reply;
 import com.boot.tsamo.entity.Users;
@@ -106,15 +107,15 @@ public class ReplyService {
 
     //댓글 수정
     @Transactional
-    public Reply update(long id, String content) {
+    public Reply update(modifyReplyDTO modifyReplyDTO){
 
-        Reply reply = replyRepository.findById(id).get();
+        Reply reply= replyRepository.findById(modifyReplyDTO.getId()).get();
 
-        reply.update(content);
+        reply.update(modifyReplyDTO.getContent());
 
-        Reply updateReply = replyRepository.save(reply);
+        Reply updatedReply= replyRepository.save(reply);
 
-        return updateReply;
+        return updatedReply;
 
     }
 
