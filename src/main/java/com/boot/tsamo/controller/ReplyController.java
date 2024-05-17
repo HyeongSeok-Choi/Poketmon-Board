@@ -1,8 +1,11 @@
 package com.boot.tsamo.controller;
 
 import com.boot.tsamo.dto.AddReplyDTO;
+import com.boot.tsamo.dto.ViewReReplyDTO;
 import com.boot.tsamo.dto.ViewReplyDTO;
+import com.boot.tsamo.entity.ReReply;
 import com.boot.tsamo.entity.Reply;
+import com.boot.tsamo.service.ReReplyService;
 import com.boot.tsamo.service.ReplyService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +22,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ReplyController {
     private final ReplyService replyService;
+    private final ReReplyService reReplyService;
 
     // 신규 댓글 생성
     @PostMapping("/api/addComment")
@@ -67,4 +71,23 @@ public class ReplyController {
 //        commentService.updateComment(dto);
 //        return commentService.findCommentById(id);
 //    }
+
+
+    // 대댓글 조회
+    @GetMapping("/api/allrecomments")
+    public ResponseEntity<List<ViewReReplyDTO>> getAllReComments(Long id, Pageable pageable) {
+
+        id = 1L;
+
+        List<ReReply> reReplieList = reReplyService.findAll(id);
+
+        List<ViewReReplyDTO> reReplyDTOS = reReplieList.stream()
+                .map(b -> new ViewReReplyDTO(b))
+                .collect(Collectors.toList());
+
+
+        return ResponseEntity.ok().body(reReplyDTOS);
+
+    }
+
 }
