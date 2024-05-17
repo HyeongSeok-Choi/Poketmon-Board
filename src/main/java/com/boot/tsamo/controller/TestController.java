@@ -48,11 +48,7 @@ public class TestController {
         return "test";
     }
 
-<<<<<<< HEAD
-    //test뷰(없어도 됨)
-=======
-    //관리자페이지
->>>>>>> parent of 177a140 (Pm06:06)
+
     @GetMapping(value = "/admin")
     public String admin() {
 
