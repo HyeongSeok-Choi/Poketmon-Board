@@ -36,7 +36,7 @@
         <a href="/"><img src="/img/home.png"></a>
         <a class="nav-link" sec:authorize="isAnonymous()" href="/user/login">로그인</a>
                 <!-- 사용자가 로그인한 경우에만 환영 메시지 표시 -->
-            <a class="label" sec:authorize="isAuthenticated()" th:text="'환영합니다, [' + ${#authentication.principal.username} + '] 님'"></a>
+<!--            <a class="label" sec:authorize="isAuthenticated()" th:text="'환영합니다, [' + ${#authentication.principal.username} + '] 님'"></a>-->
 
         <a class="nav-link" sec:authorize="isAuthenticated()" href="/user/logout">로그아웃</a>
 
