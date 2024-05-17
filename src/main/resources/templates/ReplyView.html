@@ -10,75 +10,73 @@
 </head>
 <body>
 
-    <!-- 댓글 작성 -->
-    <div class="cm_write">
-        <fieldset>
-            <legend class="skipinfo">댓글 입력</legend>
-            <div class="cm_input">
-                <p><textarea id="contents" name="contents" cols="90" rows="4"
-                             placeholder="댓글을 입력해 주세요."></textarea></p>
-                <span><button type="button" class="btns" onclick="saveComment();">등 록</button></span>
-                <span><button type="button" class="btns" onclick="updateComment();">수정</button></span>
-                <span><button type="button" class="btns" onclick="deleteComment();">삭제</button></span>
-            </div>
-        </fieldset>
-    </div>
+<!-- 댓글 작성 -->
+<div class="cm_write">
+    <fieldset>
+        <legend class="skipinfo">댓글 입력</legend>
+        <div class="cm_input">
+            <p><textarea id="contents" name="contents" cols="90" rows="4"
+                         placeholder="댓글을 입력해 주세요."></textarea></p>
+            <span><button type="button" class="btns" onclick="saveComment();">등 록</button></span>
+            <span><button type="button" class="btns" onclick="saveReComment();">답글 등록</button></span>
+            <span><button type="button" class="btns" onclick="updateComment();">수정</button></span>
+            <span><button type="button" class="btns" onclick="deleteComment();">삭제</button></span>
+        </div>
+    </fieldset>
+</div>
 
 
+<!-- 댓글 렌더링 영역 -->
+<div id="Parent">
+    <div id="replySelectAll"> <!-- 댓글 리스트 조회 되는 부분 --></div>
+</div>
+<hr/>
+<h1>답글입니다</h1>
+<div id="reReplySelectAll"></div><!-- 대댓글 리스트 조회 되는 부분 -->
 
-    <!-- 댓글 렌더링 영역 -->
-    <hr/>
-    <div id="Parent">
-    <div id="replySelectAll"> <!-- 댓글 리스트 조회 되는 부분 -->
+<script>
+    //댓글 조회 기능
+    request();
+    reRequest();
 
-    </div>
-    </div>
-    <hr/>
+    $(document).on('click', '.modify', function () {
 
- <script>
-     //댓글 조회 기능
-        request();
+        console.log("모디파이");
 
-     $(document).on('click','.modify',function(){
+        var id = $(this).attr("id");
 
-         console.log("모디파이");
+        console.log(id + "아이디는 들어온다");
 
-         var id = $(this).attr("id");
+        $('#' + id).attr('readonly', false);
 
-         console.log(id+"아이디는 들어온다");
-
-         $('#'+id).attr('readonly',false);
-
-     });
-
+    });
 
 
-     function request() {
+    function request() {
 
-             $('#replySelectAll').empty();
-             console.log("노드가 삭제 ?");
+        $('#replySelectAll').empty();
+        console.log("노드가 삭제 ?");
 
-             fetch('http://localhost:8080/api/allcomments', {
-                 headers: {
-                     'Content-Type': 'application/json',
-                     'Accept': 'application/json'
-                 },
-                 method: 'GET',
-             })
+        fetch('http://localhost:8080/api/allcomments', {
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            method: 'GET',
+        })
 
-                 .then(response => response.json())
-                 .then(data => {
-                     var comment='';
+            .then(response => response.json())
+            .then(data => {
+                var comment = '';
 
-                     $.each(data, function (i) {
-                         console.log(data);
-                         console.log(data[i].boardId);
-                         console.log(data[i].content);
-                         console.log(data[i].userid+"언디파인드?");
+                $.each(data, function (i) {
+                    console.log(data);
+                    console.log(data[i].boardId);
+                    console.log(data[i].content);
+                    console.log(data[i].userid + "언디파인드?");
 
 
-
-                         comment +=`<div class="comments">
+                    comment += `<div class="comments">
                             <input type="hidden" value="${data[i].replyId}">
                             <span class="writer_img"><img src="/img/BBANG.jpg" width="30" height="30" alt="기본 프로필 이미지"/></span>
                             <p class="writer">
@@ -91,43 +89,125 @@
                                 <button type="button"  class="btns"><span class="icons icon_del">삭제</span></button>
                             </p>
                         </div>`;
-                     })
-                     $('#replySelectAll').append(comment);
-                 });
+                })
+                $('#replySelectAll').append(comment);
+            });
 
-         }
-
-
-         // 댓글 저장
-         function saveComment() {
-
-             const contents = document.getElementById('contents').value;
-             console.log(contents);
+    }
 
 
-             const boardId = 1;  // 테스트용 ID <!-- 수정: 템플릿 표현식 주석으로 변경 -->
+    // 댓글 저장
+    function saveComment() {
+
+        const contents = document.getElementById('contents').value;
+        console.log(contents);
 
 
-             fetch("/api/addComment", {
-                 headers: {
-                     "Content-Type": "application/json",
-                 },
-                 method: 'POST',
-                 body: JSON.stringify({
-                     content: contents,
-                     boardId: boardId,
-                     userid: "qnftlstm",
-
-                 })
-
-             }).then(res => {
-                 console.log("되노");
-                 request();
-             })
+        const boardId = 1;  // 테스트용 ID <!-- 수정: 템플릿 표현식 주석으로 변경 -->
 
 
-         }
-    </script>
+        fetch("/api/addComment", {
+            headers: {
+                "Content-Type": "application/json",
+            },
+            method: 'POST',
+            body: JSON.stringify({
+                content: contents,
+                boardId: boardId,
+                userid: "qnftlstm",
+
+            })
+
+        }).then(res => {
+            console.log("되노");
+            request();
+        })
+
+
+    }
+
+
+    // ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    //대댓글 조회
+
+    function reRequest() {
+
+        $('#reReplySelectAll').empty();
+        console.log("노드가 삭제 ?");
+
+        fetch('http://localhost:8080/api/allReComment', {
+
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            method: 'GET',
+        })
+
+
+            .then(response => response.json())
+            .then(data => {
+                var comment = '';
+
+                console.log(data[0].userid + "유저아이디");
+
+                $.each(data, function (i) {
+                    console.log(data);
+                    console.log(data[i].content);
+                    console.log(data[i].userid + "언디파인드?");
+
+
+                    comment += `<div class="recomments">
+                            <input type="hidden" value="${data[i].replyId}">
+                            <span class="writer_img"><img src="/img/BBANG.jpg" width="30" height="30" alt="기본 프로필 이미지"/></span>
+                            <p class="writer">
+                                <em>${data[i].userid}</em>
+                                <span class="date">${data[i].createdAt}</span>
+                            </p>
+                            <div class="cont"><input  class="txt_con" value="${data[i].content}" readonly></div>
+                            <p class="func_btns">
+                                <button type="button" id="${data[i].replyId}" class="modify"><span class="icons icon_modify">수정</span></button>
+                                <button type="button"  class="btns"><span class="icons icon_del">삭제</span></button>
+                            </p>
+                        </div>`;
+                })
+
+                $('#reReplySelectAll').append(comment);
+            });
+
+    }
+
+
+    // 대댓글 저장
+    function saveReComment() {
+
+        const contents = document.getElementById('contents').value;
+        console.log(contents);
+
+
+        const replyId = 1;  // 테스트용 ID <!-- 수정: 템플릿 표현식 주석으로 변경 -->
+
+
+        fetch("/api/addReComment", {
+            headers: {
+                "Content-Type": "application/json",
+            },
+            method: 'POST',
+            body: JSON.stringify({
+                content: contents,
+                replyId: replyId,
+                userid: "qnftlstm",
+
+            })
+
+        }).then(res => {
+            console.log("되노");
+            reRequest();
+        })
+
+
+    }
+</script>
 
 </body>
 </html>

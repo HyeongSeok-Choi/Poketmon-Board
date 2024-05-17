@@ -1,5 +1,6 @@
 package com.boot.tsamo.controller;
 
+import com.boot.tsamo.dto.AddReReplyDTO;
 import com.boot.tsamo.dto.AddReplyDTO;
 import com.boot.tsamo.dto.ViewReReplyDTO;
 import com.boot.tsamo.dto.ViewReplyDTO;
@@ -72,9 +73,27 @@ public class ReplyController {
 //        return commentService.findCommentById(id);
 //    }
 
+    //대댓글 생성
+    @PostMapping("/api/addReComment")
+    public ResponseEntity<ReReply> saveReComment(
+            @RequestBody AddReReplyDTO contents, Principal principal) {
+
+        //Long boardId = contents.getBoardId();
+
+        //작성자
+        String author = principal.getName();
+        contents.setUserid(author);
+
+       ReReply savedReReply = reReplyService.addReReply(contents);
+
+
+        return ResponseEntity.ok().body(new ReReply());
+
+
+    }
 
     // 대댓글 조회
-    @GetMapping("/api/allrecomments")
+    @GetMapping("/api/allReComment")
     public ResponseEntity<List<ViewReReplyDTO>> getAllReComments(Long id, Pageable pageable) {
 
         id = 1L;
@@ -82,8 +101,15 @@ public class ReplyController {
         List<ReReply> reReplieList = reReplyService.findAll(id);
 
         List<ViewReReplyDTO> reReplyDTOS = reReplieList.stream()
-                .map(b -> new ViewReReplyDTO(b))
+                .map(a -> new ViewReReplyDTO(a))
                 .collect(Collectors.toList());
+
+       for (ViewReReplyDTO r : reReplyDTOS){
+           System.out.println(r.getUserid());
+           System.out.println(r.getContent());
+           System.out.println(r.getCreatedAt());
+
+       }
 
 
         return ResponseEntity.ok().body(reReplyDTOS);
