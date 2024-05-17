@@ -74,17 +74,17 @@ public class ReplyService {
 
 
 
-    public Reply addReply(AddReplyDTO addReplyDTO, Long boardId){
+    public Reply addReply(AddReplyDTO addReplyDTO){
 
-           Board board = boardRepository.findById(1L).get();
-
-           //Users user = userRepository.findById(addReplyDTO.getUserid()).get();
+            //각 Entity들의 객체 얻기
+           Board board = boardRepository.findById(addReplyDTO.getBoardId()).get();
+           Users user = userRepository.findById(addReplyDTO.getUserid()).get();
 
            Reply addreply= new Reply();
 
+           //reply객체 값 저장
            addreply.setContent(addReplyDTO.getContent());
-           Users user =new Users();
-            user.setUserId("qnftlstm78");
+
            addreply.setUserid(user);
 
            addreply.setBoardId(board);
@@ -93,8 +93,6 @@ public class ReplyService {
 
         return addreply;
     }
-
-
 
     //모든 댓글 조회
     public List<Reply> findAll(Long id) {
