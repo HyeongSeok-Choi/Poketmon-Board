@@ -45,10 +45,10 @@ public class ReplyController {
     }
 
     //댓글 조회 수정본
-    @GetMapping("/api/allcomments/{ReplyId}")
-    public ResponseEntity<List<ViewReplyDTO>> getAllComments(@PathVariable long ReplyId) {
+    @GetMapping("/api/allcomments/{boardId}")
+    public ResponseEntity<List<ViewReplyDTO>> getAllComments(@PathVariable long boardId) {
 
-        List<Reply> replieList = replyService.findAll(ReplyId);
+        List<Reply> replieList = replyService.findAll(boardId);
 
         List<ViewReplyDTO> replyDTOS = replieList.stream()
                 .map(a -> new ViewReplyDTO(a))
@@ -111,9 +111,9 @@ public class ReplyController {
     }
 
     // 상세 대댓글 조회 수정본
-    @GetMapping("/api/allReComment/{reReplyId}")
-    public ResponseEntity<List<ViewReReplyDTO>> getAllReComments(@PathVariable long reReplyId) {
-        List<ReReply> reReplieList = reReplyService.findByReplyId(reReplyId);
+    @GetMapping("/api/allReComment/{replyId}")
+    public ResponseEntity<List<ViewReReplyDTO>> getAllReComments(@PathVariable long replyId) {
+        List<ReReply> reReplieList = reReplyService.findByReplyId(replyId);
 
         List<ViewReReplyDTO> reReplyDTOS = reReplieList.stream()
                 .map(ViewReReplyDTO::new)

@@ -256,7 +256,7 @@
     function request() {
         $('#replySelectAll').empty();
 
-        fetch('http://localhost:8080/api/allcomments/${ReplyId}', {
+        fetch(`http://localhost:8080/api/allcomments/{boardId}`, {
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json'
@@ -311,7 +311,7 @@
     }
 
     function reRequest() {
-        fetch('http://localhost:8080/api/allReComment/${replyId}', {
+        fetch('http://localhost:8080/api/allReComment/{reReplyId}', {
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json'
