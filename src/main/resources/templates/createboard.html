@@ -71,13 +71,6 @@
                     </div>
                 </div>
 
-                <ul class='test' id='test' style="list-style-type: none">
-                    <li>테스트요1</li>
-                    <li>테스트요2</li>
-                    <li>테스트요3</li>
-                    <li>테스트요4</li>
-
-                </ul>
 
                 <!--해시 태그 입력-->
                 <div class="row">
@@ -100,11 +93,12 @@
 <script>
 
 
-    $(function (){
-        $(".hashTag li").on("click",function (){
-            $(this).remove();
-        })
-    })
+
+    $(document).on('click','.hashTag li',function(){
+
+        $(this).remove();
+    });
+
 
 
     $(".test li").click(function(){
