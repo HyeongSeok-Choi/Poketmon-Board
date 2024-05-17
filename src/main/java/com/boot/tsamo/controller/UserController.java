@@ -107,7 +107,7 @@ public class UserController {
     }
 
     @PostMapping(value = "/loginInfo" )
-    public String updateUserInfo(UserFormDto userFormDto, Model model, RedirectAttributes redirectAttributes) {
+    public String updateUserInfo(UserFormDto userFormDto, RedirectAttributes redirectAttributes) {
         userService.updateUser(userFormDto);
         redirectAttributes.addFlashAttribute("successMessage", "수정되었습니다.");
         return "redirect:/user/loginInfo";

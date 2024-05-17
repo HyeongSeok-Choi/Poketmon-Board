@@ -73,13 +73,14 @@ public class UserService implements UserDetailsService {
 
     public String updateUser(UserFormDto userFormDto) {
         Users user = userRepository.findById(userFormDto.getUserId()).orElseThrow(EntityNotFoundException::new);
+        user.updateEmail(userFormDto.getEmail());
         user.updateNickName(userFormDto.getNickName());
-        user.updatePassword(userFormDto.getPassword());
+/*        user.updatePassword(userFormDto.getPassword());*/
 
-        // 회원 비밀번호 수정을 위한 패스워드 암호화
+/*        // 회원 비밀번호 수정을 위한 패스워드 암호화
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         String encodePw = encoder.encode(userFormDto.getPassword());
-        user.updatePassword(encodePw);
+        user.updatePassword(encodePw);*/
 
         userRepository.save(user);
 

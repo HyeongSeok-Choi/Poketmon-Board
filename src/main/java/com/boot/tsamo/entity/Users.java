@@ -89,8 +89,8 @@ public class Users implements UserDetails {
 
     }
 
-    public void updatePassword(String password) {
-        this.password = password;
+    public void updateEmail(String email) {
+        this.email = email;
     }
 
     public void updateNickName(String nickName) {
