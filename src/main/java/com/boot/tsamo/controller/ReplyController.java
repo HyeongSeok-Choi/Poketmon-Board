@@ -1,5 +1,6 @@
 package com.boot.tsamo.controller;
 
+import com.boot.tsamo.dto.AddReReplyDTO;
 import com.boot.tsamo.dto.AddReplyDTO;
 import com.boot.tsamo.dto.ViewReReplyDTO;
 import com.boot.tsamo.dto.ViewReplyDTO;
@@ -27,7 +28,7 @@ public class ReplyController {
     // 신규 댓글 생성
     @PostMapping("/api/addComment")
     public ResponseEntity<Reply> saveComment(
-                                      @RequestBody AddReplyDTO contents,Principal principal) {
+            @RequestBody AddReplyDTO contents, Principal principal) {
 
         //Long boardId = contents.getBoardId();
 
@@ -52,8 +53,8 @@ public class ReplyController {
         List<Reply> replieList = replyService.findAll(id);
 
         List<ViewReplyDTO> replyDTOS = replieList.stream()
-                        .map(a -> new ViewReplyDTO(a))
-                        .collect(Collectors.toList());
+                .map(a -> new ViewReplyDTO(a))
+                .collect(Collectors.toList());
 
 
         return ResponseEntity.ok().body(replyDTOS);
@@ -72,22 +73,89 @@ public class ReplyController {
 //        return commentService.findCommentById(id);
 //    }
 
+    //대댓글 생성
+    @PostMapping("/api/addReComment")
+    public ResponseEntity<ReReply> saveReComment(
+            @RequestBody AddReReplyDTO contents, Principal principal) {
 
-    // 대댓글 조회
-    @GetMapping("/api/allrecomments")
-    public ResponseEntity<List<ViewReReplyDTO>> getAllReComments(Long id, Pageable pageable) {
+        //Long boardId = contents.getBoardId();
 
-        id = 1L;
+        //작성자
+        String author = principal.getName();
+        contents.setUserid(author);
 
-        List<ReReply> reReplieList = reReplyService.findAll(id);
+        ReReply savedReReply = reReplyService.addReReply(contents);
+
+
+        return ResponseEntity.ok().body(new ReReply());
+
+
+    }
+
+//    // 상세 대댓글 조회 수정본
+//    @GetMapping("/api/allReComment/{replyId}")
+//    public ResponseEntity<List<ViewReReplyDTO>> getAllReComments(@PathVariable long replyId) {
+//        List<ReReply> reReplieList = reReplyService.findByReplyId(replyId);
+//
+//        List<ViewReReplyDTO> reReplyDTOS = reReplieList.stream()
+//                .map(ViewReReplyDTO::new)
+//                .collect(Collectors.toList());
+//
+//        for (ViewReReplyDTO r : reReplyDTOS) {
+//            System.out.println(r.getUserid());
+//            System.out.println(r.getContent());
+//            System.out.println(r.getCreatedAt());
+//        }
+//
+//        return ResponseEntity.ok().body(reReplyDTOS);
+//    }
+
+    // 상세 대댓글 조회
+    @GetMapping("/api/allReComment/{replyId}")
+    public ResponseEntity<List<ViewReReplyDTO>> getAllReComments() {
+
+        Long id = 1L;
+
+        List<ReReply> reReplieList = reReplyService.findByReplyId(id);
 
         List<ViewReReplyDTO> reReplyDTOS = reReplieList.stream()
-                .map(b -> new ViewReReplyDTO(b))
+                .map(a -> new ViewReReplyDTO(a))
                 .collect(Collectors.toList());
+
+        for (ViewReReplyDTO r : reReplyDTOS) {
+            System.out.println(r.getUserid());
+            System.out.println(r.getContent());
+            System.out.println(r.getCreatedAt());
+
+        }
 
 
         return ResponseEntity.ok().body(reReplyDTOS);
 
     }
+
+//    // 모든 대댓글 조회
+//    @GetMapping("/api/allReComment")
+//    public ResponseEntity<List<ViewReReplyDTO>> getAllReComments(Long id, Pageable pageable) {
+//
+//        id = 1L;
+//
+//        List<ReReply> reReplieList = reReplyService.findAll(id);
+//
+//        List<ViewReReplyDTO> reReplyDTOS = reReplieList.stream()
+//                .map(a -> new ViewReReplyDTO(a))
+//                .collect(Collectors.toList());
+//
+//       for (ViewReReplyDTO r : reReplyDTOS){
+//           System.out.println(r.getUserid());
+//           System.out.println(r.getContent());
+//           System.out.println(r.getCreatedAt());
+//
+//       }
+//
+//
+//        return ResponseEntity.ok().body(reReplyDTOS);
+//
+//    }
 
 }

@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 public class ViewReReplyDTO {
 
     private Long Id;
+    private Long replyId;
     private String userid;
     private String content;
 
@@ -17,6 +18,7 @@ public class ViewReReplyDTO {
 
     public ViewReReplyDTO(ReReply reReply) {
         this.Id = reReply.getId();
+        this.replyId=reReply.getReplyId().getReplyId();
         this.userid = reReply.getUserid().getUserId();
         this.content = reReply.getContent();
         this.createdAt = reReply.getCreatedAt();

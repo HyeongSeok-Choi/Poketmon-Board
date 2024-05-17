@@ -1,3 +1,220 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="en"-->
+<!--      xmlns:th="http://www.thymeleaf.org"-->
+<!--      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"-->
+<!--      layout:decorate="~{common/layouts/defaultLayout}"-->
+<!--      layout:fragment="Content">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8"> &lt;!&ndash; 수정: meta 태그를 head 태그 안으로 이동 &ndash;&gt;-->
+<!--    <title>댓글 시스템</title>-->
+<!--</head>-->
+<!--<body>-->
+
+<!--&lt;!&ndash; 댓글 작성 &ndash;&gt;-->
+<!--<div class="cm_write">-->
+<!--    <fieldset>-->
+<!--        <legend class="skipinfo">댓글 입력</legend>-->
+<!--        <div class="cm_input">-->
+<!--            <p><textarea id="contents" name="contents" cols="90" rows="4"-->
+<!--                         placeholder="댓글을 입력해 주세요."></textarea></p>-->
+<!--            <span><button type="button" class="btns" onclick="saveComment();">등 록</button></span>-->
+<!--            <span><button type="button" class="btns" onclick="saveReComment();">답글 등록</button></span>-->
+<!--            <span><button type="button" class="btns" onclick="updateComment();">수정</button></span>-->
+<!--            <span><button type="button" class="btns" onclick="deleteComment();">삭제</button></span>-->
+<!--        </div>-->
+<!--    </fieldset>-->
+<!--</div>-->
+
+
+<!--&lt;!&ndash; 댓글 렌더링 영역 &ndash;&gt;-->
+<!--<div id="Parent">-->
+<!--    <div id="replySelectAll"> &lt;!&ndash; 댓글 리스트 조회 되는 부분 &ndash;&gt;</div>-->
+<!--</div>-->
+<!--<hr/>-->
+<!--<h1>답글입니다</h1>-->
+<!--<div id="reReplySelectAll"></div>&lt;!&ndash; 대댓글 리스트 조회 되는 부분 &ndash;&gt;-->
+
+<!--<script>-->
+<!--    //댓글 조회 기능-->
+<!--    request();-->
+<!--    reRequest();-->
+
+<!--    $(document).on('click', '.modify', function () {-->
+
+<!--        console.log("모디파이");-->
+
+<!--        var id = $(this).attr("id");-->
+
+<!--        console.log(id + "아이디는 들어온다");-->
+
+<!--        $('#' + id).attr('readonly', false);-->
+
+<!--    });-->
+
+
+<!--    function request() {-->
+
+<!--        $('#replySelectAll').empty();-->
+<!--        console.log("노드가 삭제 ?");-->
+
+<!--        fetch('http://localhost:8080/api/allcomments', {-->
+<!--            headers: {-->
+<!--                'Content-Type': 'application/json',-->
+<!--                'Accept': 'application/json'-->
+<!--            },-->
+<!--            method: 'GET',-->
+<!--        })-->
+
+<!--            .then(response => response.json())-->
+<!--            .then(data => {-->
+<!--                var comment = '';-->
+
+<!--                $.each(data, function (i) {-->
+<!--                    console.log(data);-->
+<!--                    console.log(data[i].boardId);-->
+<!--                    console.log(data[i].content);-->
+<!--                    console.log(data[i].userid + "언디파인드?");-->
+
+
+<!--                    comment += `<div class="comments">-->
+<!--                            <input type="hidden" value="${data[i].replyId}">-->
+<!--                            <span class="writer_img"><img src="/img/BBANG.jpg" width="30" height="30" alt="기본 프로필 이미지"/></span>-->
+<!--                            <p class="writer">-->
+<!--                                <em>${data[i].userid}</em>-->
+<!--                                <span class="date">${data[i].createdAt}</span>-->
+<!--                            </p>-->
+<!--                            <div class="cont"><input  class="txt_con" value="${data[i].content}" readonly></div>-->
+<!--                            <p class="func_btns">-->
+<!--                                <button type="button" id="${data[i].replyId}" class="modify"><span class="icons icon_modify">수정</span></button>-->
+<!--                                <button type="button"  class="btns"><span class="icons icon_del">삭제</span></button>-->
+<!--                            </p>-->
+<!--                        </div>`;-->
+<!--                })-->
+<!--                $('#replySelectAll').append(comment);-->
+<!--            });-->
+
+<!--    }-->
+
+
+<!--    // 댓글 저장-->
+<!--    function saveComment() {-->
+
+<!--        const contents = document.getElementById('contents').value;-->
+<!--        console.log(contents);-->
+
+
+<!--        const boardId = 1;  // 테스트용 ID &lt;!&ndash; 수정: 템플릿 표현식 주석으로 변경 &ndash;&gt;-->
+
+
+<!--        fetch("/api/addComment", {-->
+<!--            headers: {-->
+<!--                "Content-Type": "application/json",-->
+<!--            },-->
+<!--            method: 'POST',-->
+<!--            body: JSON.stringify({-->
+<!--                content: contents,-->
+<!--                boardId: boardId,-->
+<!--                userid: "qnftlstm",-->
+
+<!--            })-->
+
+<!--        }).then(res => {-->
+<!--            console.log("되노");-->
+<!--            request();-->
+<!--        })-->
+
+
+<!--    }-->
+
+
+<!--    // &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;-->
+<!--    //대댓글 조회-->
+
+<!--    function reRequest() {-->
+
+<!--        $('#reReplySelectAll').empty();-->
+<!--        console.log("노드가 삭제 ?");-->
+
+<!--        fetch('http://localhost:8080/api/allReComment', {-->
+
+<!--            headers: {-->
+<!--                'Content-Type': 'application/json',-->
+<!--                'Accept': 'application/json'-->
+<!--            },-->
+<!--            method: 'GET',-->
+<!--        })-->
+
+
+<!--            .then(response => response.json())-->
+<!--            .then(data => {-->
+<!--                var comment = '';-->
+
+<!--                console.log(data[0].userid + "유저아이디");-->
+
+<!--                $.each(data, function (i) {-->
+<!--                    console.log(data);-->
+<!--                    console.log(data[i].content);-->
+<!--                    console.log(data[i].userid + "언디파인드?");-->
+
+
+<!--                    comment += `<div class="recomments">-->
+<!--                            <input type="hidden" value="${data[i].replyId}">-->
+<!--                            <span class="writer_img"><img src="/img/BBANG.jpg" width="30" height="30" alt="기본 프로필 이미지"/></span>-->
+<!--                            <p class="writer">-->
+<!--                                <em>${data[i].userid}</em>-->
+<!--                                <span class="date">${data[i].createdAt}</span>-->
+<!--                            </p>-->
+<!--                            <div class="cont"><input  class="txt_con" value="${data[i].content}" readonly></div>-->
+<!--                            <p class="func_btns">-->
+<!--                                <button type="button" id="${data[i].replyId}" class="modify"><span class="icons icon_modify">수정</span></button>-->
+<!--                                <button type="button"  class="btns"><span class="icons icon_del">삭제</span></button>-->
+<!--                            </p>-->
+<!--                        </div>`;-->
+<!--                })-->
+
+<!--                $('#reReplySelectAll').append(comment);-->
+<!--            });-->
+
+<!--    }-->
+
+
+<!--    // 대댓글 저장-->
+<!--    function saveReComment() {-->
+
+<!--        const contents = document.getElementById('contents').value;-->
+<!--        console.log(contents);-->
+
+
+<!--        const replyId = 1;  // 테스트용 ID &lt;!&ndash; 수정: 템플릿 표현식 주석으로 변경 &ndash;&gt;-->
+
+
+<!--        fetch("/api/addReComment", {-->
+<!--            headers: {-->
+<!--                "Content-Type": "application/json",-->
+<!--            },-->
+<!--            method: 'POST',-->
+<!--            body: JSON.stringify({-->
+<!--                content: contents,-->
+<!--                replyId: replyId,-->
+<!--                userid: "qnftlstm",-->
+
+<!--            })-->
+
+<!--        }).then(res => {-->
+<!--            console.log("되노");-->
+<!--            reRequest();-->
+<!--        })-->
+
+
+<!--    }-->
+<!--</script>-->
+
+<!--</body>-->
+<!--</html>-->
+
+
+<!--수정코드 입니다 수정코드 입니다 수정코드 입니다 수정코드 입니다 수정코드 입니다 수정코드 입니다-->
+
 <!DOCTYPE html>
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org"
@@ -10,124 +227,152 @@
 </head>
 <body>
 
-    <!-- 댓글 작성 -->
-    <div class="cm_write">
-        <fieldset>
-            <legend class="skipinfo">댓글 입력</legend>
-            <div class="cm_input">
-                <p><textarea id="contents" name="contents" cols="90" rows="4"
-                             placeholder="댓글을 입력해 주세요."></textarea></p>
-                <span><button type="button" class="btns" onclick="saveComment();">등 록</button></span>
-                <span><button type="button" class="btns" onclick="updateComment();">수정</button></span>
-                <span><button type="button" class="btns" onclick="deleteComment();">삭제</button></span>
-            </div>
-        </fieldset>
-    </div>
+<!-- 댓글 작성 -->
+<div class="cm_write">
+    <fieldset>
+        <legend class="skipinfo">댓글 입력</legend>
+        <div class="cm_input">
+            <p><textarea id="contents" name="contents" cols="90" rows="4"
+                         placeholder="댓글을 입력해 주세요."></textarea></p>
+            <span><button type="button" class="btns" onclick="saveComment();">등 록</button></span>
+        </div>
+    </fieldset>
+</div>
 
+<!-- 댓글 렌더링 영역 -->
+<div id="Parent">
+    <div id="replySelectAll"> <!-- 댓글 리스트 조회 되는 부분 --></div>
+</div>
 
+<script>
+    // 댓글 및 답글 조회 기능
+    request();
 
-    <!-- 댓글 렌더링 영역 -->
-    <hr/>
-    <div id="Parent">
-    <div id="replySelectAll"> <!-- 댓글 리스트 조회 되는 부분 -->
+    $(document).on('click', '.modify', function () {
+        var id = $(this).attr("id");
+        $('#' + id).attr('readonly', false);
+    });
 
-    </div>
-    </div>
-    <hr/>
+    function request() {
+        $('#replySelectAll').empty();
 
- <script>
-     //댓글 조회 기능
-        request();
+        fetch('http://localhost:8080/api/allcomments', {
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            method: 'GET',
+        })
+            .then(response => response.json())
+            .then(data => {
+                var comment = '';
 
-     $(document).on('click','.modify',function(){
+                $.each(data, function (i) {
+                    comment += `
+                    <div class="comments" id="comment-${data[i].replyId}">
+                        <input type="hidden" value="${data[i].replyId}">
+                        <span class="writer_img"><img src="/img/BBANG.jpg" width="30" height="30" alt="기본 프로필 이미지"/></span>
+                        <p class="writer">
+                            <em>${data[i].userid}</em>
+                            <span class="date">${data[i].createdAt}</span>
+                        </p>
+                        <div class="cont"><input class="txt_con" value="${data[i].content}" readonly></div>
+                        <p class="func_btns">
+                            <button type="button" id="${data[i].replyId}" class="modify"><span class="icons icon_modify">수정</span></button>
+                            <button type="button" class="btns"><span class="icons icon_del">삭제</span></button>
+                            <button type="button" class="btns reply-btn" onclick="showReplyForm(${data[i].replyId});">답글 달기</button>
+                        </p>
+                        <div class="recomments" id="replies-${data[i].replyId}"></div> <!-- 답글 영역 -->
+                    </div>`;
+                });
 
-         console.log("모디파이");
+                $('#replySelectAll').append(comment);
+                reRequest(); // 댓글을 불러온 후 답글도 불러옴
+            });
+    }
 
-         var id = $(this).attr("id");
+    function saveComment() {
+        const contents = document.getElementById('contents').value;
+        const boardId = 1;  // 테스트용 ID
 
-         console.log(id+"아이디는 들어온다");
+        fetch("/api/addComment", {
+            headers: {
+                "Content-Type": "application/json",
+            },
+            method: 'POST',
+            body: JSON.stringify({
+                content: contents,
+                boardId: boardId,
+                userid: "qnftlstm",
+            })
+        }).then(res => {
+            request();
+        });
+    }
 
-         $('#'+id).attr('readonly',false);
+    function reRequest() {
+        fetch('http://localhost:8080/api/allReComment/{replyId}', {
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            method: 'GET',
+        })
+            .then(response => response.json())
+            .then(data => {
+                var replyHtml;
+                $.each(data, function (i) {
+                    replyHtml = `
+                    <div class="recomment">
+                        <input type="hidden" value="${data[i].reReplyId}">
+                        <span class="writer_img"><img src="/img/BBANG.jpg" width="30" height="30" alt="기본 프로필 이미지"/></span>
+                        <p class="writer">
+                            <em>${data[i].userid}</em>
+                            <span class="date">${data[i].createdAt}</span>
+                        </p>
+                        <div class="cont">ㄴ<input class="txt_con" value="${data[i].content}" readonly></div>
+                        <p class="func_btns">
+                            <button type="button" id="${data[i].reReplyId}" class="modify"><span class="icons icon_modify">수정</span></button>
+                            <button type="button" class="btns"><span class="icons icon_del">삭제</span></button>
+                        </p>
+                    </div>`;
+                    // 댓글 ID에 해당하는 답글 영역에 답글 추가
+                    $('#replies-' + data[i].replyId).append(replyHtml);
+                });
+            });
+    }
 
-     });
+    function showReplyForm(replyId) {
+        const replyFormHtml = `
+            <div class="replyForm" id="replyForm-${replyId}">
+                <textarea id="replyContents-${replyId}" cols="90" rows="4" placeholder="답글을 입력해 주세요."></textarea>
+                <span><button type="button" class="btns" onclick="saveReComment(${replyId});">답글 등록</button></span>
+            </div>`;
+        // Append reply form to the specific comment
+        $('#comment-' + replyId).append(replyFormHtml);
+    }
 
+    function saveReComment(replyId) {
+        const contents = document.getElementById('replyContents-' + replyId).value;
 
-
-     function request() {
-
-             $('#replySelectAll').empty();
-             console.log("노드가 삭제 ?");
-
-             fetch('http://localhost:8080/api/allcomments', {
-                 headers: {
-                     'Content-Type': 'application/json',
-                     'Accept': 'application/json'
-                 },
-                 method: 'GET',
-             })
-
-                 .then(response => response.json())
-                 .then(data => {
-                     var comment='';
-
-                     $.each(data, function (i) {
-                         console.log(data);
-                         console.log(data[i].boardId);
-                         console.log(data[i].content);
-                         console.log(data[i].userid+"언디파인드?");
-
-
-
-                         comment +=`<div class="comments">
-                            <input type="hidden" value="${data[i].replyId}">
-                            <span class="writer_img"><img src="/img/BBANG.jpg" width="30" height="30" alt="기본 프로필 이미지"/></span>
-                            <p class="writer">
-                                <em>${data[i].userid}</em>
-                                <span class="date">${data[i].createdAt}</span>
-                            </p>
-                            <div class="cont"><input  class="txt_con" value="${data[i].content}" readonly></div>
-                            <p class="func_btns">
-                                <button type="button" id="${data[i].replyId}" class="modify"><span class="icons icon_modify">수정</span></button>
-                                <button type="button"  class="btns"><span class="icons icon_del">삭제</span></button>
-                            </p>
-                        </div>`;
-                     })
-                     $('#replySelectAll').append(comment);
-                 });
-
-         }
-
-
-         // 댓글 저장
-         function saveComment() {
-
-             const contents = document.getElementById('contents').value;
-             console.log(contents);
-
-
-             const boardId = 1;  // 테스트용 ID <!-- 수정: 템플릿 표현식 주석으로 변경 -->
-
-
-             fetch("/api/addComment", {
-                 headers: {
-                     "Content-Type": "application/json",
-                 },
-                 method: 'POST',
-                 body: JSON.stringify({
-                     content: contents,
-                     boardId: boardId,
-                     userid: "qnftlstm",
-
-                 })
-
-             }).then(res => {
-                 console.log("되노");
-                 request();
-             })
-
-
-         }
-    </script>
+        fetch("/api/addReComment", {
+            headers: {
+                "Content-Type": "application/json",
+            },
+            method: 'POST',
+            body: JSON.stringify({
+                content: contents,
+                replyId: replyId,
+                userid: "qnftlstm",
+            })
+        }).then(res => {
+            reRequest();
+            // Remove the reply form after saving the reply
+            $('#replyForm-' + replyId).remove();
+        });
+    }
+</script>
 
 </body>
 </html>
+
