@@ -48,7 +48,6 @@ public class TestController {
         return "test";
     }
 
-
     @GetMapping(value = "/admin")
     public String admin() {
 
