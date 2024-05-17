@@ -42,8 +42,7 @@
 
         <a class="nav-link" sec:authorize="isAnonymous()" href="/user/new">회원가입</a>
 
-        <a class="nav-link" sec:authorize="isAuthenticated()"
-           th:href="@{'/user/loginInfo/' + ${#authentication.principal.username}}">회원정보</a>
+        <a class="nav-link" sec:authorize="isAuthenticated()" href="/user/loginInfo">회원정보</a>
 
 <!--           th:href="@{'/loginInfo/' + ${userFormDto.userId}}">마이페이지</a>-->
 

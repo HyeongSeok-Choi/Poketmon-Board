@@ -34,12 +34,19 @@
             color: #0b5ed7;
         }
     </style>
+    <th:block layout:fragment="script">
+        <script >
+            const message = "[[${successMessage}]]";
+            if(message) alert(message);
+        </script>
+    </th:block>
 
 </head>
 <body>
 <div class="container">
     <div class="input-form-backgroud row">
         <div class="input-form col-md-12 mx-auto">
+            <form action="/user/loginInfo" role="form" method="post" th:object="${userFormDto}">
 
 
             <h4 class="mb-3">회원 정보 수정</h4>
@@ -60,25 +67,23 @@
                 <div class="col-md-6 mb-3">
                     <label for="nickName">닉네임</label>
                     <input type="text" class="form-control" id="nickName" name="nickName" th:value="${user.nickName}">
-                    <button>중복확인</button>
                 </div>
 
             </div>
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <label for="password">비밀번호</label>
-                    <input type="password" class="form-control" id="password" name="password" th:value="${user.password}">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="password">비밀번호</label>
+                        <input type="password" class="form-control" id="password" name="password" th:value="${user.password}" readonly>
+                    </div>
                 </div>
-            </div>
             <hr class="mb-4">
             <br>
-     <!--       <form class="validation-form"  method="post" th:action="@{/modifyUser(id=${user.userId})}">
                 <button class="btn btn-primary btn-lg btn-block" type="submit" >수정</button>
             </form>
-            <form class="validation-form"  method="post" th:action="@{/deleteUser(id=${user.userId})}">
+            <!--<form class="validation-form"  method="post" th:action="@{/deleteUser(id=${user.userId})}">
                 <button class="btn btn-primary btn-lg btn-block" type="submit" >삭제</button>
-            </form>
--->
+            </form>-->
+
         </div>
     </div>
 </div>

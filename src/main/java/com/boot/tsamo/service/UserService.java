@@ -5,6 +5,7 @@ import com.boot.tsamo.dto.UserFormDto;
 import com.boot.tsamo.entity.Users;
 import com.boot.tsamo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -68,6 +69,21 @@ public class UserService implements UserDetailsService {
 
         // 변환된 UserFormDto를 반환합니다.
         return userFormDto;
+    }
+
+    public String updateUser(UserFormDto userFormDto) {
+        Users user = userRepository.findById(userFormDto.getUserId()).orElseThrow(EntityNotFoundException::new);
+        user.updateNickName(userFormDto.getNickName());
+        user.updatePassword(userFormDto.getPassword());
+
+        // 회원 비밀번호 수정을 위한 패스워드 암호화
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        String encodePw = encoder.encode(userFormDto.getPassword());
+        user.updatePassword(encodePw);
+
+        userRepository.save(user);
+
+        return user.getUserId();
     }
 
 }

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.PathVariable; // import PathVariable
 import org.springframework.web.bind.annotation.RequestParam; // import RequestParam for update
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
 import java.security.Principal;
@@ -58,7 +59,6 @@ public class UserController {
 
         return "redirect:/user/login";
 
-        //redirect:/user/login 로 하면 에러 500
     }
 
 /*    @PostMapping(value = "/new")
@@ -88,11 +88,11 @@ public class UserController {
         return "/user/userLoginForm";
     }
 
-    @GetMapping("/loginInfo/{userId}")
-    public String updateUserInfo(@PathVariable("userId") String userId, Model model) {
+    @GetMapping("/loginInfo")
+    public String updateUserInfo(Model model, Principal principal) {
         try {
             // userService.getUserDetails(userId)를 호출합니다.
-            UserFormDto userFormDto = userService.getUserDetails(userId);
+            UserFormDto userFormDto = userService.getUserDetails(principal.getName());
 
             // 모델에 사용자 정보를 추가합니다.
             model.addAttribute("user", userFormDto);
@@ -105,5 +105,13 @@ public class UserController {
         // 수정 페이지를 반환합니다.
         return "/user/userLoginInfo";
     }
+
+    @PostMapping(value = "/loginInfo" )
+    public String updateUserInfo(UserFormDto userFormDto, Model model, RedirectAttributes redirectAttributes) {
+        userService.updateUser(userFormDto);
+        redirectAttributes.addFlashAttribute("successMessage", "수정되었습니다.");
+        return "redirect:/user/loginInfo";
+    }
+
 
 }
