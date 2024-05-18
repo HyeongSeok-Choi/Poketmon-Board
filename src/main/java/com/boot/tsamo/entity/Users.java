@@ -51,7 +51,7 @@ public class Users implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return !this.isEnabled;
     }
 
     @Id
@@ -77,6 +77,8 @@ public class Users implements UserDetails {
         user.setPassword(password);
         user.setNickName(userFormDto.getNickName());
         user.setRole(Role.USER);
+        user.setDeleted(false); // 계정 생성 시 삭제되지 않음으로 설정
+        user.setEnabled(true); // 계정 생성 시 활성화 상태로 설정
         return user;
     }
 
@@ -85,6 +87,8 @@ public class Users implements UserDetails {
         this.email = email;
         this.userId = userId;
         this.role = Role.ADMIN;
+        this.isDeleted = false; // 계정 생성 시 삭제되지 않음으로 설정
+        this.isEnabled = true; // 계정 생성 시 활성화 상태로 설정
         this.password = "chltest";
 
     }
@@ -95,6 +99,14 @@ public class Users implements UserDetails {
 
     public void updateNickName(String nickName) {
         this.nickName = nickName;
+    }
+
+    private boolean isDeleted; // 추가된 필드
+    private boolean isEnabled; // 추가된 필드
+
+    public void deleteUser() {
+        this.isDeleted = true; // 계정 삭제 시 isDeleted 플래그 설정
+        this.isEnabled = false; // 계정 삭제 시 비활성화
     }
 }
 

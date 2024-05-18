@@ -88,7 +88,7 @@ public class BoardService {
 
     //작성자로 검색 -리스트 출력
     public Page<Board> findAllByUserId(Pageable pageable, String userId){
-       Users findByUserIdContaining= userRepository.findByUserIdContaining(userId);
+       Users findByUserIdContaining= userRepository.findByUserIdAndIsDeletedFalse(userId);
 
         return boardRepository.findByUserid(findByUserIdContaining,pageable);
     }

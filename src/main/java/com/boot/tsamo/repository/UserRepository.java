@@ -11,6 +11,6 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<Users,String> {
 
-    Users findByUserIdContaining(String userId);
+    Users findByUserIdAndIsDeletedFalse(String userId);
 
 }

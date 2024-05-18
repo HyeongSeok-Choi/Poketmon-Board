@@ -113,5 +113,16 @@ public class UserController {
         return "redirect:/user/loginInfo";
     }
 
+    @PostMapping("/delete/{userId}")
+    public String deleteUser(@PathVariable("userId") String userId, Model model) {
+        try {
+            userService.deleteUser(userId);
+            model.addAttribute("successMessage", "탈퇴 완료 되었습니다.");
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("errorMessage", "존재하지 않는 아이디입니다.");
+        }
+        return "redirect:/";
+    }
+
 
 }

@@ -36,7 +36,7 @@ public class UserService implements UserDetailsService {
     }
 
     private void validateDuplicateUser(Users user) {
-        Users findUser = userRepository.findByUserIdContaining(user.getUserId());
+        Users findUser = userRepository.findByUserIdAndIsDeletedFalse(user.getUserId());
         if (findUser != null) {
             throw new UsernameNotFoundException("이미 가입된 회원입니다.");
         }
@@ -45,7 +45,7 @@ public class UserService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String userId) throws
             UsernameNotFoundException {
-        Users user = userRepository.findByUserIdContaining(userId);
+        Users user = userRepository.findByUserIdAndIsDeletedFalse(userId);
 
         if (user == null) {
             throw new UsernameNotFoundException(userId);
@@ -85,6 +85,17 @@ public class UserService implements UserDetailsService {
         userRepository.save(user);
 
         return user.getUserId();
+    }
+
+    public void deleteUser(String userId) {
+        Users user = userRepository.findByUserIdAndIsDeletedFalse(userId);
+        if (user == null) {
+            System.out.println("해당 아이디로 사용자를 찾을 수 없습니다: " + userId); // 로그 추가
+            throw new EntityNotFoundException("존재하지 않는 아이디입니다: " + userId);
+        }
+        System.out.println("사용자 삭제 중: " + userId); // 로그 추가
+        user.deleteUser();
+        userRepository.save(user);
     }
 
 }
