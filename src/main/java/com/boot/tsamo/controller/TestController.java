@@ -24,8 +24,7 @@ public class TestController {
 
     //댓글 리스트 조회
     @GetMapping(value = "/reply")
-
-    public String reply() {
+    public String reply(Model model) {
 
         return "ReplyView";
     }
@@ -48,7 +47,6 @@ public class TestController {
         return "test";
     }
 
-    //test뷰(없어도 됨)
     @GetMapping(value = "/admin")
     public String admin() {
 

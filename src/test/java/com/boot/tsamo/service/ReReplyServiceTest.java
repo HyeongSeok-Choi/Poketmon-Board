@@ -1,41 +1,50 @@
-package com.boot.tsamo.repository;
+package com.boot.tsamo.service;
 
 import com.boot.tsamo.entity.Board;
 import com.boot.tsamo.entity.ReReply;
 import com.boot.tsamo.entity.Reply;
 import com.boot.tsamo.entity.Users;
-import com.boot.tsamo.entity.ReReply;
-
+import com.boot.tsamo.repository.BoardRepository;
+import com.boot.tsamo.repository.ReReplyRepository;
+import com.boot.tsamo.repository.ReplyRepository;
+import com.boot.tsamo.repository.UserRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+
 @SpringBootTest
 @TestPropertySource(locations = "classpath:application-test.properties")
-class reReplyRepositoryTest {
-    @Autowired
-    ReplyRepository replyRepository;
+class ReReplyServiceTest {
 
     @Autowired
-    ReReplyRepository reReplyRepository;
+    private ReReplyService rereplyService;
 
     @Autowired
-    UserRepository userRepository;
+    private UserRepository usersRepository;
 
     @Autowired
-    BoardRepository boardRepository;
+    private BoardRepository boardRepository;
 
-    @Test
-    @DisplayName("save 기능 테스트")
-    public void replySave() {
+    @Autowired
+    private ReplyRepository replyRepository;
+
+    @Autowired
+    private ReReplyRepository rereplyRepository;
+//더미 데이터
+    public void based() {
+
         Users user = new Users();
         user.setUserId("aaa");
         user.setPassword("1234");
         user.setEmail("aaa@aaa.aaa");
         user.setNickName("aaa");
-        userRepository.save(user);
+        usersRepository.save(user);
 
         for (int i = 0; i <= 5; i++) {
             Board board = new Board();
@@ -50,18 +59,39 @@ class reReplyRepositoryTest {
             reply.setContent("댓글" + i);
             replyRepository.save(reply);
 
-            System.out.println(reply.toString());
-
             ReReply rereply = new ReReply();
-            rereply.setUserid(user);
             rereply.setReplyId(reply);
+            rereply.setUserid(user);
             rereply.setContent("대댓글" + i);
-            reReplyRepository.save(rereply);
+            rereplyRepository.save(rereply);
 
-            System.out.println(rereply.toString());
         }
+
     }
 
-    
+
+    @Test
+    @DisplayName("대댓글 생성 기능 테스트")
+    public void saveReReplyTest() {
+
+        this.based();
+
+
+
+    }
+
+
+    @Test
+    @DisplayName("대댓글 조회 기능 테스트")
+    public void findByReReplyTest() {
+
+        this.based();
+
+        Users user = usersRepository.findById("aaa").orElseThrow();
+        List<ReReply> rereplyList = rereplyService.findAll(1L);
+      System.out.println(rereplyList);
+
+    }
+
 
 }
