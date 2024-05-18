@@ -248,6 +248,8 @@
     // 댓글 및 답글 조회 기능
     request();
 
+    var replyId1 = 1;
+
     $(document).on('click', '.modify', function () {
         var id = $(this).attr("id");
         $('#' + id).attr('readonly', false);
@@ -256,146 +258,7 @@
     function request() {
         $('#replySelectAll').empty();
 
- <script>
-
-        request();
-
-        //댓글 조회 기능
-     function request() {
-
-             $('#replySelectAll').empty();
-             console.log("노드가 삭제 ?");
-
-             fetch('http://localhost:8080/api/allcomments', {
-                 headers: {
-                     'Content-Type': 'application/json',
-                     'Accept': 'application/json'
-                 },
-                 method: 'GET',
-             })
-
-                 .then(response => response.json())
-                 .then(data => {
-                     var comment='';
-
-                     $.each(data, function (i) {
-                         console.log(data);
-                         console.log(data[i].boardId);
-                         console.log(data[i].content);
-                         console.log(data[i].userid+"언디파인드?");
-
-
-
-                         comment +=`<div class="comments">
-                            <input type="hidden" value="${data[i].replyId}">
-                            <span class="writer_img"><img src="/img/BBANG.jpg" width="30" height="30" alt="기본 프로필 이미지"/></span>
-                            <p class="writer">
-                                <em>${data[i].userid}</em>
-                                <span class="date">${data[i].createdAt}</span>
-                            </p>
-                            <div class="cont"><input id="${data[i].replyId}input"  class="txt_con" value="${data[i].content}" readonly></div>
-                            <p class="func_btns">
-                                <button type="button" id="${data[i].replyId}" class="modify"><span class="icons icon_modify">수정</span></button>
-                                <button type="button"  class="btns"><span class="icons icon_del">삭제</span></button>
-                            </p>
-                        </div>`;
-                     })
-                     $('#replySelectAll').append(comment);
-                 });
-
-         }
-
-
-         // 댓글 저장
-         function saveComment() {
-
-             const contents = document.getElementById('contents').value;
-             console.log(contents);
-
-
-             const boardId = 1;  // 테스트용 ID <!-- 수정: 템플릿 표현식 주석으로 변경 -->
-
-
-             fetch("/api/addComment", {
-                 headers: {
-                     "Content-Type": "application/json",
-                 },
-                 method: 'POST',
-                 body: JSON.stringify({
-                     content: contents,
-                     boardId: boardId,
-                     userid: "qnftlstm",
-
-                 })
-
-             }).then(res => {
-
-                 $('#contents').val('')
-                 console.log("되노");
-                 request();
-             })
-
-
-         }
-
-
-
-        $(document).on('blur','.txt_con',function(){
-
-            console.log("포커스 아웃");
-
-            $('.txt_con').attr('readonly',true);
-
-        });
-
-
-        $(document).on('click','.modify',function(){
-
-
-            var id = $(this).attr("id");
-
-            if($(this).html() == "저장") {
-                console.log("저장");
-
-
-                const content = document.getElementById(id + 'input').value;
-                console.log(content);
-
-
-                fetch("/api/modify", {
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    method: 'POST',
-                    body: JSON.stringify({
-                        content: content,
-                        id:id
-                    })
-
-                }).then(res => {
-
-                    $(this).html('수정');
-                    request();
-
-                })
-            }else{
-
-                $(this).html('저장')
-
-                console.log("모디파이");
-
-                var id = $(this).attr("id");
-
-                console.log(id+"아이디는 들어온다");
-
-                $('#'+id+'input').attr('readonly',false).focus();
-
-
-            }
-        })
-
- </script>
-        fetch(`http://localhost:8080/api/allcomments/{boardId}`, {
+        fetch(`http://localhost:8080/api/allcomments/1`, {
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json'
@@ -415,7 +278,7 @@
                             <em>${data[i].userid}</em>
                             <span class="date">${data[i].createdAt}</span>
                         </p>
-                        <div class="cont"><input class="txt_con" value="${data[i].content}" readonly></div>
+                        <div class="cont"><input id="input-${data[i].replyId}" class="txt_con" value="${data[i].content}" readonly></div>
                         <p class="func_btns">
                             <button type="button" id="${data[i].replyId}" class="modify"><span class="icons icon_modify">수정</span></button>
                             <button type="button" class="btns"><span class="icons icon_del">삭제</span></button>
@@ -449,8 +312,12 @@
         });
     }
 
+
+    //대댓글 목록 요청
     function reRequest() {
-        fetch('http://localhost:8080/api/allReComment/{reReplyId}', {
+
+
+        fetch('http://localhost:8080/api/allReComment/'+replyId1, {
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json'
@@ -481,6 +348,7 @@
             });
     }
 
+    //대댓글 입력폼
     function showReplyForm(replyId) {
         const replyFormHtml = `
             <div class="replyForm" id="replyForm-${replyId}">
@@ -491,6 +359,7 @@
         $('#comment-' + replyId).append(replyFormHtml);
     }
 
+    //대댓글 등록폼
     function saveReComment(replyId) {
         const contents = document.getElementById('replyContents-' + replyId).value;
 
@@ -505,9 +374,11 @@
                 userid: "qnftlstm",
             })
         }).then(res => {
-            reRequest();
+            request();
             // Remove the reply form after saving the reply
             $('#replyForm-' + replyId).remove();
+
+            replyId1 = replyId;
         });
     }
 </script>

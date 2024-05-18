@@ -4,18 +4,22 @@ import com.boot.tsamo.dto.AddReReplyDTO;
 import com.boot.tsamo.dto.AddReplyDTO;
 import com.boot.tsamo.dto.ViewReReplyDTO;
 import com.boot.tsamo.dto.ViewReplyDTO;
-import com.boot.tsamo.dto.modifyReplyDTO;
 import com.boot.tsamo.entity.ReReply;
 import com.boot.tsamo.entity.Reply;
 import com.boot.tsamo.service.ReReplyService;
 import com.boot.tsamo.service.ReplyService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -37,13 +41,16 @@ public class ReplyController {
 
         Reply savedReply = replyService.addReply(contents);
 
+
         return ResponseEntity.ok().body(new Reply());
+
 
     }
 
     //댓글 조회 수정본
     @GetMapping("/api/allcomments/{boardId}")
-    public ResponseEntity<List<ViewReplyDTO>> getAllComments(@PathVariable long boardId) {
+    public ResponseEntity<List<ViewReplyDTO>> getAllComments(@PathVariable long boardId,
+                                                             @PageableDefault(page=0,size = 1)Pageable pageable) {
 
         List<Reply> replieList = replyService.findAll(boardId);
 
@@ -52,20 +59,22 @@ public class ReplyController {
                 .collect(Collectors.toList());
 
 
+        Page<ViewReplyDTO> List = new PageImpl<>(replyDTOS,pageable,replyDTOS.size());
+
+        
+        for(ViewReplyDTO replyDTO : replyDTOS) {
+            System.out.println(replyDTO.getReplyId()+"여기에요");
+            System.out.println(replyDTO.getUserid()+"여기에요");
+            System.out.println(replyDTO.getUpdatedAt()+"여기에요");
+            System.out.println(replyDTO.getContent()+"여기에요");
+            System.out.println(replyDTO.getReplyId()+"여기에요");
+        }
+
+
         return ResponseEntity.ok().body(replyDTOS);
 
     }
 
-    //기존 댓글 수정
-    @PostMapping("/api/modify")
-    public ResponseEntity<modifyReplyDTO> updateComment(@RequestBody modifyReplyDTO dto) {
-
-        replyService.update(dto);
-
-        return ResponseEntity.ok().body(dto);
-    }
-
-}
 
     // 댓글 조회
 //    @GetMapping("/api/allcomments")
