@@ -7,6 +7,7 @@ import com.boot.tsamo.entity.Board;
 import com.boot.tsamo.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -55,11 +56,20 @@ public class TestController {
 
     //게시물 목록(main페이지) 검색, 페이징 기능 포함
     @GetMapping(value = "/")
-    public String main(Model model,@PageableDefault(page=0,size = 1,sort = "id",
-            direction = Sort.Direction.DESC) Pageable pageable, String searchvalue, String searchtype) {
+    public String main(Model model,@PageableDefault(page=0,size = 3,sort = "id",
+            direction = Sort.Direction.DESC) Pageable pageable, String searchvalue, String searchtype,String sort) {
 
 
-            Page<Board> Boards ;
+        if(sort == null || sort.equals("title")) {
+            Sort.by(Sort.Direction.DESC, "title");
+        } else if (sort.equals("createdAt")) {
+            Sort.by(Sort.Direction.DESC, "createdAt");
+        }else if (sort.equals("userid")) {
+            Sort.by(Sort.Direction.DESC, "userid");
+        }
+
+
+        Page<Board> Boards = boardService.findAll(pageable);
 
             if(searchvalue == null){
                 Boards = boardService.findAll(pageable);
@@ -76,9 +86,17 @@ public class TestController {
                     Boards = boardService.findAllByUserId(pageable,searchvalue);
                 }
 
-                else{
+                else if(searchtype.equals("hashTag")){
 
                     Boards = boardService.findAllByHashTag(pageable,searchvalue);
+                    for(Board board : Boards){
+                        board.getId();
+                        board.getTitle();
+                        board.getReplies();
+
+                    }
+                    System.out.println(Boards.getPageable().getPageNumber()+"페이지 넘버");
+                    System.out.println(Boards.getTotalPages()+"페이지 넘버");
                     //Boards = boardService.findAll(pageable);
                 }
 
@@ -97,6 +115,7 @@ public class TestController {
                 model.addAttribute("endPage", endPage);
                 model.addAttribute("searchvalue", searchvalue);
                 model.addAttribute("searchtype", searchtype);
+                model.addAttribute("sort", sort);
                 return "main";
             }
 
@@ -105,6 +124,7 @@ public class TestController {
             model.addAttribute("endPage", null);
             model.addAttribute("searchvalue", searchvalue);
             model.addAttribute("searchtype", searchtype);
+            model.addAttribute("sort", sort);
 
             return "main";
         }

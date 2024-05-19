@@ -1,4 +1,4 @@
-package com.boot.tsamo.config.oauth;
+/*package com.boot.tsamo.config.oauth;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -30,3 +30,4 @@ public class CustomOAuth2User implements OAuth2User {
         return this.userId;
     }
 }
+*/

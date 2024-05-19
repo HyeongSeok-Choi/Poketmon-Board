@@ -63,4 +63,10 @@ public class UserController {
         return "/user/userLoginForm";
     }
 
+    @GetMapping(value = "/auth/kakao/callback")
+    public String kakaoCallback(){
+
+        return "createboard";
+    }
+
 }

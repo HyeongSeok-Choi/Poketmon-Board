@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import static org.springframework.boot.autoconfigure.security.servlet.PathRequest.toH2Console;
@@ -37,6 +38,10 @@ public class SecurityConfig   {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         http.csrf(AbstractHttpConfigurer::disable);
+        HttpSessionRequestCache requestCache = new HttpSessionRequestCache();
+		requestCache.setMatchingRequestParameterName("null");
+
+        http.requestCache((cache) -> cache.requestCache(requestCache));
 
         http.formLogin((formLogin) ->
                         formLogin
@@ -57,7 +62,7 @@ public class SecurityConfig   {
 
                                 .requestMatchers("/css/**", "/js/**", "/img/**").permitAll()
                                 .requestMatchers("/","/user/**","/createBoard","/BoardDetailView","/reply","/posts","/createBoard","createBoard2"
-                                        ,"/api/addComment").permitAll()
+                                        ,"/api/addComment","/error").permitAll()
                                 .requestMatchers("/admin/**").hasRole("ADMIN")
                                 .anyRequest().authenticated()
 

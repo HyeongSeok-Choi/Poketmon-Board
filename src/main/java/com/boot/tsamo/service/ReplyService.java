@@ -3,6 +3,7 @@ package com.boot.tsamo.service;
 import com.boot.tsamo.constant.Role;
 import com.boot.tsamo.dto.AddReplyDTO;
 import com.boot.tsamo.dto.UserFormDto;
+import com.boot.tsamo.dto.ViewReplyDTO;
 import com.boot.tsamo.dto.modifyReplyDTO;
 import com.boot.tsamo.entity.Board;
 import com.boot.tsamo.entity.Reply;
@@ -11,6 +12,10 @@ import com.boot.tsamo.repository.BoardRepository;
 import com.boot.tsamo.repository.ReplyRepository;
 import com.boot.tsamo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -122,6 +127,19 @@ public class ReplyService {
     //댓글 삭제
     public void deleteById(Long id) {
         replyRepository.deleteById(id);
+    }
+
+
+    
+    //댓글 페이징
+    public Page<ViewReplyDTO> getreplyPage(Pageable pageable, List<ViewReplyDTO> replies) {
+
+        PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize());
+        int start = (int) pageRequest.getOffset();
+        int end = Math.min((start + pageRequest.getPageSize()), replies.size());
+        Page<ViewReplyDTO> ReplyPage = new PageImpl<>(replies.subList(start, end), pageRequest, replies.size());
+
+        return ReplyPage;
     }
 
 

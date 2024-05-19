@@ -1,9 +1,6 @@
 package com.boot.tsamo.controller;
 
-import com.boot.tsamo.dto.AddReReplyDTO;
-import com.boot.tsamo.dto.AddReplyDTO;
-import com.boot.tsamo.dto.ViewReReplyDTO;
-import com.boot.tsamo.dto.ViewReplyDTO;
+import com.boot.tsamo.dto.*;
 import com.boot.tsamo.entity.ReReply;
 import com.boot.tsamo.entity.Reply;
 import com.boot.tsamo.service.ReReplyService;
@@ -49,8 +46,8 @@ public class ReplyController {
 
     //댓글 조회 수정본
     @GetMapping("/api/allcomments/{boardId}")
-    public ResponseEntity<List<ViewReplyDTO>> getAllComments(@PathVariable long boardId,
-                                                             @PageableDefault(page=0,size = 1)Pageable pageable) {
+    public Page<ViewReplyDTO> getAllComments(@PathVariable long boardId,
+                                                             @PageableDefault(page=0,size = 3)Pageable pageable) {
 
         List<Reply> replieList = replyService.findAll(boardId);
 
@@ -59,20 +56,31 @@ public class ReplyController {
                 .collect(Collectors.toList());
 
 
-        Page<ViewReplyDTO> List = new PageImpl<>(replyDTOS,pageable,replyDTOS.size());
-
-        
-        for(ViewReplyDTO replyDTO : replyDTOS) {
-            System.out.println(replyDTO.getReplyId()+"여기에요");
-            System.out.println(replyDTO.getUserid()+"여기에요");
-            System.out.println(replyDTO.getUpdatedAt()+"여기에요");
-            System.out.println(replyDTO.getContent()+"여기에요");
-            System.out.println(replyDTO.getReplyId()+"여기에요");
-        }
+       Page<ViewReplyDTO> replyDTOPage = replyService.getreplyPage(pageable, replyDTOS);
 
 
-        return ResponseEntity.ok().body(replyDTOS);
+        return replyDTOPage;
 
+    }
+
+    //기존 댓글 수정
+    @PostMapping("/api/modify")
+    public ResponseEntity<modifyReplyDTO> updateComment(@RequestBody modifyReplyDTO dto) {
+
+        replyService.update(dto);
+
+        return ResponseEntity.ok().body(dto);
+    }
+
+    //기존 댓글 삭제
+    @DeleteMapping ("/api/delete/{id}")
+    public ResponseEntity<Long> deletecomment(@PathVariable Long id) {
+
+
+        System.out.println(id+"삭제 아이디 들어오나");
+        replyService.deleteById(id);
+
+        return ResponseEntity.ok().body(id);
     }
 
 
@@ -135,11 +143,6 @@ public class ReplyController {
                 .map(ViewReReplyDTO::new)
                 .collect(Collectors.toList());
 
-        for (ViewReReplyDTO r : reReplyDTOS) {
-            System.out.println(r.getUserid());
-            System.out.println(r.getContent());
-            System.out.println(r.getCreatedAt());
-        }
 
         return ResponseEntity.ok().body(reReplyDTOS);
     }

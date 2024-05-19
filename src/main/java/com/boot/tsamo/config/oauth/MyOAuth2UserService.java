@@ -42,6 +42,6 @@ public class MyOAuth2UserService extends DefaultOAuth2UserService {
 
         userRepository.save(user);
 
-        return new CustomOAuth2User(userId);
+        return user;
     }
 }
