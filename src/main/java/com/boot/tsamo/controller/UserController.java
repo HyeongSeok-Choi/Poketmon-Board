@@ -5,6 +5,7 @@ import com.boot.tsamo.entity.Users;
 import com.boot.tsamo.repository.UserRepository;
 import com.boot.tsamo.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -114,14 +115,13 @@ public class UserController {
     }
 
     @PostMapping("/delete")
-    public String deleteUser(@RequestParam("id") String userId, Model model) {
-
-        System.out.println(userId+"여기서부터 안들어오니 ?");
-
-
+    public String deleteUser(@RequestParam("id") String userId, HttpSession session, Model model) {
         try {
             userService.deleteUser(userId);
+            session.invalidate();
+
             model.addAttribute("successMessage", "탈퇴 완료 되었습니다.");
+            return "redirect:/user/login";
         } catch (EntityNotFoundException e) {
             model.addAttribute("errorMessage", "존재하지 않는 아이디입니다.");
         }

@@ -26,11 +26,6 @@ public class UserService implements UserDetailsService {
 
     public Users saveUser(Users user) {
 
-        System.out.println(user.getUserId()+"dsjfak");
-        System.out.println(user.getPassword()+"dsjfak");
-        System.out.println(user.getRole()+"dsjfak");
-        System.out.println(user.getEmail()+"dsjfak");
-        System.out.println(user.getNickName()+"dsjfak");
         validateDuplicateUser(user);
         return userRepository.save(user);
     }
