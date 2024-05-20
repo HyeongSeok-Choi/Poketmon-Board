@@ -4,6 +4,7 @@ import com.boot.tsamo.constant.Role;
 import com.boot.tsamo.dto.AddReReplyDTO;
 import com.boot.tsamo.dto.AddReplyDTO;
 import com.boot.tsamo.dto.UserFormDto;
+import com.boot.tsamo.dto.modifyReReplyDTO;
 import com.boot.tsamo.entity.Board;
 import com.boot.tsamo.entity.ReReply;
 import com.boot.tsamo.entity.Reply;
@@ -49,16 +50,6 @@ public class ReReplyService {
     }
 
 
-//    //모든 대댓글 조회
-//    public List<ReReply> findAll(Long id) {
-//
-//        Reply reply = replyRepository.findById(id).get();
-//
-//        List<ReReply> rereplies = reply.getRereplies();
-//
-//        return rereplies;
-//    }
-
     // 대댓글 상세 조회
     public List<ReReply> findByReplyId(Long id) {
 
@@ -71,11 +62,11 @@ public class ReReplyService {
 
     //대댓글 수정
     @Transactional
-    public ReReply update(long id, String content) {
+    public ReReply update(modifyReReplyDTO modifyReReplyDTO) {
 
-        ReReply reReply = rereplyRepository.findById(id).get();
+        ReReply reReply = rereplyRepository.findById(modifyReReplyDTO.getReplyId()).get();
 
-        reReply.reReplyupdate(content);
+        reReply.reReplyupdate(modifyReReplyDTO.getContent());
 
         ReReply updateReReplyResult = rereplyRepository.save(reReply);
 
