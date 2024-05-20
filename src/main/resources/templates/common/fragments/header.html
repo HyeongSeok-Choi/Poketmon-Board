@@ -38,7 +38,7 @@
                 <!-- 사용자가 로그인한 경우에만 환영 메시지 표시 -->
            <a class="label" sec:authorize="isAuthenticated()" th:text="'환영합니다, [' + ${#authentication.principal.username} + '] 님'"></a>
 
-        <a sec:authorize="hasRole('ADMIN')" >관리자 페이지</a>
+        <a sec:authorize="hasRole('ADMIN')" href="/admin" >관리자 페이지</a>
 
 <!--        &lt;!&ndash; 사용자가 로그인한 경우에만 환영 메시지 표시 &ndash;&gt;
             <a class="nav-link" sec:authorize="isAuthenticated()" href="#" th:text="'환영합니다, ' + ${#authentication.principal.nickName} + '님'"></a>-->

@@ -51,7 +51,7 @@
 </head>
 <body>
 
-<div class="card col-md-3 mb-1">
+<div class="card col-md-6 mb-1">
     <div class="card-header">
         <strong class="card-title" id="attachTitle">첨부 파일</strong>
     </div>
@@ -129,7 +129,7 @@
             button.addEventListener('click', function() {
                 const fileId = this.dataset.fileId;
                 const boardId = this.dataset.boardId;
-                loadFilePreview(fileId, boardId); // loadFilePreview 함수에 boardId를 전달
+                loadFilePreview(fileId, boardId);
             });
         });
     });
