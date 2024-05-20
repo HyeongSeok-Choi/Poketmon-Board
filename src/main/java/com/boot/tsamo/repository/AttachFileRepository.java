@@ -11,5 +11,5 @@ import java.util.List;
 public interface AttachFileRepository extends JpaRepository<AttachFile,Long> {
 
     List<AttachFile> findByBoardIdId(Long boardId);
-    AttachFile findByIdAndBoardIdId(Long id, Long boardId);
+    AttachFile findByBoardIdIdAndId(Long boardId, Long id);
 }

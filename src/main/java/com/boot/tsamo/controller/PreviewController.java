@@ -3,10 +3,7 @@ package com.boot.tsamo.controller;
 import com.boot.tsamo.entity.AttachFile;
 import com.boot.tsamo.service.AttachFileService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,16 +15,12 @@ import java.nio.file.Files;
 @Controller
 public class PreviewController {
 
-    private AttachFileService attachFileService;
-
-    public PreviewController(AttachFileService attachFileService) {
-        this.attachFileService = attachFileService;
-    }
+    private final AttachFileService attachFileService;
 
     @GetMapping("/preview/{bno}/{fno}")
-    public ResponseEntity<?> showPreviewFile(@PathVariable Long fno, @PathVariable Long bno){
+    public ResponseEntity<?> showPreviewFile(@PathVariable Long bno, @PathVariable Long fno){
         try {
-            AttachFile attachFile = attachFileService.getAttachFile(fno, bno); // attachFileService에서 파일 정보 가져오기
+            AttachFile attachFile = attachFileService.getAttachFile(bno, fno); // attachFileService에서 파일 정보 가져오기
             if (attachFile == null) {
                 return ResponseEntity.notFound().build();
             }
@@ -38,9 +31,11 @@ public class PreviewController {
             byte[] fileContent = Files.readAllBytes(file.toPath());
             MediaType mediaType = attachFileService.determineMediaType(fileName); // 미디어 타입 결정
 
-            return ResponseEntity.ok()
-                    .contentType(mediaType)
-                    .body(fileContent);
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(mediaType);
+            headers.setContentDisposition(ContentDisposition.builder("attachment").filename(attachFile.getOri_fileName()).build());
+
+            return new ResponseEntity<>(fileContent, headers, HttpStatus.OK);
         } catch (IOException e) {
             return ResponseEntity.notFound().build();
         }

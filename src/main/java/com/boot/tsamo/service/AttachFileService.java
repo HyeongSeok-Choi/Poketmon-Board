@@ -84,8 +84,8 @@ public class AttachFileService {
         return attachFileRepository.findByBoardIdId(boardId);
     }
 
-    public AttachFile getAttachFile(Long fno, Long boardId) {
-        return attachFileRepository.findByIdAndBoardIdId(fno, boardId);
+    public AttachFile getAttachFile(Long boardId, Long fno) {
+        return attachFileRepository.findByBoardIdIdAndId(boardId, fno);
     }
 
     // 파일 확장자에 따라 미디어 타입 결정
@@ -94,8 +94,14 @@ public class AttachFileService {
             return MediaType.IMAGE_PNG;
         } else if (fileName.endsWith(".jpg") || fileName.endsWith(".jpeg")) {
             return MediaType.IMAGE_JPEG;
+        } else if (fileName.endsWith(".gif")) {
+            return MediaType.IMAGE_GIF;
         } else if (fileName.endsWith(".mp4")) {
             return MediaType.valueOf("video/mp4");
+        } else if (fileName.endsWith(".pdf")) {
+            return MediaType.APPLICATION_PDF;
+        } else if (fileName.endsWith(".txt")) {
+            return MediaType.TEXT_PLAIN;
         } else {
             return MediaType.APPLICATION_OCTET_STREAM; // 기본값
         }
