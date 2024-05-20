@@ -32,7 +32,7 @@ public class Users implements UserDetails, OAuth2User {
 
     @Override
     public String getName() {
-        return "";
+        return userId;
     }
 
     @Override
@@ -42,7 +42,7 @@ public class Users implements UserDetails, OAuth2User {
 
     @Override
     public String getUsername() {
-        return this.userId;
+        return userId;
     }
 
     @Override

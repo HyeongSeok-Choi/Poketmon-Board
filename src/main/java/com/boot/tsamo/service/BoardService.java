@@ -10,6 +10,7 @@ import com.boot.tsamo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -107,7 +108,14 @@ public class BoardService {
         }
 
 
-        return new PageImpl<>(boards_hashTag,pageable,boards_hashTag.size());
+        // 요청으로 들어온 page와 한 page당 원하는 데이터의 갯수
+        PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize());
+        int start = (int) pageRequest.getOffset();
+        int end = Math.min((start + pageRequest.getPageSize()), boards_hashTag.size());
+        Page<Board> BoardhashList = new PageImpl<>(boards_hashTag.subList(start, end), pageRequest, boards_hashTag.size());
+
+
+        return BoardhashList;
 
     }
 

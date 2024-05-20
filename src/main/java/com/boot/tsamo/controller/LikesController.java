@@ -1,0 +1,37 @@
+package com.boot.tsamo.controller;
+
+
+import com.boot.tsamo.dto.addLikesDTO;
+import com.boot.tsamo.repository.LikeRepository;
+import com.boot.tsamo.service.LikeService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
+
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/api/likes")
+
+public class LikesController {
+
+    private final LikeService likeService;
+
+
+    @PostMapping
+    public ResponseEntity<?> insert(@RequestBody addLikesDTO likesDTO, Principal principal) throws Exception{
+
+        //뷰에서 받아온 정보에 로그인 아이디 대입
+        likesDTO.setUserId(principal.getName());
+
+
+        //좋아요 존재유무 확인(true라면 이미 존재, false라면 좋아요 없음)
+       boolean checkLikes= likeService.checklikes(likesDTO);
+
+        return ResponseEntity.ok().body(checkLikes);
+
+
+    }
+
+}

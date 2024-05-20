@@ -5,9 +5,16 @@ import lombok.Data;
 @Data
 public class addLikesDTO {
 
-    private String boardId;
+    private Long boardId;
 
     private String userId;
 
+    private String check;
+
+    public addLikesDTO(Long boardId, String userId,String check) {
+        this.boardId = boardId;
+        this.userId = userId;
+        this.check = check;
+    }
 
 }

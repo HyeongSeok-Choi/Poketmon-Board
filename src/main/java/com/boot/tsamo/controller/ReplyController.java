@@ -1,16 +1,16 @@
 package com.boot.tsamo.controller;
 
-import com.boot.tsamo.dto.AddReReplyDTO;
-import com.boot.tsamo.dto.AddReplyDTO;
-import com.boot.tsamo.dto.ViewReReplyDTO;
-import com.boot.tsamo.dto.ViewReplyDTO;
+import com.boot.tsamo.dto.*;
 import com.boot.tsamo.entity.ReReply;
 import com.boot.tsamo.entity.Reply;
 import com.boot.tsamo.service.ReReplyService;
 import com.boot.tsamo.service.ReplyService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -44,22 +44,64 @@ public class ReplyController {
 
     }
 
-    // 댓글 조회
-    @GetMapping("/api/allcomments")
-    public ResponseEntity<List<ViewReplyDTO>> getAllComments(Long id, Pageable pageable) {
+    //댓글 조회 수정본
+    @GetMapping("/api/allcomments/{boardId}")
+    public Page<ViewReplyDTO> getAllComments(@PathVariable long boardId,
+                                                             @PageableDefault(page=0,size = 3)Pageable pageable) {
 
-        id = 1L;
-
-        List<Reply> replieList = replyService.findAll(id);
+        List<Reply> replieList = replyService.findAll(boardId);
 
         List<ViewReplyDTO> replyDTOS = replieList.stream()
                 .map(a -> new ViewReplyDTO(a))
                 .collect(Collectors.toList());
 
 
-        return ResponseEntity.ok().body(replyDTOS);
+       Page<ViewReplyDTO> replyDTOPage = replyService.getreplyPage(pageable, replyDTOS);
+
+
+        return replyDTOPage;
 
     }
+
+    //기존 댓글 수정
+    @PostMapping("/api/modify")
+    public ResponseEntity<modifyReplyDTO> updateComment(@RequestBody modifyReplyDTO dto) {
+
+        replyService.update(dto);
+
+        return ResponseEntity.ok().body(dto);
+    }
+
+    //기존 댓글 삭제
+    @DeleteMapping ("/api/delete/{id}")
+    public ResponseEntity<Long> deletecomment(@PathVariable Long id) {
+
+
+        System.out.println(id+"삭제 아이디 들어오나");
+        replyService.deleteById(id);
+
+        return ResponseEntity.ok().body(id);
+    }
+
+
+    // 댓글 조회
+//    @GetMapping("/api/allcomments")
+//    public ResponseEntity<List<ViewReplyDTO>> getAllComments(Long id, Pageable pageable) {
+//
+//        id = 1L;
+//
+//        List<Reply> replieList = replyService.findAll(id);
+//
+//        List<ViewReplyDTO> replyDTOS = replieList.stream()
+//                .map(a -> new ViewReplyDTO(a))
+//                .collect(Collectors.toList());
+//
+//
+//        return ResponseEntity.ok().body(replyDTOS);
+//
+//    }
+
+
 
 //    //기존 댓글 수정
 //    @PatchMapping("/posts/{postId}/comments/{id}")
@@ -92,47 +134,47 @@ public class ReplyController {
 
     }
 
-//    // 상세 대댓글 조회 수정본
-//    @GetMapping("/api/allReComment/{replyId}")
-//    public ResponseEntity<List<ViewReReplyDTO>> getAllReComments(@PathVariable long replyId) {
-//        List<ReReply> reReplieList = reReplyService.findByReplyId(replyId);
+    // 상세 대댓글 조회 수정본
+    @GetMapping("/api/allReComment/{replyId}")
+    public ResponseEntity<List<ViewReReplyDTO>> getAllReComments(@PathVariable long replyId) {
+        List<ReReply> reReplieList = reReplyService.findByReplyId(replyId);
+
+        List<ViewReReplyDTO> reReplyDTOS = reReplieList.stream()
+                .map(ViewReReplyDTO::new)
+                .collect(Collectors.toList());
+
+
+        return ResponseEntity.ok().body(reReplyDTOS);
+    }
+
+
+
+
+//    // 상세 대댓글 조회
+//    @GetMapping("/api/allReComment")
+//    public ResponseEntity<List<ViewReReplyDTO>> getAllReComments() {
+//
+//        Long id = 1L;
+//
+//        List<ReReply> reReplieList = reReplyService.findByReplyId(id);
 //
 //        List<ViewReReplyDTO> reReplyDTOS = reReplieList.stream()
-//                .map(ViewReReplyDTO::new)
+//                .map(a -> new ViewReReplyDTO(a))
 //                .collect(Collectors.toList());
 //
 //        for (ViewReReplyDTO r : reReplyDTOS) {
 //            System.out.println(r.getUserid());
 //            System.out.println(r.getContent());
 //            System.out.println(r.getCreatedAt());
+//
 //        }
 //
+//
 //        return ResponseEntity.ok().body(reReplyDTOS);
+//
 //    }
 
-    // 상세 대댓글 조회
-    @GetMapping("/api/allReComment/{replyId}")
-    public ResponseEntity<List<ViewReReplyDTO>> getAllReComments() {
 
-        Long id = 1L;
-
-        List<ReReply> reReplieList = reReplyService.findByReplyId(id);
-
-        List<ViewReReplyDTO> reReplyDTOS = reReplieList.stream()
-                .map(a -> new ViewReReplyDTO(a))
-                .collect(Collectors.toList());
-
-        for (ViewReReplyDTO r : reReplyDTOS) {
-            System.out.println(r.getUserid());
-            System.out.println(r.getContent());
-            System.out.println(r.getCreatedAt());
-
-        }
-
-
-        return ResponseEntity.ok().body(reReplyDTOS);
-
-    }
 
 //    // 모든 대댓글 조회
 //    @GetMapping("/api/allReComment")

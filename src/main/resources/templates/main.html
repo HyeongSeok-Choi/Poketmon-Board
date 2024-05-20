@@ -41,9 +41,19 @@
         </div>
     </form>
 
+
     <!-- board list area -->
     <div id="board-list" >
         <div class="container">
+            <form th:action="@{/}" method="get">
+            <div>
+                <select name ="sort" onchange="this.form.submit()" >
+                    <option value="title" th:selected="${sort} == 'title'">제목</option>
+                    <option value="createdAt" th:selected="${sort} == 'createdAt'">작성일</option>
+                    <option value="userid" th:selected="${sort} == 'userid'">작성자로 검색</option>
+                </select>
+            </div>
+            </form>
             <table class="board-table">
                 <thead>
                 <tr>
@@ -65,16 +75,19 @@
             <!--페이징 처리 부분 -->
             <div class="d-flex justify-content-center" th:if="${startPage != null && endPage != null && nowPage != null}" >
 
-                <!--이전 버튼-->
-                <li><a th:if="${nowPage > 1}" th:href="@{/(page=${nowPage - 2})}">[이전]</a></li>
+                <ul class="pagination">
 
-                <li class="btn btn btn-primary" th:each="page : ${#numbers.sequence(startPage, endPage)}">
-                    <a class="page-link" th:if="${page != nowPage}" th:href="@{/(page = ${page - 1},title=${param.title})}" th:text="${page}"></a>
-                    <strong  th:if="${page == nowPage}" th:text="${page}" style="color: red "></strong>
+                <!--이전 버튼-->
+                <li class="page-item"><a class="page-link" th:if="${nowPage > 1}" th:href="@{/(page=${nowPage - 2},title=${param.title},sort=${param.sort},searchtype=${param.searchtype},searchvalue=${param.searchvalue})}">이전</a></li>
+
+                <li class="page-item" th:each="page : ${#numbers.sequence(startPage, endPage)}">
+                    <a class="page-link" th:if="${page != nowPage}" th:href="@{/(page = ${page - 1},title=${param.title},sort=${param.sort},searchtype=${param.searchtype},searchvalue=${param.searchvalue})}" th:text="${page}"></a>
+                    <a class="page-link"  th:if="${page == nowPage}" th:text="${page}" style="color: red "></a>
                 </li>
 
                 <!--다음 버튼-->
-                <li><a th:if="${nowPage != endPage && endPage > 1} " th:href="@{/(page=${nowPage})}">[다음]</a></li>
+                <li class="page-item"><a  class="page-link"th:if="${nowPage != endPage && endPage > 1} " th:href="@{/(page=${nowPage},title=${param.title},sort=${param.sort},searchtype=${param.searchtype},searchvalue=${param.searchvalue})}">다음</a></li>
+                </ul>
             </div>
                  <button class="btn btn-dark" onclick="location.href='/createBoard'">등록</button>
         </div>
