@@ -63,8 +63,8 @@ public class SecurityConfig {
                         authorizeRequests
 
                                 .requestMatchers("/css/**", "/js/**", "/img/**").permitAll()
-                                .requestMatchers("/main", "/", "/user/**", "/createBoard", "/BoardDetailView", "/reply", "/posts", "/createBoard", "createBoard2"
-                                        , "/api/addComment","/error").permitAll()
+                                .requestMatchers("/main","/","/user/**","/createBoard","/BoardDetailView","/reply","/posts","/createBoard","createBoard2"
+                                        ,"/api/addComment" ,"/attachFile", "/board/**", "/**","/error").permitAll()
                                 .requestMatchers("/admin/**").hasRole("ADMIN")
                                 .anyRequest().authenticated()
 
