@@ -320,8 +320,7 @@
 
     });
 
-
-    // 대댓글 수정 관련
+    //대댓글 수정 관련
     document.addEventListener('click', function(event) {
         if (event.target.classList.contains('recomment-modify')) {
             const id = event.target.id.split('-')[2]; // 여기서 id를 추출합니다.
@@ -342,7 +341,9 @@
                 }).then(res => {
                     event.target.innerText = '수정';
                     contentInput.setAttribute('readonly', true); // 수정이 완료되면 다시 readonly 설정
-                    loadReplies(id); // 수정 후 대댓글을 다시 로드합니다.
+                    // 대댓글을 다시 로드합니다.
+                    const parentReplyId = document.getElementById(`comment-${id}`).querySelector('input[type="hidden"]').value;
+                    loadReplies(parentReplyId);
                 });
             } else {
                 event.target.innerText = '저장';
@@ -351,6 +352,7 @@
             }
         }
     });
+
 
 
 
