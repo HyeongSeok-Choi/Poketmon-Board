@@ -5,6 +5,7 @@ import com.boot.tsamo.repository.AttachFileRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -86,5 +87,17 @@ public class AttachFileService {
         return attachFileRepository.findByIdAndBoardIdId(fno, boardId);
     }
 
+    // 파일 확장자에 따라 미디어 타입 결정
+    public MediaType determineMediaType(String fileName) {
+        if (fileName.endsWith(".png")) {
+            return MediaType.IMAGE_PNG;
+        } else if (fileName.endsWith(".jpg") || fileName.endsWith(".jpeg")) {
+            return MediaType.IMAGE_JPEG;
+        } else if (fileName.endsWith(".mp4")) {
+            return MediaType.valueOf("video/mp4");
+        } else {
+            return MediaType.APPLICATION_OCTET_STREAM; // 기본값
+        }
+    }
 
 }
