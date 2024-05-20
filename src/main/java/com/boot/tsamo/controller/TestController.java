@@ -32,8 +32,6 @@ public class TestController {
         return "ReplyView";
     }
 
-
-
     //board서비스
     private final BoardService boardService;
     //File서비스
@@ -45,7 +43,9 @@ public class TestController {
 
     //test뷰(없어도 됨)
     @GetMapping(value = "/test")
-    public String test() {
+    public String test(Principal principal) {
+        System.out.println(principal.getName());
+        System.out.println("아니 들어오니");
 
         return "test";
     }

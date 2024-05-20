@@ -82,7 +82,7 @@
                 <br>
                 <button class="btn btn-primary btn-lg btn-block" type="submit">정보 수정</button>
             </form>
-            <form class="validation-form"  method="post" th:action="@{/user/delete/${user.userId}}">
+            <form class="validation-form"  method="post" th:action="@{/user/delete(id=${user.userId})}">
                 <button class="btn btn-primary btn-lg btn-block" type="submit" >회원 탈퇴</button>
             </form>
 
