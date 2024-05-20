@@ -205,6 +205,7 @@ public class TestController {
         Board detailBoard = boardService.findById(id);
         model.addAttribute("attachFileFormDto", new AttachFileFormDto());
         model.addAttribute("board", detailBoard);
+        model.addAttribute("hashTag", hashTagService.getHashTags(detailBoard));
 
         return "boardDetail";
     }

@@ -6,11 +6,14 @@ import com.boot.tsamo.repository.HashTagRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class HashTagService {
 
     private final HashTagRepository hashTagRepository;
+
 
     public void saveHashTags(String hashTagValue, Board board) {
         System.out.println(hashTagValue);
@@ -30,5 +33,12 @@ public class HashTagService {
 
             }
         }
+    }
+
+    public List<HashTag> getHashTags(Board board) {
+
+        List<HashTag> hashTags =  board.getHashTags();
+
+        return hashTags;
     }
 }

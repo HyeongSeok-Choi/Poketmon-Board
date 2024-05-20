@@ -143,7 +143,14 @@
                  <!--좋아요 버튼 끝-->
 
                 <hr class="mb-4">
-            <div class="col-md-6 mb-3">
+
+            <h5 class="mb-3">해시태그</h5>
+            <ul style="list-style:none" th:each="hash:${hashTag}">
+               <i><li style="float: left; margin-right: 20px" th:text="'#'+${hash.getHashTagContent()}"></li></i>
+            </ul>
+
+            <div style="clear: both;" class="col-md-6 mb-3">
+                <hr class="mb-4" >
             <form class="validation-form"  method="post" th:action="@{/modifyBoard(id=${board.id})}">
                 <button class="btn btn-primary btn btn-block" type="submit" >수정</button>
             </form>
