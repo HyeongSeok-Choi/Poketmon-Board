@@ -15,6 +15,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -37,7 +38,15 @@ public class Users implements UserDetails, OAuth2User {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        Collection<GrantedAuthority> collect = new ArrayList<>();
+        collect.add(new GrantedAuthority() {
+            private Users user;
+            @Override
+            public String getAuthority() {
+                return user.getRole().toString();
+            }
+        });
+        return null;
     }
 
     @Override
