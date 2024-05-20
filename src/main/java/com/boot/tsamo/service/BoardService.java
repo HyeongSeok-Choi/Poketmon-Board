@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -98,22 +99,33 @@ public class BoardService {
     //해시태그로 검색 - 리스트 출력
     public Page<Board> findAllByHashTag(Pageable pageable, String hashTag){
 
+        String[] hashvalues = hashTag.split("#");
 
-        List<HashTag> findHash = hashTagRepository.findByHashTagContentContaining(hashTag);
+        List<HashTag> findHash = new ArrayList<>();
+
+        for (String hash : hashvalues){
+            System.out.println(hash+"해시값들");
+            String trimhash = hash.trim();
+            System.out.println();
+            findHash.addAll(hashTagRepository.findByHashTagContent(trimhash));
+        }
+
+
+        //List<HashTag> findHash = hashTagRepository.findByHashTagContentContains(hashTag);
         List<Board> boards_hashTag = new ArrayList<>();
-
 
         for (HashTag hashTag1 : findHash) {
             boards_hashTag.add(hashTag1.getBoardId());
         }
 
+        List<Board> boards_hashTag2 =boards_hashTag.stream().distinct().collect(Collectors.toList());
+
 
         // 요청으로 들어온 page와 한 page당 원하는 데이터의 갯수
         PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize());
         int start = (int) pageRequest.getOffset();
-        int end = Math.min((start + pageRequest.getPageSize()), boards_hashTag.size());
-        Page<Board> BoardhashList = new PageImpl<>(boards_hashTag.subList(start, end), pageRequest, boards_hashTag.size());
-
+        int end = Math.min((start + pageRequest.getPageSize()), boards_hashTag2.size());
+        Page<Board> BoardhashList = new PageImpl<>(boards_hashTag2.subList(start, end), pageRequest, boards_hashTag2.size());
 
         return BoardhashList;
 
