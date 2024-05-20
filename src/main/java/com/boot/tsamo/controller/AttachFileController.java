@@ -30,10 +30,12 @@ public class AttachFileController {
 
     }
 
+    /*
     // 상품등록
     @PostMapping(value ="/attachFile")
     public String attachFileNew(@Valid AttachFileFormDto attachFileFormDto, BindingResult bindingResult,
                           Model model, @RequestParam("attachFile") List<MultipartFile> attachFileList){
+
 
         if(bindingResult.hasErrors()){
             return "attachFile/attachFile";
@@ -53,4 +55,6 @@ public class AttachFileController {
 
         return "redirect:/";
     }
+
+     */
 }

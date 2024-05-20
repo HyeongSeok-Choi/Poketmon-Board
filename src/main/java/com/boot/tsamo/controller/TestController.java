@@ -4,8 +4,10 @@ package com.boot.tsamo.controller;
 import com.boot.tsamo.dto.AttachFileFormDto;
 import com.boot.tsamo.dto.addBoardDTO;
 import com.boot.tsamo.dto.attachAttributeDTO;
+import com.boot.tsamo.entity.AttachFile;
 import com.boot.tsamo.entity.Board;
 import com.boot.tsamo.service.*;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -14,6 +16,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -36,7 +39,7 @@ public class TestController {
     //board서비스
     private final BoardService boardService;
     //File서비스
-    private final FileService fileService;
+    private final AttachFileService fileService;
     //HashTag서비스
     private final HashTagService hashTagService;
     //attachAttribute서비스
@@ -138,6 +141,7 @@ public class TestController {
     public String createBoard(Model model) {
 
         model.addAttribute("board", new Board());
+        model.addAttribute("attachFileFormDto", new AttachFileFormDto());
 
         return "createBoard";
     }
@@ -145,13 +149,30 @@ public class TestController {
     //게시물 등록
     @PostMapping(value = "/createBoard2")
     public String createBoardRequest(@ModelAttribute addBoardDTO addBoarddto,
-                                     @RequestParam("uploadFiles") List<MultipartFile> files,
-                                     @RequestParam("hashTagValue")String hashTagValue) {
+                                     @RequestParam("attachFile") List<MultipartFile> attachFileList,
+                                     @RequestParam("hashTagValue")String hashTagValue,
+                                     @Valid AttachFileFormDto attachFileFormDto, BindingResult bindingResult,
+                                     Model model) {
+
+        if(bindingResult.hasErrors()){
+            return "createBoard";
+        }
+
+        if(attachFileList.get(0).isEmpty() && attachFileFormDto.getId()==null){
+            model.addAttribute("errorMessage", "첨부파일 입력 필요");
+            return "createBoard";
+        }
 
 
         Board board = boardService.save(addBoarddto.toEntity());
 
-        fileService.saveFile(files,board);
+        try{
+            fileService.saveAttachFileList(attachFileList,board);
+        } catch(Exception e){
+            model.addAttribute("errorMessage", "첨부파일 DB 저장 에러");
+            return "createBoard";
+        }
+
 
         hashTagService.saveHashTags(hashTagValue,board);
 
@@ -164,12 +185,28 @@ public class TestController {
     @GetMapping(value = "/BoardDetailView")
     public String BoardDetailView(Model model,@RequestParam Long id,Principal principal) {
 
-        String userid = principal.getName();
+        if(principal != null) {
+            String userid = principal.getName();
+            model.addAttribute("userid", userid);
+        }
+
+
+        List<AttachFile> attachFiles = fileService.getAttachFileByBoardId(id);
+
+        for(AttachFile attachFile : attachFiles){
+            System.out.println(attachFile.getUuid_fileName()+"여기 있습니다.");
+
+        }
+
+
+
+        model.addAttribute("attachFiles", attachFiles);
+
+
 
         Board detailBoard = boardService.findById(id);
         model.addAttribute("attachFileFormDto", new AttachFileFormDto());
         model.addAttribute("board", detailBoard);
-        model.addAttribute("userid", userid);
 
         return "boardDetail";
     }

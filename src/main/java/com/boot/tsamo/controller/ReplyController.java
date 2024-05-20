@@ -32,8 +32,12 @@ public class ReplyController {
 
         //Long boardId = contents.getBoardId();
 
-        //작성자
-        String author = principal.getName();
+        String author ="";
+        if(principal != null) {
+            //작성자
+            author = principal.getName();
+
+        }
         contents.setUserid(author);
 
         Reply savedReply = replyService.addReply(contents);
@@ -57,6 +61,11 @@ public class ReplyController {
 
 
        Page<ViewReplyDTO> replyDTOPage = replyService.getreplyPage(pageable, replyDTOS);
+
+       for(ViewReplyDTO rwe :replyDTOPage ){
+           System.out.println(rwe.getContent()+"테스트");
+           System.out.println(rwe.getUserid()+"테스트");
+       }
 
 
         return replyDTOPage;

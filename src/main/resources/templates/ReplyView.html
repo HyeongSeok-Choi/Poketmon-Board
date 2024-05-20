@@ -178,7 +178,9 @@
 
            $('#replySelectAll').empty();
 
-           fetch(`http://localhost:8080/api/allcomments/1?page=${page}`, {
+           var boardnumbr = document.getElementById("board-id").value
+
+           fetch(`http://localhost:8080/api/allcomments/${boardnumbr}?page=${page}`, {
                headers: {
                    'Content-Type': 'application/json',
                    'Accept': 'application/json'

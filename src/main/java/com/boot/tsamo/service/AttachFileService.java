@@ -1,6 +1,7 @@
 package com.boot.tsamo.service;
 
 import com.boot.tsamo.entity.AttachFile;
+import com.boot.tsamo.entity.Board;
 import com.boot.tsamo.repository.AttachFileRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
@@ -27,11 +28,11 @@ public class AttachFileService {
     private final AttachFileRepository attachFileRepository;
 
 
-    public void saveAttachFileList(List<MultipartFile> attachFileList) throws Exception{
+    public void saveAttachFileList(List<MultipartFile> attachFileList, Board boardId) throws Exception{
 
         for(int i=0; i<attachFileList.size(); i++){
             AttachFile attachFile = new AttachFile();
-//            attachFile.setBoardId(boardId);
+            attachFile.setBoardId(boardId);
 
             //첨부하지 않은 첨부란은 파일정보가 DB에 저장되지 않도록 설정
             if(!attachFileList.get(i).isEmpty()) {

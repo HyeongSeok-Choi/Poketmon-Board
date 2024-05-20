@@ -1,7 +1,7 @@
 
 <body>
 
-    <form role="form" method="post" enctype="multipart/form-data" th:object="${attachFileFormDto}">
+
         <div th:if="${#lists.isEmpty(attachFileFormDto.attachFileDtoList)}">
             <div class="form-group" th:each="num: ${#numbers.sequence(1,5)}">
                 <div class="custom-file img-div">
@@ -21,10 +21,7 @@
             </div>
         </div>
 
-        <div th:if="${#strings.isEmpty(attachFileFormDto.id)}" style="text-align: center">
-            <button th:formaction="@{/attachFile}" type="submit" class="btn btn-primary">저장</button>
-        </div>
-    </form>
+
 
 </body>
 </html>
