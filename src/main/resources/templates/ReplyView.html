@@ -132,9 +132,9 @@
                             <em>${reply.userid}</em>
                             <span class="date">${reply.createdAt}</span>
                         </p>
-                        <div class="cont">ㄴ<input class="txt_con" value="${reply.content}" readonly></div>
+                          <div class="cont">ㄴ<input id="input2-${reply.reReplyId}" class="txt_con" value="${reply.content}" readonly></div>
                         <p class="func_btns">
-                            <button class="btn btn-warning" type="button" id="${reply.reReplyId}" class="modify">수정</button>
+                            <button class="btn btn-warning recomment-modify" type="button" id="recomment-modify-${reply.reReplyId}">수정</button>
                             <button class="btn btn-danger" type="button" class="btns">삭제</button>
                         </p>
                     </div>`;
@@ -272,7 +272,6 @@
             body: JSON.stringify({
                 content: contents,
                 replyId: replyId,
-                userid: "qnftlstm",
             })
         }).then(res => {
             if (activeReplies[replyId]) {
@@ -318,7 +317,42 @@
                 contentInput.focus();
             }
         }
+
     });
+
+
+    // 대댓글 수정 관련
+    document.addEventListener('click', function(event) {
+        if (event.target.classList.contains('recomment-modify')) {
+            const id = event.target.id.split('-')[2]; // 여기서 id를 추출합니다.
+            const contentInput = document.getElementById(`input2-${id}`); // 추출한 id로 요소를 찾습니다.
+
+            if (event.target.innerText === '저장') {
+                const content = contentInput.value;
+
+                fetch("/api/Remodify", {
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    method: 'POST',
+                    body: JSON.stringify({
+                        content: content,
+                        replyId: id
+                    })
+                }).then(res => {
+                    event.target.innerText = '수정';
+                    contentInput.setAttribute('readonly', true); // 수정이 완료되면 다시 readonly 설정
+                    loadReplies(id); // 수정 후 대댓글을 다시 로드합니다.
+                });
+            } else {
+                event.target.innerText = '저장';
+                contentInput.removeAttribute('readonly'); // 수정 버튼을 누르면 readonly 해제
+                contentInput.focus();
+            }
+        }
+    });
+
+
 
     // 댓글 삭제 관련
     document.addEventListener('click', function(event) {
