@@ -101,9 +101,7 @@ public class TestController {
                         board.getReplies();
 
                     }
-                    System.out.println(Boards.getPageable().getPageNumber()+"페이지 넘버");
-                    System.out.println(Boards.getTotalPages()+"페이지 넘버");
-                    //Boards = boardService.findAll(pageable);
+
                 }
 
             }
