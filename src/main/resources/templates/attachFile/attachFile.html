@@ -14,6 +14,15 @@
                 </div>
             </div>
 
+            <p th:style="'color: red'">
+                <th:block th:each="extension : ${extensions}">
+                    <span th:text="${extension.extension}" th:if="${!#strings.isEmpty(extension.extension)}"></span>
+                    <span th:unless="${extension == extensions[extensions.size() - 1]}">, </span>
+                </th:block>
+                파일들만 등록 됩니다.
+            </p>
+
+
             <div th:if = "${not #lists.isEmpty(attachFileFormDto.attachFileDtoList)}">
                 <div class="form-group" th:each="attachFileDto, status: ${attachFileFormDto.attachFileDtoList}">
                     <div class="custom-file img-div">
@@ -24,6 +33,7 @@
                 </div>
             </div>
         </div>
+
 
     </div>
 
