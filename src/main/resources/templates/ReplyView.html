@@ -73,7 +73,7 @@
                         <p class="func_btns">
                             <button type="button" id="${replyId}" class="modify btn btn-primary">수정</button>
                             <button class="delete btn btn-danger" type="button" id="delete-${replyId}">삭제</button>
-                            <button class="btn btn-warning" type="button" class="btns reply-btn" onclick="showReplyForm(${replyId});">답글 달기</button>
+                            <button class="btn btn-warning" type="button" class="btns reply-btn" onclick="toggleReplyForm(${replyId});">답글 달기</button>
                             <button class="btn btn-secondary" type="button" id="loadRepliesBtn-${replyId}" onclick="toggleReplies(${replyId});">${buttonLabel}</button>
                         </p>
                         <div class="recomments" id="replies-${replyId}" style="display: ${isRepliesVisible};"></div>
@@ -185,7 +185,7 @@
                 <p class="func_btns">
                     <button type="button" id="${replyId}" class="modify btn btn-primary">수정</button>
                     <button class="delete btn btn-danger" type="button" id="delete-${replyId}">삭제</button>
-                    <button class="btn btn-warning" type="button" class="btns reply-btn" onclick="showReplyForm(${replyId});">답글 달기</button>
+                    <button class="btn btn-warning" type="button" class="btns reply-btn" onclick="toggleReplyForm(${replyId});">답글 달기</button>
                     <button class="btn btn-secondary" type="button" id="loadRepliesBtn-${replyId}" onclick="toggleReplies(${replyId});">${buttonLabel}</button>
                 </p>
                 <div class="recomments" id="replies-${replyId}" style="display: ${isRepliesVisible};"></div>
@@ -236,19 +236,29 @@
                 boardId: boardId,
             })
         }).then(res => {
+            const contents = document.getElementById('contents').value = null;
             request();
         });
     }
+    
+    // 대댓글 입력폼 토글 함수
+    function toggleReplyForm(replyId) {
+        const replyFormDiv = document.getElementById(`replyForm-${replyId}`);
+        const existingForm = replyFormDiv !== null; // 폼이 이미 존재하는지 확인
 
-    // 대댓글 입력폼
-    function showReplyForm(replyId) {
-        const replyFormHtml = `
+        // 이미 존재하는 폼을 숨기거나 삭제하고, 존재하지 않으면 생성
+        if (existingForm) {
+            replyFormDiv.remove(); // 폼 삭제
+        } else {
+            const replyFormHtml = `
             <div class="replyForm" id="replyForm-${replyId}">
                 <textarea id="replyContents-${replyId}" cols="90" rows="4" placeholder="답글을 입력해 주세요."></textarea>
                 <span><button type="button" class="btn btn-primary" onclick="saveReComment(${replyId});">답글 등록</button></span>
             </div>`;
-        document.getElementById(`comment-${replyId}`).insertAdjacentHTML('beforeend', replyFormHtml);
+            document.getElementById(`comment-${replyId}`).insertAdjacentHTML('beforeend', replyFormHtml);
+        }
     }
+
 
     // 대댓글 등록
     function saveReComment(replyId) {
