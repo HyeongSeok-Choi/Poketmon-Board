@@ -17,7 +17,7 @@ public class AttachFile {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "board_id")

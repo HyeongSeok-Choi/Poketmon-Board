@@ -83,8 +83,8 @@ public class AttachFileService {
         return attachFileRepository.findByBoardIdId(boardId);
     }
 
-    public AttachFile getAttachFile(Long fno, Long boardId) {
-        return attachFileRepository.findByIdAndBoardIdId(fno, boardId);
+    public AttachFile getAttachFile(Long boardId, Long fno) {
+        return attachFileRepository.findByBoardIdIdAndId(boardId, fno);
     }
 
     // 파일 확장자에 따라 미디어 타입 결정
