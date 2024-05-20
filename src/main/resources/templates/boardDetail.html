@@ -123,14 +123,13 @@
                             <label for="title">제목</label>
                             <input type="text" class="form-control" id="title" name="title" th:value="${board.title}" readonly>
                         </div>
+                        <div th:replace="~{/attachFile/boardAttachFile.html}">
                     </div>
 
                 <!--내용 입력-->
-            <div class="col-md-12">
-            <div th:replace="~{/attachFile/boardAttachFile.html}">
 
 
-            </div>
+
              </div>
                 <div class="mb-3">
                     <label for="content">내용</label>
