@@ -93,8 +93,14 @@ public class AttachFileService {
             return MediaType.IMAGE_PNG;
         } else if (fileName.endsWith(".jpg") || fileName.endsWith(".jpeg")) {
             return MediaType.IMAGE_JPEG;
+        } else if (fileName.endsWith(".gif")) {
+            return MediaType.IMAGE_GIF;
         } else if (fileName.endsWith(".mp4")) {
             return MediaType.valueOf("video/mp4");
+        } else if (fileName.endsWith(".pdf")) {
+            return MediaType.APPLICATION_PDF;
+        } else if (fileName.endsWith(".txt")) {
+            return MediaType.TEXT_PLAIN;
         } else {
             return MediaType.APPLICATION_OCTET_STREAM; // 기본값
         }
