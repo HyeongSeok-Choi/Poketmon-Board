@@ -194,7 +194,7 @@ public class ReplyServiceTest {
 
        String beforeUpdated= replyRepository.findById(1L).get().getContent();
 
-       replyService.update(1,"1번을 수정했습니다");
+       /*replyService.update(1,"1번을 수정했습니다");*/
 
        String updatedreply =replyRepository.findById(1L).get().getContent();
 

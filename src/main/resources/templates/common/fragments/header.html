@@ -1,47 +1,18 @@
-<!DOCTYPE html>
-<html lang="ko"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
-      th:fragment="HeaderFragment">
-<head>
-    <meta charset="UTF-8">
-    <style>
 
-        header {
-            background-color: #ffffff;
-            color: #AED284FF;
-            text-align: center;
-            width: 100%;
-        }
-
-        .headerNav {
-            background-color: #AED284FF;
-            padding: 3px;
-        }
-
-        .headerNav a {
-            color: #fff;
-            text-decoration: none;
-            padding: 10px;
-            margin-right: 10px;
-            display: inline-block;
-        }
-
-
-    </style>
-</head>
-<div>
+<div xmlns:th="http://www.thymeleaf.org"
+xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+th:fragment="HeaderFragment">
     <nav class="headerNav">
 
         <a href="/"><img src="/img/home.png"></a>
         <a class="nav-link" sec:authorize="isAnonymous()" href="/user/login">로그인</a>
-                <!-- 사용자가 로그인한 경우에만 환영 메시지 표시 -->
-           <a class="label" sec:authorize="isAuthenticated()" th:text="'환영합니다, [' + ${#authentication.principal.username} + '] 님'"></a>
+        <!-- 사용자가 로그인한 경우에만 환영 메시지 표시 -->
+        <a class="label" sec:authorize="isAuthenticated()" th:text="'환영합니다, [' + ${#authentication.principal.username} + '] 님'"></a>
 
         <a sec:authorize="hasRole('ADMIN')" >관리자 페이지</a>
 
-<!--        &lt;!&ndash; 사용자가 로그인한 경우에만 환영 메시지 표시 &ndash;&gt;
-            <a class="nav-link" sec:authorize="isAuthenticated()" href="#" th:text="'환영합니다, ' + ${#authentication.principal.nickName} + '님'"></a>-->
+        <!--        &lt;!&ndash; 사용자가 로그인한 경우에만 환영 메시지 표시 &ndash;&gt;
+                    <a class="nav-link" sec:authorize="isAuthenticated()" href="#" th:text="'환영합니다, ' + ${#authentication.principal.nickName} + '님'"></a>-->
 
         <a class="nav-link" sec:authorize="isAuthenticated()" href="/user/logout">로그아웃</a>
 
@@ -49,11 +20,10 @@
 
         <a class="nav-link" sec:authorize="isAuthenticated()" href="/user/loginInfo">회원정보</a>
 
-<!--           th:href="@{'/loginInfo/' + ${userFormDto.userId}}">마이페이지</a>-->
+        <!--           th:href="@{'/loginInfo/' + ${userFormDto.userId}}">마이페이지</a>-->
 
         <!--<a class="nav-link" sec:authorize="hasAnyAuthority('ROLE_ADMIN')" href="/admin/">관리자 페이지</a>-->
 
     </nav>
 
 </div>
-</html>
