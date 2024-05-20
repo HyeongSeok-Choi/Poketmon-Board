@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8"> <!-- 수정: meta 태그를 head 태그 안으로 이동 -->
+    <meta charset="UTF-8">
     <title>댓글 시스템</title>
 </head>
 <body>
@@ -11,8 +11,7 @@
     <fieldset>
         <legend class="skipinfo">댓글 입력</legend>
         <div class="cm_input">
-            <p><textarea id="contents" name="contents" cols="60" rows="4"
-                         placeholder="댓글을 입력해 주세요."></textarea></p>
+            <p><textarea id="contents" name="contents" cols="60" rows="4" placeholder="댓글을 입력해 주세요."></textarea></p>
             <span><button type="button" class="btn btn-primary" onclick="saveComment();">등 록</button></span>
         </div>
     </fieldset>
@@ -20,337 +19,313 @@
 
 <!-- 댓글 렌더링 영역 -->
 <div id="Parent">
-    <div id="replySelectAll"> <!-- 댓글 리스트 조회 되는 부분 --></div>
+    <div id="replySelectAll"></div>
 </div>
 
-<!--페이징 영역-->
-<ul class="pagination" id="paging">
-
-</ul>
+<!-- 페이징 영역 -->
+<ul class="pagination" id="paging"></ul>
 
 <script>
-    // 댓글 및 답글 조회 기능
-    /*request();*/
+    // 활성화된 답글 상태 저장 변수
+    let activeReplies = {};
 
+    // 댓글 조회 기능
+    request();
 
-       var replyId1 = 1;
+    function request() {
+        const replySelectAll = document.getElementById('replySelectAll');
+        replySelectAll.innerHTML = '';
 
-       request();
+        const boardnumbr = document.getElementById("board-id").value;
 
-       function request() {
+        fetch(`http://localhost:8080/api/allcomments/${boardnumbr}?page=0`, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            method: 'GET',
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                console.log("댓글목록");
+                let totalpage1 = data.totalPages;
+                let nowPage1 = data.number;
 
+                makePagination(nowPage1, totalpage1);
 
-           $('#replySelectAll').empty();
+                let comment = '';
 
-           var boardnumbr = document.getElementById("board-id").value
+                for (let i = 0; i < data["content"].length; i++) {
+                    const replyId = data["content"][i].replyId;
+                    const isRepliesVisible = activeReplies[replyId] ? 'block' : 'none';
+                    const buttonLabel = activeReplies[replyId] ? '답글 닫기' : '답글 더보기';
 
-           fetch(`http://localhost:8080/api/allcomments/${boardnumbr}?page=0`, {
-               headers: {
-                   'Content-Type': 'application/json',
-                   'Accept': 'application/json'
-               },
-               method: 'GET',
-           })
-               .then(response => response.json())
-               .then(data => {
-                   console.log(data);
-                   console.log("댓글목록");
-                   let totalpage1 = data.totalPages;
-                   let nowPage1 = data.number;
-
-                   makePagination(nowPage1, totalpage1);
-
-
-                   var comment = '';
-
-                   for (let i = 0; i < data["content"].length; i++) {
-
-
-                       comment += `
-                    <div class="comments" id="comment-${data["content"][i].replyId}">
-                        <input type="hidden" value="${data["content"][i].replyId}">
+                    comment += `
+                    <div class="comments" id="comment-${replyId}">
+                        <input type="hidden" value="${replyId}">
                         <span class="writer_img"><img src="/img/BBANG.jpg" width="30" height="30" alt="기본 프로필 이미지"/></span>
                         <p class="writer">
                             <em>${data["content"][i].userid}</em>
                             <span class="date">${data["content"][i].createdAt}</span>
                         </p>
-                        <div class="cont"><input id="input-${data["content"][i].replyId}" class="txt_con" value="${data["content"][i].content}" readonly></div>
+                        <div class="cont"><input id="input-${replyId}" class="txt_con" value="${data["content"][i].content}" readonly></div>
                         <p class="func_btns">
-                            <button type="button" id="${data["content"][i].replyId}" class="modify btn btn-primary"><span class="icons icon_modify">수정</span></button>
-                            <button class="delete btn btn-danger" type="button" class="btns" id="delete-${data["content"][i].replyId}"><span class="icons icon_del">삭제</span></button>
-                            <button class="btn btn-warning" type="button" class="btns reply-btn" onclick="showReplyForm(${data["content"][i].replyId});">답글 달기</button>
+                            <button type="button" id="${replyId}" class="modify btn btn-primary">수정</button>
+                            <button class="delete btn btn-danger" type="button" id="delete-${replyId}">삭제</button>
+                            <button class="btn btn-warning" type="button" class="btns reply-btn" onclick="showReplyForm(${replyId});">답글 달기</button>
+                            <button class="btn btn-secondary" type="button" id="loadRepliesBtn-${replyId}" onclick="toggleReplies(${replyId});">${buttonLabel}</button>
                         </p>
-                        <div class="recomments" id="replies-${data["content"][i].replyId}"></div> <!-- 답글 영역 -->
+                        <div class="recomments" id="replies-${replyId}" style="display: ${isRepliesVisible};"></div>
                     </div>`;
-
-
-                   }
-
-                   $('#replySelectAll').append(comment);
-                   //$('#replySelectAll').html(comment);
-                   reRequest(); // 댓글을 불러온 후 답글도 불러옴
-               });
-       }
-
-
-       <!--댓글 수정 관련 -->
-       $(document).on('blur', '.txt_con', function () {
-
-           console.log("포커스 아웃");
-
-           $('.txt_con').attr('readonly', true);
-
-       });
-
-
-       $(document).on('click', '.modify', function () {
-           console.log("수정먹나");
-
-
-           var id = $(this).attr("id");
-
-           if ($(this).html() == "저장") {
-               console.log("저장");
-
-
-               const content = document.getElementById('input-' + id).value;
-               console.log(content);
-
-
-               fetch("/api/modify", {
-                   headers: {
-                       "Content-Type": "application/json",
-                   },
-                   method: 'POST',
-                   body: JSON.stringify({
-                       content: content,
-                       id: id
-                   })
-
-               }).then(res => {
-
-                   $(this).html('수정');
-                   request();
-
-               })
-           } else {
-
-               $(this).html('저장')
-
-               console.log("모디파이");
-
-               var id = $(this).attr("id");
-
-               console.log(id + "아이디는 들어온다");
-
-               $('#input-' + id).attr('readonly', false).focus();
-
-
-           }
-       });
-
-       <!--댓글 삭제 관련-->
-       $(document).on('click', '.delete', function () {
-           console.log("삭제먹나");
-
-           var id = $(this).attr("id").split('-');
-
-           const realId = id[1];
-
-
-           fetch(`/api/delete/${realId}`, {
-               headers: {
-                   "Content-Type": "application/json",
-               },
-               method: 'DELETE',
-
-           }).then(res => {
-               request();
-           })
-
-       });
-
-
-       <!--페이징 시작-->
-
-       function PagingRequest(page) {
-
-
-           $('#replySelectAll').empty();
-
-           fetch(`http://localhost:8080/api/allcomments/1?page=${page}`, {
-               headers: {
-                   'Content-Type': 'application/json',
-                   'Accept': 'application/json'
-               },
-               method: 'GET',
-           })
-               .then(response => response.json())
-               .then(data => {
-                   console.log(data);
-
-                   let totalpage2 = data.totalPages;
-                   let nowPage2 = data.number;
-
-                   makePagination(nowPage2, totalpage2);
-
-
-                   var comment = '';
-
-                   for (let i = 0; i < data["content"].length; i++) {
-
-
-                       comment += `
-                    <div class="comments" id="comment-${data["content"][i].replyId}">
-                        <input type="hidden" value="${data["content"][i].replyId}">
-                        <span class="writer_img"><img src="/img/BBANG.jpg" width="30" height="30" alt="기본 프로필 이미지"/></span>
-                        <p class="writer">
-                            <em>${data["content"][i].userid}</em>
-                            <span class="date">${data["content"][i].createdAt}</span>
-                        </p>
-                        <div class="cont"><input id="input-${data["content"][i].replyId}" class="txt_con" value="${data["content"][i].content}" readonly></div>
-                        <p class="func_btns">
-                            <button  type="button" id="${data["content"][i].replyId}" class="modify btn btn-primary"><span class="icons icon_modify">수정</span></button>
-                            <button  class="delete btn btn-danger" type="button" id="delete-${data["content"][i].replyId}><span class="icons icon_del">삭제</span></button>
-                            <button class="btn btn-warning" type="button" class="btns reply-btn" onclick="showReplyForm(${data["content"][i].replyId});">답글 달기</button>
-                        </p>
-                        <div class="recomments" id="replies-${data["content"][i].replyId}"></div> <!-- 답글 영역 -->
-                    </div>`;
-
-
-                   }
-
-                   $('#replySelectAll').append(comment);
-
-                   reRequest(); // 댓글을 불러온 후 답글도 불러옴
-               });
-       }
-
-
-       <!--페이징 버튼 출력-->
-       function makePagination(nowpage, totalpage) {
-
-           let pagination = $("#paging");
-           pagination.empty();
-
-
-           let Nowpage = nowpage + 1;
-           let startPage = Math.max(Nowpage - 4, 1);
-           let endPage = Math.min(Nowpage + 5, totalpage);
-
-
-           if (Nowpage > 1) // 이전 버튼
-               pagination.append(`<li style="cursor: pointer" class="page-item"><a class="page-link" onclick="PagingRequest(${nowpage - 1})">이전</a></li>`);
-
-           for (let i = startPage; i <= endPage; i++) { // 페이지네이션
-               if (Nowpage == i) {
-                   pagination.append(`<li style="cursor: pointer" class="page-item disabled" style="color: red"><a class="page-link">${i}</a></li>`);
-               } else {
-                   pagination.append(`<li style="cursor: pointer" class="page-item"><a class="page-link" onclick="PagingRequest(${i - 1})">${i}</a></li>`);
-               }
-
-           }
-           if (endPage > 1 && Nowpage != endPage) // 다음 버튼
-               pagination.append(`<li style="cursor: pointer" class="page-item"><a class="page-link" onclick="PagingRequest(${nowpage + 1})">다음</a></li>`);
-       }
-
-
-       <!--끝-->
-
-
-       <!--댓글 저장-->
-       function saveComment() {
-           const contents = document.getElementById('contents').value;
-           const boardId = document.getElementById("board-id").value;  // 테스트용 ID
-           fetch("/api/addComment", {
-               headers: {
-                   "Content-Type": "application/json",
-               },
-               method: 'POST',
-               body: JSON.stringify({
-                   content: contents,
-                   boardId: boardId,
-               })
-           }).then(res => {
-               request();
-           });
-       }
-
-
-       //대댓글 목록 요청
-       function reRequest() {
-
-
-           fetch('http://localhost:8080/api/allReComment/' + replyId1, {
-               headers: {
-                   'Content-Type': 'application/json',
-                   'Accept': 'application/json'
-               },
-               method: 'GET',
-           })
-               .then(response => response.json())
-               .then(data => {
-                   var replyHtml;
-                   $.each(data, function (i) {
-                       replyHtml = `
+                }
+
+                replySelectAll.innerHTML = comment;
+
+                // 활성화된 상태 유지
+                for (let replyId in activeReplies) {
+                    if (activeReplies[replyId]) {
+                        loadReplies(replyId);
+                    }
+                }
+            });
+    }
+
+    // 답글 토글 함수
+    function toggleReplies(replyId) {
+        const repliesDiv = document.getElementById(`replies-${replyId}`);
+        const loadRepliesBtn = document.getElementById(`loadRepliesBtn-${replyId}`);
+
+        if (repliesDiv.style.display === 'none' || repliesDiv.innerHTML === '') {
+            repliesDiv.style.display = 'block';
+            loadReplies(replyId);
+            loadRepliesBtn.textContent = '답글 닫기';
+            activeReplies[replyId] = true;
+        } else {
+            repliesDiv.style.display = 'none';
+            loadRepliesBtn.textContent = '답글 더보기';
+            activeReplies[replyId] = false;
+        }
+    }
+
+    // 답글 조회 함수
+    function loadReplies(replyId) {
+        const repliesDiv = document.getElementById(`replies-${replyId}`);
+        repliesDiv.innerHTML = ''; // 기존 답글 초기화
+
+        fetch(`http://localhost:8080/api/allReComment/${replyId}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            method: 'GET',
+        })
+            .then(response => response.json())
+            .then(data => {
+                let replyHtml = '';
+                data.forEach(reply => {
+                    replyHtml += `
                     <div class="recomment">
-                        <input type="hidden" value="${data[i].reReplyId}">
+                        <input type="hidden" value="${reply.reReplyId}">
                         <span class="writer_img"><img src="/img/BBANG.jpg" width="30" height="30" alt="기본 프로필 이미지"/></span>
                         <p class="writer">
-                            <em>${data[i].userid}</em>
-                            <span class="date">${data[i].createdAt}</span>
+                            <em>${reply.userid}</em>
+                            <span class="date">${reply.createdAt}</span>
                         </p>
-                        <div class="cont">ㄴ<input class="txt_con" value="${data[i].content}" readonly></div>
+                        <div class="cont">ㄴ<input class="txt_con" value="${reply.content}" readonly></div>
                         <p class="func_btns">
-                            <button class="btn btn-warning" type="button" id="${data[i].reReplyId}" class="modify"><span class="icons icon_modify">수정</span></button>
+                            <button class="btn btn-warning" type="button" id="${reply.reReplyId}" class="modify"><span class="icons icon_modify">수정</span></button>
                             <button class="btn btn-danger" type="button" class="btns"><span class="icons icon_del">삭제</span></button>
                         </p>
                     </div>`;
-                       // 댓글 ID에 해당하는 답글 영역에 답글 추가
-                       $('#replies-' + data[i].replyId).append(replyHtml);
-                   });
-               });
-       }
+                });
+                repliesDiv.innerHTML = replyHtml;
+            });
+    }
 
-       //대댓글 입력폼
-       function showReplyForm(replyId) {
-           const replyFormHtml = `
+    // 페이징 시작
+    function PagingRequest(page) {
+        $('#replySelectAll').empty();
+        var boardnumbr = document.getElementById("board-id").value;
+
+        // 페이지가 변경될 때 activeReplies 초기화
+        activeReplies = {};
+
+        fetch(`http://localhost:8080/api/allcomments/${boardnumbr}?page=${page}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            method: 'GET',
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                let totalpage2 = data.totalPages;
+                let nowPage2 = data.number;
+
+                makePagination(nowPage2, totalpage2);
+
+                var comment = '';
+
+                for (let i = 0; i < data["content"].length; i++) {
+                    const replyId = data["content"][i].replyId;
+                    const isRepliesVisible = activeReplies[replyId] ? 'block' : 'none';
+                    const buttonLabel = activeReplies[replyId] ? '답글 닫기' : '답글 더보기';
+
+                    comment += `
+            <div class="comments" id="comment-${replyId}">
+                <input type="hidden" value="${replyId}">
+                <span class="writer_img"><img src="/img/BBANG.jpg" width="30" height="30" alt="기본 프로필 이미지"/></span>
+                <p class="writer">
+                    <em>${data["content"][i].userid}</em>
+                    <span class="date">${data["content"][i].createdAt}</span>
+                </p>
+                <div class="cont"><input id="input-${replyId}" class="txt_con" value="${data["content"][i].content}" readonly></div>
+                <p class="func_btns">
+                    <button type="button" id="${replyId}" class="modify btn btn-primary">수정</button>
+                    <button class="delete btn btn-danger" type="button" id="delete-${replyId}">삭제</button>
+                    <button class="btn btn-warning" type="button" class="btns reply-btn" onclick="showReplyForm(${replyId});">답글 달기</button>
+                    <button class="btn btn-secondary" type="button" id="loadRepliesBtn-${replyId}" onclick="toggleReplies(${replyId});">${buttonLabel}</button>
+                </p>
+                <div class="recomments" id="replies-${replyId}" style="display: ${isRepliesVisible};"></div>
+            </div>`;
+                }
+
+                $('#replySelectAll').append(comment);
+                reRequest(); // 댓글을 불러온 후 답글도 불러옴
+            });
+    }
+
+
+    // 페이징 버튼 출력
+    function makePagination(nowpage, totalpage) {
+        const pagination = document.getElementById("paging");
+        pagination.innerHTML = '';
+
+        let Nowpage = nowpage + 1;
+        let startPage = Math.max(Nowpage - 4, 1);
+        let endPage = Math.min(Nowpage + 5, totalpage);
+
+        if (Nowpage > 1) // 이전 버튼
+            pagination.innerHTML += `<li style="cursor: pointer" class="page-item"><a class="page-link" onclick="PagingRequest(${nowpage - 1})">이전</a></li>`;
+
+        for (let i = startPage; i <= endPage; i++) { // 페이지네이션
+            if (Nowpage === i) {
+                pagination.innerHTML += `<li style="cursor: pointer" class="page-item disabled" style="color: red"><a class="page-link">${i}</a></li>`;
+            } else {
+                pagination.innerHTML += `<li style="cursor: pointer" class="page-item"><a class="page-link" onclick="PagingRequest(${i - 1})">${i}</a></li>`;
+            }
+        }
+        if (endPage > 1 && Nowpage !== endPage) // 다음 버튼
+            pagination.innerHTML += `<li style="cursor: pointer" class="page-item"><a class="page-link" onclick="PagingRequest(${nowpage + 1})">다음</a></li>`;
+    }
+
+    // 댓글 저장
+    function saveComment() {
+        const contents = document.getElementById('contents').value;
+        const boardId = document.getElementById("board-id").value;
+
+        fetch("/api/addComment", {
+            headers: {
+                "Content-Type": "application/json",
+            },
+            method: 'POST',
+            body: JSON.stringify({
+                content: contents,
+                boardId: boardId,
+            })
+        }).then(res => {
+            request();
+        });
+    }
+
+    // 대댓글 입력폼
+    function showReplyForm(replyId) {
+        const replyFormHtml = `
             <div class="replyForm" id="replyForm-${replyId}">
                 <textarea id="replyContents-${replyId}" cols="90" rows="4" placeholder="답글을 입력해 주세요."></textarea>
                 <span><button type="button" class="btn btn-primary" onclick="saveReComment(${replyId});">답글 등록</button></span>
             </div>`;
-           // Append reply form to the specific comment
-           $('#comment-' + replyId).append(replyFormHtml);
-       }
+        document.getElementById(`comment-${replyId}`).insertAdjacentHTML('beforeend', replyFormHtml);
+    }
 
-       //대댓글 등록폼
-       function saveReComment(replyId) {
-           const contents = document.getElementById('replyContents-' + replyId).value;
+    // 대댓글 등록
+    function saveReComment(replyId) {
+        const contents = document.getElementById(`replyContents-${replyId}`).value;
 
-           fetch("/api/addReComment", {
-               headers: {
-                   "Content-Type": "application/json",
-               },
-               method: 'POST',
-               body: JSON.stringify({
-                   content: contents,
-                   replyId: replyId,
-                   userid: "qnftlstm",
-               })
-           }).then(res => {
-               request();
-               // Remove the reply form after saving the reply
-               $('#replyForm-' + replyId).remove();
+        fetch("/api/addReComment", {
+            headers: {
+                "Content-Type": "application/json",
+            },
+            method: 'POST',
+            body: JSON.stringify({
+                content: contents,
+                replyId: replyId,
+                userid: "qnftlstm",
+            })
+        }).then(res => {
+            if (activeReplies[replyId]) {
+                loadReplies(replyId);
+            } else {
+                request();
+            }
+            document.getElementById(`replyForm-${replyId}`).remove();
+        });
+    }
 
-               replyId1 = replyId;
-           });
-       }
+    // 댓글 수정 관련
+    document.addEventListener('blur', function(event) {
+        if (event.target.classList.contains('txt_con')) {
+            event.target.setAttribute('readonly', true);
+        }
+    }, true);
 
+    document.addEventListener('click', function(event) {
+        if (event.target.classList.contains('modify')) {
+            const id = event.target.id;
+            const contentInput = document.getElementById(`input-${id}`);
 
+            if (event.target.innerText === '저장') {
+                const content = contentInput.value;
 
+                fetch("/api/modify", {
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    method: 'POST',
+                    body: JSON.stringify({
+                        content: content,
+                        id: id
+                    })
+                }).then(res => {
+                    event.target.innerText = '수정';
+                    request();
+                });
+            } else {
+                event.target.innerText = '저장';
+                contentInput.removeAttribute('readonly');
+                contentInput.focus();
+            }
+        }
+    });
 
+    // 댓글 삭제 관련
+    document.addEventListener('click', function(event) {
+        if (event.target.classList.contains('delete')) {
+            const id = event.target.id.split('-')[1];
+
+            fetch(`/api/delete/${id}`, {
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                method: 'DELETE',
+            }).then(res => {
+                request();
+            });
+        }
+    });
 </script>
 
 </body>
 </html>
-
