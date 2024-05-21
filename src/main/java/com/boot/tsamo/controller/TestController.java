@@ -6,6 +6,7 @@ import com.boot.tsamo.dto.addBoardDTO;
 import com.boot.tsamo.dto.attachAttributeDTO;
 import com.boot.tsamo.entity.AttachFile;
 import com.boot.tsamo.entity.Board;
+import com.boot.tsamo.entity.Extension;
 import com.boot.tsamo.service.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -138,8 +139,11 @@ public class TestController {
     @GetMapping(value = "/createBoard")
     public String createBoard(Model model) {
 
+        List<Extension> extensions = fileService.getExtensions();
+
         model.addAttribute("board", new Board());
         model.addAttribute("attachFileFormDto", new AttachFileFormDto());
+        model.addAttribute("extensions", extensions);
 
         return "createBoard";
     }

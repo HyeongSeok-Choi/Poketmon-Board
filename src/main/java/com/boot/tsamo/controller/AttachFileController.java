@@ -2,6 +2,8 @@ package com.boot.tsamo.controller;
 
 import com.boot.tsamo.dto.AttachFileFormDto;
 import com.boot.tsamo.dto.ViewReplyDTO;
+import com.boot.tsamo.entity.AttachFile;
+import com.boot.tsamo.entity.Extension;
 import com.boot.tsamo.service.AttachFileService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +26,10 @@ public class AttachFileController {
     @GetMapping(value = "/attachFile")
     public String attachFileForm(Model model){
 
+        List<Extension> extensions = fileService.getExtensions();
+
         model.addAttribute("attachFileFormDto", new AttachFileFormDto());
+        model.addAttribute("extensions", extensions);
         return "attachFile/attachFile";
 
 
