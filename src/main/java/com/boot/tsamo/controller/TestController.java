@@ -1,6 +1,7 @@
 package com.boot.tsamo.controller;
 
 
+import com.boot.tsamo.dto.AttachFileFormDto;
 import com.boot.tsamo.dto.addBoardDTO;
 import com.boot.tsamo.dto.attachAttributeDTO;
 import com.boot.tsamo.entity.Board;
@@ -161,12 +162,14 @@ public class TestController {
 
     //게시물 상세보기
     @GetMapping(value = "/BoardDetailView")
-    public String BoardDetailView(Model model,@RequestParam Long id) {
+    public String BoardDetailView(Model model,@RequestParam Long id,Principal principal) {
+
+        String userid = principal.getName();
 
         Board detailBoard = boardService.findById(id);
-
-
+        model.addAttribute("attachFileFormDto", new AttachFileFormDto());
         model.addAttribute("board", detailBoard);
+        model.addAttribute("userid", userid);
 
         return "boardDetail";
     }
@@ -201,10 +204,6 @@ public class TestController {
         if(extension == null){
             extension = new ArrayList<>();
         }
-
-        System.out.println(extension);
-        System.out.println(maxcnt);
-        System.out.println(maxsize);
 
         attachAttributeDTO attachAttributeDTO = new attachAttributeDTO();
         attachAttributeDTO.setExtension(extension);

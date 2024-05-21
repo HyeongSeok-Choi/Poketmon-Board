@@ -88,7 +88,7 @@ class ReReplyServiceTest {
         this.based();
 
         Users user = usersRepository.findById("aaa").orElseThrow();
-        List<ReReply> rereplyList = rereplyService.findAll(1L);
+        List<ReReply> rereplyList = rereplyService.findByReplyId(1L);
       System.out.println(rereplyList);
 
     }

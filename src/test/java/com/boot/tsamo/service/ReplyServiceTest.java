@@ -1,6 +1,7 @@
 package com.boot.tsamo.service;
 
 import com.boot.tsamo.constant.Role;
+import com.boot.tsamo.dto.modifyReplyDTO;
 import com.boot.tsamo.entity.Board;
 import com.boot.tsamo.entity.Reply;
 import com.boot.tsamo.entity.Users;
@@ -194,7 +195,7 @@ public class ReplyServiceTest {
 
        String beforeUpdated= replyRepository.findById(1L).get().getContent();
 
-       /*replyService.update(1,"1번을 수정했습니다");*/
+       replyService.update(new modifyReplyDTO());
 
        String updatedreply =replyRepository.findById(1L).get().getContent();
 
