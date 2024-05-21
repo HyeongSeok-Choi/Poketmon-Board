@@ -87,6 +87,4 @@ public class ReReplyService {
     public void deleteById(Long id) {
         rereplyRepository.deleteById(id);
     }
-
-
 }

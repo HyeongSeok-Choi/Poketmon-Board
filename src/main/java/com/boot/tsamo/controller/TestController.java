@@ -140,10 +140,12 @@ public class TestController {
     public String createBoard(Model model) {
 
         List<Extension> extensions = fileService.getExtensions();
+        Integer maxUploadCnt = fileAttributeService.getMaxRequestCnt(1L);
 
         model.addAttribute("board", new Board());
         model.addAttribute("attachFileFormDto", new AttachFileFormDto());
         model.addAttribute("extensions", extensions);
+        model.addAttribute("maxUploadCnt", maxUploadCnt);
 
         return "createBoard";
     }
@@ -236,10 +238,6 @@ public class TestController {
     public String attachatt(@RequestParam(required = false) List<String> extension, int maxcnt, int maxsize) {
 
         //null처리
-        if(extension == null){
-            extension = new ArrayList<>();
-        }
-
         if(extension == null){
             extension = new ArrayList<>();
         }
