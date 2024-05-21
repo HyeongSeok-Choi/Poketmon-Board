@@ -108,6 +108,9 @@
 
 </head>
 <body>
+
+
+
 <div class="container">
     <div class="input-form-backgroud row">
         <div class="input-form col-md-12 mx-auto">
@@ -115,27 +118,21 @@
 
 
             <h4 class="mb-3">게시물 조회</h4>
+            <p th:text="'조회수: '+${board.getViewCount()}">조회수</p>
                     <!--제목 입력-->
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="title">제목</label>
                             <input type="text" class="form-control" id="title" name="title" th:value="${board.title}" readonly>
                         </div>
-
-                        <div class="col-md-6 mb-2">
-                            <!-- 우측 상단에 작은 첨부파일 목록 -->
-                            <div class="float-right">
-                                <strong>첨부파일</strong>
-                                <ul class="list-unstyled">
-                                    <li><a href="#" target="_blank"><span class="sim">첨부파일</span>index.html</a></li>
-                                    <li><a href="#" target="_blank"><span class="sim">첨부파일</span>learn.html</a></li>
-                                    <li><a href="#" target="_blank"><span class="sim">첨부파일</span>naver_search.php</a></li>
-                                </ul>
-                            </div>
-                        </div>
+                        <div th:replace="~{/attachFile/boardAttachFile.html}">
                     </div>
 
                 <!--내용 입력-->
+
+
+
+             </div>
                 <div class="mb-3">
                     <label for="content">내용</label>
                     <textarea class="form-control" id="content" name="content" placeholder="프로젝트 내용을 입력해주세요" th:text="${board.content}" readonly></textarea>
@@ -148,10 +145,14 @@
                  <!--좋아요 버튼 끝-->
 
                 <hr class="mb-4">
-            <div class="col-md-6 mb-3">
-            <form class="validation-form"  method="post" th:action="@{/modifyBoard(id=${board.id})}">
-                <button class="btn btn-primary btn btn-block" type="submit" >수정</button>
-            </form>
+
+            <h5 class="mb-3">해시태그</h5>
+            <ul style="list-style:none" th:each="hash:${hashTag}">
+               <i><li style="float: left; margin-right: 20px" th:text="'#'+${hash.getHashTagContent()}"></li></i>
+            </ul>
+
+            <div style="clear: both;" class="col-md-6 mb-3">
+                <hr class="mb-4" >
             </div>
             <div class="col-md-6 mb-3">
             <form class="validation-form"  method="post" th:action="@{/deleteBoard(id=${board.id})}">
@@ -163,6 +164,9 @@
 
 
             </div>
+            <form class="validation-form"  method="post" th:action="@{/modifyBoard(id=${board.id})}">
+                <button class="btn btn-primary btn btn-block" type="submit" >수정</button>
+            </form>
         </div>
 
     </div>

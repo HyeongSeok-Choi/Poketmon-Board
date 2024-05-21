@@ -1,7 +1,11 @@
 package com.boot.tsamo.service;
 
 import com.boot.tsamo.entity.AttachFile;
+import com.boot.tsamo.entity.AttachFileAttribute;
+import com.boot.tsamo.entity.Board;
+import com.boot.tsamo.entity.Extension;
 import com.boot.tsamo.repository.AttachFileRepository;
+import com.boot.tsamo.repository.ExtensionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,13 +29,14 @@ public class AttachFileService {
     @Value("${attachFileLocation}")
     private String attachFileLocation;
     private final AttachFileRepository attachFileRepository;
+    private final ExtensionRepository extensionRepository;
 
 
-    public void saveAttachFileList(List<MultipartFile> attachFileList) throws Exception{
+    public void saveAttachFileList(List<MultipartFile> attachFileList, Board boardId) throws Exception{
 
         for(int i=0; i<attachFileList.size(); i++){
             AttachFile attachFile = new AttachFile();
-//            attachFile.setBoardId(boardId);
+            attachFile.setBoardId(boardId);
 
             //첨부하지 않은 첨부란은 파일정보가 DB에 저장되지 않도록 설정
             if(!attachFileList.get(i).isEmpty()) {
@@ -56,10 +61,28 @@ public class AttachFileService {
         attachFileRepository.save(attachFile);
     }
 
+    // DB에서 확장자를 가져와 파일의 확장자가 존재하면 true 없으면 false 반환 메소드
+    public boolean isAllowedExtension(String originalFileName) {
+        String fileExtension = originalFileName.substring(originalFileName.lastIndexOf(".")+1);
+        List<Extension> allowedExtensions = getExtensions();
 
+        for (Extension extension : allowedExtensions) {
+            if (extension.getExtension().equalsIgnoreCase(fileExtension)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // +@ DB에 파일에 해당하는 확장자가 없으면 "허용되지 않는 파일 형식입니다." 예외 처리
     // 해당 경로에 폴더가 없으면 폴더를 생성하고 경로에 파일 바이트코드를 기반으로 파일을 생성하며 UUID를 더한 파일명을 반환하는 서비스 메소드.
     // 파라미터 : 업로드 경로, 파일 원본 이름, 파일 바이트코드 데이터
     public String uploadFile(String uploadPath, String originalFileName, byte[] fileData) throws Exception{
+
+        if (!isAllowedExtension(originalFileName)) {
+            throw new RuntimeException("허용되지 않는 파일 형식입니다.");
+        }
+
         UUID uuid = UUID.randomUUID();
         String extension = originalFileName.substring(originalFileName.lastIndexOf("."));
         String savedFileName = uuid.toString() + extension;
@@ -83,8 +106,12 @@ public class AttachFileService {
         return attachFileRepository.findByBoardIdId(boardId);
     }
 
-    public AttachFile getAttachFile(Long fno, Long boardId) {
-        return attachFileRepository.findByIdAndBoardIdId(fno, boardId);
+    public AttachFile getAttachFile(Long boardId, Long fno) {
+        return attachFileRepository.findByBoardIdIdAndId(boardId, fno);
+    }
+
+    public List<Extension> getExtensions() {
+        return extensionRepository.findAll();
     }
 
     // 파일 확장자에 따라 미디어 타입 결정
@@ -93,8 +120,14 @@ public class AttachFileService {
             return MediaType.IMAGE_PNG;
         } else if (fileName.endsWith(".jpg") || fileName.endsWith(".jpeg")) {
             return MediaType.IMAGE_JPEG;
+        } else if (fileName.endsWith(".gif")) {
+            return MediaType.IMAGE_GIF;
         } else if (fileName.endsWith(".mp4")) {
             return MediaType.valueOf("video/mp4");
+        } else if (fileName.endsWith(".pdf")) {
+            return MediaType.APPLICATION_PDF;
+        } else if (fileName.endsWith(".txt")) {
+            return MediaType.TEXT_PLAIN;
         } else {
             return MediaType.APPLICATION_OCTET_STREAM; // 기본값
         }

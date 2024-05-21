@@ -29,6 +29,8 @@ public class Board {
 
     private String content;
 
+    private Long viewCount;
+
     @JoinColumn(name = "user_id")
     @ManyToOne
     private Users userid;

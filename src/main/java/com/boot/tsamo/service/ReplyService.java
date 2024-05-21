@@ -86,6 +86,7 @@ public class ReplyService {
            Board board = boardRepository.findById(addReplyDTO.getBoardId()).get();
            Users user = userRepository.findById(addReplyDTO.getUserid()).get();
 
+
            Reply addreply= new Reply();
 
            //reply객체 값 저장
