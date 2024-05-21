@@ -126,5 +126,16 @@ public class ReplyController {
         return ResponseEntity.ok().body(dto);
     }
 
+    //대댓글 삭제
+    @DeleteMapping ("/api/redelete/{id}")
+    public ResponseEntity<Long> deleteRecomment(@PathVariable Long id) {
+
+
+        System.out.println(id+"삭제 아이디 들어오나");
+        reReplyService.deleteById(id);
+
+        return ResponseEntity.ok().body(id);
+    }
+
 
 }

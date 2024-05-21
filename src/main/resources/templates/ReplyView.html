@@ -28,17 +28,18 @@
 <script>
     // 활성화된 답글 상태 저장 변수
     let activeReplies = {};
+    let currentPage = 0; // 현재 페이지 번호를 저장할 전역 변수
 
     // 댓글 조회 기능
-    request();
+    request(currentPage); // 초기 로드 시 페이지 번호 전달
 
-    function request() {
+    function request(page) {
         const replySelectAll = document.getElementById('replySelectAll');
         replySelectAll.innerHTML = '';
 
         const boardnumbr = document.getElementById("board-id").value;
 
-        fetch(`http://localhost:8080/api/allcomments/${boardnumbr}?page=0`, {
+        fetch(`http://localhost:8080/api/allcomments/${boardnumbr}?page=${page}`, {
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json'
@@ -51,6 +52,8 @@
                 console.log("댓글목록");
                 let totalpage1 = data.totalPages;
                 let nowPage1 = data.number;
+
+                currentPage = nowPage1; // 현재 페이지 번호를 업데이트
 
                 makePagination(nowPage1, totalpage1);
 
@@ -124,18 +127,20 @@
             .then(data => {
                 let replyHtml = '';
                 data.forEach(reply => {
+                    console.log(reply);
+                    console.log("대댓글");
                     replyHtml += `
                     <div class="recomment">
-                        <input type="hidden" value="${reply.reReplyId}">
+                        <input type="hidden" value="${reply.id}">
                         <span class="writer_img"><img src="/img/BBANG.jpg" width="30" height="30" alt="기본 프로필 이미지"/></span>
                         <p class="writer">
                             <em>${reply.userid}</em>
                             <span class="date">${reply.createdAt}</span>
                         </p>
-                          <div class="cont">ㄴ<input id="input2-${reply.reReplyId}" class="txt_con" value="${reply.content}" readonly></div>
+                          <div class="cont">ㄴ<input id="input2-${reply.id}" class="txt_con" value="${reply.content}" readonly></div>
                         <p class="func_btns">
-                            <button class="btn btn-warning recomment-modify" type="button" id="recomment-modify-${reply.reReplyId}">수정</button>
-                            <button class="btn btn-danger" type="button" class="btns">삭제</button>
+                            <button class="btn btn-warning recomment-modify" type="button" id="recomment-modify-${reply.id}">수정</button>
+                            <button class="redelete btn btn-danger" type="button" id="redelete-${reply.id}">삭제</button>
                         </p>
                     </div>`;
                 });
@@ -163,6 +168,8 @@
                 console.log(data);
                 let totalpage2 = data.totalPages;
                 let nowPage2 = data.number;
+
+                currentPage = nowPage2; // 현재 페이지 번호를 업데이트
 
                 makePagination(nowPage2, totalpage2);
 
@@ -196,7 +203,6 @@
                 reRequest(); // 댓글을 불러온 후 답글도 불러옴
             });
     }
-
 
     // 페이징 버튼 출력
     function makePagination(nowpage, totalpage) {
@@ -237,7 +243,7 @@
             })
         }).then(res => {
             const contents = document.getElementById('contents').value = null;
-            request();
+            request(currentPage); // 현재 페이지를 유지하며 댓글 목록 요청
         });
     }
 
@@ -259,7 +265,6 @@
         }
     }
 
-
     // 대댓글 등록
     function saveReComment(replyId) {
         const contents = document.getElementById(`replyContents-${replyId}`).value;
@@ -277,7 +282,7 @@
             if (activeReplies[replyId]) {
                 loadReplies(replyId);
             } else {
-                request();
+                request(currentPage); // 현재 페이지를 유지하며 댓글 목록 요청
             }
             document.getElementById(`replyForm-${replyId}`).remove();
         });
@@ -309,7 +314,7 @@
                     })
                 }).then(res => {
                     event.target.innerText = '수정';
-                    request();
+                    request(currentPage); // 현재 페이지를 유지하며 댓글 목록 요청
                 });
             } else {
                 event.target.innerText = '저장';
@@ -320,7 +325,7 @@
 
     });
 
-    //대댓글 수정 관련
+    // 대댓글 수정 관련
     document.addEventListener('click', function(event) {
         if (event.target.classList.contains('recomment-modify')) {
             const id = event.target.id.split('-')[2]; // 여기서 id를 추출합니다.
@@ -353,8 +358,21 @@
         }
     });
 
+    // 대댓글 삭제 관련
+    document.addEventListener('click', function(event) {
+        if (event.target.classList.contains('redelete')) {
+            const id = event.target.id.split('-')[1];
 
-
+            fetch(`/api/redelete/${id}`, {
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                method: 'DELETE',
+            }).then(res => {
+                request(currentPage); // 현재 페이지를 유지하며 댓글 목록 요청
+            });
+        }
+    });
 
     // 댓글 삭제 관련
     document.addEventListener('click', function(event) {
@@ -367,7 +385,7 @@
                 },
                 method: 'DELETE',
             }).then(res => {
-                request();
+                request(currentPage); // 현재 페이지를 유지하며 댓글 목록 요청
             });
         }
     });
