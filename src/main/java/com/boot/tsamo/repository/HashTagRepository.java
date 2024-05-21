@@ -21,5 +21,6 @@ public interface HashTagRepository extends JpaRepository<HashTag,Long> {
     List<HashTag> findByHashTagContent(String hashTag);
 
 
+    Long deleteByBoardId(Board board);
 
 }

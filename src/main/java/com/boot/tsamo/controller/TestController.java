@@ -33,6 +33,8 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class TestController {
 
+    private final AttachFileService attachFileService;
+
     //댓글 리스트 조회
     @GetMapping(value = "/reply")
     public String reply(Model model) {
@@ -78,7 +80,6 @@ public class TestController {
             Sort.by(Sort.Direction.DESC, "userid");
         }
 
-
         Page<Board> Boards = boardService.findAll(pageable);
 
             if(searchvalue == null){
@@ -114,8 +115,6 @@ public class TestController {
             int startPage=Math.max(nowPage-4,1);
             int endPage=Math.min(nowPage+5,Boards.getTotalPages());
 
-
-
             if(!Boards.isEmpty()) {
                 model.addAttribute("boards", Boards);
                 model.addAttribute("nowPage", nowPage);
@@ -139,8 +138,12 @@ public class TestController {
 
 
     //게시물 등록 뷰
+
     @GetMapping(value = "/createBoard")
     public String createBoard(Model model) {
+
+        model.addAttribute("fileMaxCnt",attachFileService.getMaxCnt());
+        model.addAttribute("fileMaxSize",attachFileService.getMaxSize());
 
         String createOrmodify = "create";
 
@@ -159,15 +162,18 @@ public class TestController {
     }
 
 
-
     //게시물 등록 요청
     @PostMapping(value = "/createBoardRequest")
     public String createBoardRequest(@ModelAttribute addBoardDTO addBoarddto,
                                      @RequestParam("attachFile") List<MultipartFile> attachFileList,
                                      @RequestParam("hashTagValue")String hashTagValue,
                                      @Valid AttachFileFormDto attachFileFormDto, BindingResult bindingResult,
-                                     Model model,Principal principal,@RequestParam(value="boardid", required=false)Long boardId) {
+                                     Model model,Principal principal,@RequestParam(value="boardid", required=false)Long boardId) throws Exception {
 
+        model.addAttribute("fileMaxCnt",attachFileService.getMaxCnt());
+        model.addAttribute("fileMaxSize",attachFileService.getMaxSize());
+
+         
         //더미 해시값(해시 값이 없을 경우)
         List<HashTag> hashTags= new ArrayList<>();
         hashTags.add(new HashTag());
@@ -198,35 +204,115 @@ public class TestController {
         }
 
 
+            int maxsize =0 ;
+        for(MultipartFile attachFile : attachFileList){
+            maxsize += attachFile.getSize();
 
-
-            //등록 수정을 포함하는 로직
-        Map<String,Board> save = boardService.save(addBoarddto.toEntity(), principal,boardId);
-
-        Board board;
-
-        if(save.get("modify") != null ? true : false){
-            board= save.get("modify");
-        }else{
-            board= save.get("create");
         }
 
-
-        try{
-            fileService.saveAttachFileList(attachFileList,board);
-        } catch(Exception e){
-            model.addAttribute("errorMessage", e.getMessage());
+        if(Math.floor(maxsize / 1024 / 1024) > attachFileService.getMaxSize()){
+            model.addAttribute("errorMessage", "최대 파일 업로드 용량을 초과하였습니다.");
             model.addAttribute("attachFileFormDto", attachFileFormDto);
             model.addAttribute("hashTags", hashTags);
             model.addAttribute("attachFileList", attachFileList);
             model.addAttribute("board", addBoarddto);
             model.addAttribute("extensions", extensions);
             return "createBoard";
+
         }
 
 
-        hashTagService.saveHashTags(hashTagValue,board);
+            //등록 수정을 포함하는 로직
+//        Map<String,Board> save = boardService.save(addBoarddto.toEntity(), principal,boardId);
+//
+//        Board board;
+//
+//        if(save.get("modify") != null ? true : false){
+//            board= save.get("modify");
+//            board.setHashTags(null);
+//            hashTagService.saveHashTags(hashTagValue,board);
+//        }else{
+//            board= save.get("create");
+//            hashTagService.saveHashTags(hashTagValue,board);
+//        }
 
+
+
+
+
+//        try{
+//            //등록 수정을 포함하는 로직
+//            Map<String,Board> save = boardService.save(addBoarddto.toEntity(), principal,boardId);
+//
+//            Board board;
+//
+//
+//            if(save.get("modify") != null ? true : false){
+//                System.out.println("모디파이");
+//                board= save.get("modify");
+//                hashTagService.deleteHashTags(board);
+//                fileService.deleteAttachFile(board);
+//
+//                hashTagService.saveHashTags(hashTagValue,board);
+//            }else{
+//                System.out.println("크리에이트");
+//                board= save.get("create");
+//                hashTagService.saveHashTags(hashTagValue,board);
+//            }
+//
+//            fileService.saveAttachFileList(attachFileList,board);
+//        } catch(Exception e){
+//            model.addAttribute("errorMessage", e.getMessage());
+//            model.addAttribute("attachFileFormDto", attachFileFormDto);
+//            model.addAttribute("hashTags", hashTags);
+//            model.addAttribute("attachFileList", attachFileList);
+//            model.addAttribute("board", addBoarddto);
+//            model.addAttribute("extensions", extensions);
+//            return "createBoard";
+//        }
+
+        //연습
+
+            //로직을 밖으로 빼기
+            for(MultipartFile a : attachFileList) {
+
+               if(a.getOriginalFilename() !="") {
+                   if (!attachFileService.isAllowedExtension(a.getOriginalFilename())) {
+                       model.addAttribute("errorMessage", "허용되지 않는 파일 형식입니다.");
+                       model.addAttribute("attachFileFormDto", attachFileFormDto);
+                       model.addAttribute("hashTags", hashTags);
+                       model.addAttribute("attachFileList", attachFileList);
+                       model.addAttribute("board", addBoarddto);
+                       model.addAttribute("extensions", extensions);
+
+                       return "createBoard";
+                   }
+               }
+            }
+
+            //등록 수정을 포함하는 로직
+            Map<String,Board> save = boardService.save(addBoarddto.toEntity(), principal,boardId);
+
+            Board board;
+
+            if(save.get("modify") != null ? true : false){
+                System.out.println("모디파이");
+                board= save.get("modify");
+                hashTagService.deleteHashTags(board);
+                fileService.deleteAttachFile(board);
+
+                hashTagService.saveHashTags(hashTagValue,board);
+            }else{
+                System.out.println("크리에이트");
+                board= save.get("create");
+                hashTagService.saveHashTags(hashTagValue,board);
+            }
+
+            fileService.saveAttachFileList(attachFileList,board);
+
+
+
+        //연습끝
 
         return "redirect:/";
     }
@@ -234,6 +320,8 @@ public class TestController {
     //게시물 수정 뷰
     @PostMapping(value = "/modifyBoard")
     public String modifyBoard(Model model,@RequestParam Long id) {
+        model.addAttribute("fileMaxCnt",attachFileService.getMaxCnt());
+        model.addAttribute("fileMaxSize",attachFileService.getMaxSize());
 
         String createOrmodify = "modify";
 

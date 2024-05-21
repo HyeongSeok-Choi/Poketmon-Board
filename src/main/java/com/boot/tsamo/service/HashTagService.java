@@ -3,6 +3,7 @@ package com.boot.tsamo.service;
 import com.boot.tsamo.entity.Board;
 import com.boot.tsamo.entity.HashTag;
 import com.boot.tsamo.repository.HashTagRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -40,5 +41,12 @@ public class HashTagService {
         List<HashTag> hashTags =  board.getHashTags();
 
         return hashTags;
+    }
+
+    @Transactional
+    public void deleteHashTags(Board board) {
+
+        hashTagRepository.deleteByBoardId(board);
+
     }
 }

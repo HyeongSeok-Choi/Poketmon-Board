@@ -116,8 +116,6 @@ public class UserController {
     @PostMapping("/delete")
     public String deleteUser(@RequestParam("id") String userId, Model model) {
 
-        System.out.println(userId+"여기서부터 안들어오니 ?");
-
 
         try {
             userService.deleteUser(userId);

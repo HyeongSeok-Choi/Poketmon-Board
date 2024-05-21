@@ -147,8 +147,8 @@
                 <hr class="mb-4">
 
             <h5 class="mb-3">해시태그</h5>
-            <ul style="list-style:none" th:each="hash:${hashTag}">
-               <i><li style="float: left; margin-right: 20px" th:text="'#'+${hash.getHashTagContent()}"></li></i>
+            <ul style="list-style:none" >
+               <i th:each="hash:${hashTag}"><li  style="float: left; margin-right: 20px" th:text="'#'+${hash.getHashTagContent()}"></li></i>
             </ul>
 
             <div style="clear: both;" class="col-md-6 mb-3">

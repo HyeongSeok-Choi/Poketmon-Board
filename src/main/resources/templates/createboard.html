@@ -77,8 +77,8 @@
                     <div class="col-md-6 mb-3">
                         <label for="addValue">해시태그</label>
 
-                        <ul class='hashTag' id='hashTag' style="list-style-type: none"  th:each="hash:${hashTags}">
-                            <li th:if="${hash.getHashTagContent()} != null" th:text="'#'+${hash.getHashTagContent()}"></li>
+                        <ul class='hashTag' id='hashTag' style="list-style-type: none"  >
+                            <li th:each="hash:${hashTags}" th:if="${hash.getHashTagContent()} != null" th:text="'#'+${hash.getHashTagContent()}"></li>
                         </ul>
                         <input type='text' id='addValue' />
                         <input class="btn btn-primary btn-lg btn-block" type='button' value='추가' onclick='addList()' />

@@ -109,7 +109,7 @@ public class Users implements UserDetails, OAuth2User {
         this.role = Role.ADMIN;
         this.isDeleted = false; // 계정 생성 시 삭제되지 않음으로 설정
         this.isEnabled = true; // 계정 생성 시 활성화 상태로 설정
-        this.password = "chltest";
+
 
     }
 
