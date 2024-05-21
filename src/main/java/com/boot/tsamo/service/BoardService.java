@@ -13,7 +13,9 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,25 +29,16 @@ public class BoardService {
     private final HashTagRepository hashTagRepository;
 
 
-    //더미 데이터로 테스트중
-    public Board save(Board board) {
+    //게시물 저장
+    public Board save(Board board,Principal principal) {
 
-        Users users= new Users();
+            Users user;
 
-        users.setUserId("qnftlstm");
+            user = userRepository.findById(principal.getName()).get();
 
-        users.setEmail("qnftlstm@naver.com");
+            board.setUserid(user);
 
-        users.setRole(Role.pUSER);
-
-        users.setPassword("chl153");
-
-        users.setNickName("뿡뿡이");
-
-        userRepository.save(users);
-
-
-        board.setUserid(users);
+        board.setViewCount(0L);
 
         Board result = boardRepository.save(board);
 
@@ -57,6 +50,14 @@ public class BoardService {
     List<Board> boards = boardRepository.findAll();
 
     return boards;
+    }
+
+    //게시물 조회수 업데이트
+    @Transactional
+    public int getViewCounting(Long id) {
+        
+        return boardRepository.updateViews(id);
+
     }
 
 

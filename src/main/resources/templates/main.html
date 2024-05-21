@@ -59,6 +59,8 @@
                 <tr>
                     <th scope="col" class="th-num" >번호</th>
                     <th scope="col" class="th-title">제목</th>
+                    <th scope="col" class="th-author" >작성자</th>
+                    <th scope="col" class="th-viewCount" >조회수</th>
                     <th scope="col" class="th-date" >등록일</th>
                 </tr>
                 </thead>
@@ -66,9 +68,11 @@
                 <!--게시물 목록 생성-->
                 <tr th:if="${boards == null}"><td></td><td>등록된 게시물이 없습니다.</td><td></td></tr>
                 <tr th:each="board : ${boards}" >
-                    <td th:text="${board.id}" >1</td>
+                    <td th:text="${board.id}" >게시물 번호</td>
                     <td><a th:href="@{/BoardDetailView(id=${board.id})}" th:text="*{board.title}">환영합니다. 자유롭게 글을 작성해주세요</a></td>
-                    <td th:text="*{board.createdAt}"></td>
+                    <td th:text="${board.userid.userId}" >작성자</td>
+                    <td th:text="${board.viewCount}" >조회수</td>
+                    <td th:text="*{board.createdAt}">등록일</td>
                 </tr>
                 </tbody>
             </table>
@@ -89,7 +93,7 @@
                 <li class="page-item"><a  class="page-link"th:if="${nowPage != endPage && endPage > 1} " th:href="@{/(page=${nowPage},title=${param.title},sort=${param.sort},searchtype=${param.searchtype},searchvalue=${param.searchvalue})}">다음</a></li>
                 </ul>
             </div>
-                 <button class="btn btn-dark" onclick="location.href='/createBoard'">등록</button>
+                 <button sec:authorize="isAuthenticated()" class="btn btn-dark" onclick="location.href='/createBoard'">등록</button>
         </div>
     </div>
 

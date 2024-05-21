@@ -7,6 +7,7 @@ import com.boot.tsamo.dto.attachAttributeDTO;
 import com.boot.tsamo.entity.AttachFile;
 import com.boot.tsamo.entity.Board;
 import com.boot.tsamo.entity.Extension;
+import com.boot.tsamo.entity.HashTag;
 import com.boot.tsamo.service.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -141,20 +142,50 @@ public class TestController {
 
         List<Extension> extensions = fileService.getExtensions();
 
+        List<HashTag> hashTags =new ArrayList<>();
+        hashTags.add(new HashTag());
+
         model.addAttribute("board", new Board());
         model.addAttribute("attachFileFormDto", new AttachFileFormDto());
         model.addAttribute("extensions", extensions);
+        model.addAttribute("hashTags", hashTags);
 
         return "createBoard";
     }
 
-    //게시물 등록
-    @PostMapping(value = "/createBoard2")
+
+    //게시물 수정 뷰
+    @PostMapping(value = "/modifyBoard")
+    public String modifyBoard(Model model,@RequestParam Long id) {
+
+        List<Extension> extensions = fileService.getExtensions();
+
+        Board board = boardService.findById(id);
+
+        List<HashTag> hashTags ;
+        hashTags = board.getHashTags();
+
+        if(hashTags.size() == 0) {
+            hashTags.add(new HashTag());
+        }
+
+        model.addAttribute("board", board);
+        model.addAttribute("attachFileFormDto", new AttachFileFormDto());
+        model.addAttribute("extensions", extensions);
+        model.addAttribute("hashTags", hashTags);
+
+        return "createBoard";
+    }
+
+
+
+    //게시물 등록 요청
+    @PostMapping(value = "/createBoardRequest")
     public String createBoardRequest(@ModelAttribute addBoardDTO addBoarddto,
                                      @RequestParam("attachFile") List<MultipartFile> attachFileList,
                                      @RequestParam("hashTagValue")String hashTagValue,
                                      @Valid AttachFileFormDto attachFileFormDto, BindingResult bindingResult,
-                                     Model model) {
+                                     Model model,Principal principal) {
 
         if(bindingResult.hasErrors()){
             return "createBoard";
@@ -166,7 +197,7 @@ public class TestController {
         }
 
 
-        Board board = boardService.save(addBoarddto.toEntity());
+        Board board = boardService.save(addBoarddto.toEntity(),principal);
 
         try{
             fileService.saveAttachFileList(attachFileList,board);
@@ -200,7 +231,7 @@ public class TestController {
 
         }
 
-
+        boardService.getViewCounting(id);
 
         model.addAttribute("attachFiles", attachFiles);
 
@@ -214,16 +245,6 @@ public class TestController {
         return "boardDetail";
     }
 
-
-    @GetMapping(value = "/modifyBoard")
-    public String modifyBoard(Model model,@RequestParam Long id) {
-
-        Board detailBoard = boardService.findById(id);
-
-        model.addAttribute("board", detailBoard);
-
-        return "createBoard";
-    }
 
     @PostMapping(value = "/deleteBoard")
     public String deleteBoard(Model model,@RequestParam Long id) {
