@@ -19,9 +19,11 @@
     </div>
 
     <!-- board seach area -->
+
     <form th:action="@{/}" method="get">
         <div id="board-search">
             <div class="container">
+                <img src="/img/movingCatgif.gif" />
                 <div class="search-window">
                         <div class="search-wrap">
                             <label for="searchvalue" class="blind">공지사항 내용 검색</label>
@@ -55,7 +57,15 @@
             </div>
             </form>
             <table class="board-table">
+                <colgroup>
+                    <col width=10%>
+                    <col width=50%>
+                    <col width=20%>
+                    <col width=10%>
+                    <col width=10%>
+                </colgroup>
                 <thead>
+
                 <tr>
                     <th scope="col" class="th-num" >번호</th>
                     <th scope="col" class="th-title">제목</th>
@@ -72,7 +82,7 @@
                     <td><a th:href="@{/BoardDetailView(id=${board.id})}" th:text="*{board.title}">환영합니다. 자유롭게 글을 작성해주세요</a></td>
                     <td th:text="${board.userid.userId}" >작성자</td>
                     <td th:text="${board.viewCount}" >조회수</td>
-                    <td th:text="*{board.createdAt}">등록일</td>
+                    <td th:text="*{#temporals.format(board.createdAt, 'yyyy-MM-dd HH:mm:ss')}">등록일</td>
                 </tr>
                 </tbody>
             </table>
