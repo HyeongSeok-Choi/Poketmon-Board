@@ -180,7 +180,7 @@
                     const isRepliesVisible = activeReplies[replyId] ? 'block' : 'none';
                     const buttonLabel = activeReplies[replyId] ? '답글 닫기' : '답글 더보기';
 
-                    comment += `
+                    comment += `<hr/>
             <div class="comments" id="comment-${replyId}">
                 <input type="hidden" value="${replyId}">
                 <span class="writer_img"><img src="/img/BBANG.jpg" width="30" height="30" alt="기본 프로필 이미지"/></span>
