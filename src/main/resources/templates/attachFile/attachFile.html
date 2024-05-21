@@ -14,12 +14,15 @@
                 </div>
             </div>
 
-            <p th:style="'color: red'">
+            <p th:if="${#lists.isEmpty(extensions)}" th:style="'color: red'">
+                모든 확장자에 대해 파일 업로드가 제한되어 있습니다.
+            </p>
+            <p th:if="${!#lists.isEmpty(extensions)}" th:style="'color: red'">
                 <th:block th:each="extension : ${extensions}">
                     <span th:text="${extension.extension}" th:if="${!#strings.isEmpty(extension.extension)}"></span>
                     <span th:unless="${extension == extensions[extensions.size() - 1]}">, </span>
                 </th:block>
-                파일들만 등록 됩니다.
+                파일들만 등록 가능합니다.
             </p>
 
 
