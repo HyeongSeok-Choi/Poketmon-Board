@@ -31,6 +31,7 @@ import java.util.Map;
 public class TestController {
 
     private final AttachFileService attachFileService;
+    private final LikeService likeService;
 
     //댓글 리스트 조회
     @GetMapping(value = "/reply")
@@ -321,6 +322,7 @@ public class TestController {
 
 
         Board detailBoard = boardService.findById(id);
+        model.addAttribute("LikeCount", likeService.countLike(detailBoard));
         model.addAttribute("attachFileFormDto", new AttachFileFormDto());
         model.addAttribute("board", detailBoard);
         model.addAttribute("hashTag", hashTagService.getHashTags(detailBoard));
