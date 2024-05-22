@@ -11,6 +11,7 @@ import com.boot.tsamo.entity.HashTag;
 import com.boot.tsamo.service.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -30,6 +31,8 @@ import java.util.List;
 @Controller
 @RequiredArgsConstructor
 public class TestController {
+
+
 
     //댓글 리스트 조회
     @GetMapping(value = "/reply")
@@ -64,76 +67,73 @@ public class TestController {
 
     //게시물 목록(main페이지) 검색, 페이징 기능 포함
     @GetMapping(value = "/")
-    public String main(Model model,@PageableDefault(page=0,size = 3,sort = "id",
-            direction = Sort.Direction.DESC) Pageable pageable, String searchvalue, String searchtype,String sort) {
+    public String main(Model model, @PageableDefault(page = 0, size = 3, sort = "id",
+            direction = Sort.Direction.DESC) Pageable pageable, String searchvalue, String searchtype, String sort) {
 
 
-        if(sort == null || sort.equals("title")) {
+        if (sort == null || sort.equals("title")) {
             Sort.by(Sort.Direction.DESC, "title");
         } else if (sort.equals("createdAt")) {
             Sort.by(Sort.Direction.DESC, "createdAt");
-        }else if (sort.equals("userid")) {
+        } else if (sort.equals("userid")) {
             Sort.by(Sort.Direction.DESC, "userid");
         }
 
 
         Page<Board> Boards = boardService.findAll(pageable);
 
-            if(searchvalue == null){
-                Boards = boardService.findAll(pageable);
+        if (searchvalue == null) {
+            Boards = boardService.findAll(pageable);
 
-            }else{
-                //제목으로 검색하기
-                if(searchtype.equals("title")){
-                    Boards = boardService.findAllByTitle(pageable,searchvalue);
-                }else if(searchtype.equals("content")){
-                    //본문으로 검색하기
-                    Boards = boardService.findAllByContent(pageable,searchvalue);
-                }else if(searchtype.equals("userid")){
-                    //작성자으로 검색하기
-                    Boards = boardService.findAllByUserId(pageable,searchvalue);
-                }
+        } else {
+            //제목으로 검색하기
+            if (searchtype.equals("title")) {
+                Boards = boardService.findAllByTitle(pageable, searchvalue);
+            } else if (searchtype.equals("content")) {
+                //본문으로 검색하기
+                Boards = boardService.findAllByContent(pageable, searchvalue);
+            } else if (searchtype.equals("userid")) {
+                //작성자으로 검색하기
+                Boards = boardService.findAllByUserId(pageable, searchvalue);
+            } else if (searchtype.equals("hashTag")) {
 
-                else if(searchtype.equals("hashTag")){
-
-                    Boards = boardService.findAllByHashTag(pageable,searchvalue);
-                    for(Board board : Boards){
-                        board.getId();
-                        board.getTitle();
-                        board.getReplies();
-
-                    }
+                Boards = boardService.findAllByHashTag(pageable, searchvalue);
+                for (Board board : Boards) {
+                    board.getId();
+                    board.getTitle();
+                    board.getReplies();
 
                 }
 
             }
 
-            int nowPage = Boards.getPageable().getPageNumber()+1;
-            int startPage=Math.max(nowPage-4,1);
-            int endPage=Math.min(nowPage+5,Boards.getTotalPages());
+        }
+
+        int nowPage = Boards.getPageable().getPageNumber() + 1;
+        int startPage = Math.max(nowPage - 4, 1);
+        int endPage = Math.min(nowPage + 5, Boards.getTotalPages());
 
 
-
-            if(!Boards.isEmpty()) {
-                model.addAttribute("boards", Boards);
-                model.addAttribute("nowPage", nowPage);
-                model.addAttribute("startPage", startPage);
-                model.addAttribute("endPage", endPage);
-                model.addAttribute("searchvalue", searchvalue);
-                model.addAttribute("searchtype", searchtype);
-                model.addAttribute("sort", sort);
-                return "main";
-            }
-
-            model.addAttribute("nowPage", null);
-            model.addAttribute("startPage", null);
-            model.addAttribute("endPage", null);
+        if (!Boards.isEmpty()) {
+            model.addAttribute("boards", Boards);
+            model.addAttribute("nowPage", nowPage);
+            model.addAttribute("startPage", startPage);
+            model.addAttribute("endPage", endPage);
             model.addAttribute("searchvalue", searchvalue);
             model.addAttribute("searchtype", searchtype);
             model.addAttribute("sort", sort);
-
             return "main";
         }
+
+        model.addAttribute("nowPage", null);
+        model.addAttribute("startPage", null);
+        model.addAttribute("endPage", null);
+        model.addAttribute("searchvalue", searchvalue);
+        model.addAttribute("searchtype", searchtype);
+        model.addAttribute("sort", sort);
+
+        return "main";
+    }
 
 
     //게시물 등록 뷰
@@ -142,7 +142,7 @@ public class TestController {
 
         List<Extension> extensions = fileService.getExtensions();
 
-        List<HashTag> hashTags =new ArrayList<>();
+        List<HashTag> hashTags = new ArrayList<>();
         hashTags.add(new HashTag());
 
         model.addAttribute("board", new Board());
@@ -156,16 +156,16 @@ public class TestController {
 
     //게시물 수정 뷰
     @PostMapping(value = "/modifyBoard")
-    public String modifyBoard(Model model,@RequestParam Long id) {
+    public String modifyBoard(Model model, @RequestParam Long id) {
 
         List<Extension> extensions = fileService.getExtensions();
 
         Board board = boardService.findById(id);
 
-        List<HashTag> hashTags ;
+        List<HashTag> hashTags;
         hashTags = board.getHashTags();
 
-        if(hashTags.size() == 0) {
+        if (hashTags.size() == 0) {
             hashTags.add(new HashTag());
         }
 
@@ -178,36 +178,35 @@ public class TestController {
     }
 
 
-
     //게시물 등록 요청
     @PostMapping(value = "/createBoardRequest")
     public String createBoardRequest(@ModelAttribute addBoardDTO addBoarddto,
                                      @RequestParam("attachFile") List<MultipartFile> attachFileList,
-                                     @RequestParam("hashTagValue")String hashTagValue,
+                                     @RequestParam("hashTagValue") String hashTagValue,
                                      @Valid AttachFileFormDto attachFileFormDto, BindingResult bindingResult,
-                                     Model model,Principal principal) {
+                                     Model model, Principal principal) {
 
-        if(bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             return "createBoard";
         }
 
-        if(attachFileList.get(0).isEmpty() && attachFileFormDto.getId()==null){
+        if (attachFileList.get(0).isEmpty() && attachFileFormDto.getId() == null) {
             model.addAttribute("errorMessage", "첨부파일 입력 필요");
             return "createBoard";
         }
 
 
-        Board board = boardService.save(addBoarddto.toEntity(),principal);
+        Board board = boardService.save(addBoarddto.toEntity(), principal);
 
-        try{
-            fileService.saveAttachFileList(attachFileList,board);
-        } catch(Exception e){
+        try {
+            fileService.saveAttachFileList(attachFileList, board);
+        } catch (Exception e) {
             model.addAttribute("errorMessage", "첨부파일 DB 저장 에러");
             return "createBoard";
         }
 
 
-        hashTagService.saveHashTags(hashTagValue,board);
+        hashTagService.saveHashTags(hashTagValue, board);
 
 
         return "redirect:/";
@@ -216,9 +215,9 @@ public class TestController {
 
     //게시물 상세보기
     @GetMapping(value = "/BoardDetailView")
-    public String BoardDetailView(Model model,@RequestParam Long id,Principal principal) {
+    public String BoardDetailView(Model model, @RequestParam Long id, Principal principal) {
 
-        if(principal != null) {
+        if (principal != null) {
             String userid = principal.getName();
             model.addAttribute("userid", userid);
         }
@@ -226,15 +225,14 @@ public class TestController {
 
         List<AttachFile> attachFiles = fileService.getAttachFileByBoardId(id);
 
-        for(AttachFile attachFile : attachFiles){
-            System.out.println(attachFile.getUuid_fileName()+"여기 있습니다.");
+        for (AttachFile attachFile : attachFiles) {
+            System.out.println(attachFile.getUuid_fileName() + "여기 있습니다.");
 
         }
 
         boardService.getViewCounting(id);
 
         model.addAttribute("attachFiles", attachFiles);
-
 
 
         Board detailBoard = boardService.findById(id);
@@ -247,22 +245,22 @@ public class TestController {
 
 
     @PostMapping(value = "/deleteBoard")
-    public String deleteBoard(Model model,@RequestParam Long id) {
+    public String deleteBoard(Model model, @RequestParam Long id) {
 
         boardService.deleteById(id);
 
-        return"redirect:/";
+        return "redirect:/";
     }
 
     @PostMapping(value = "/attachatt")
     public String attachatt(@RequestParam(required = false) List<String> extension, int maxcnt, int maxsize) {
 
         //null처리
-        if(extension == null){
+        if (extension == null) {
             extension = new ArrayList<>();
         }
 
-        if(extension == null){
+        if (extension == null) {
             extension = new ArrayList<>();
         }
 
@@ -273,7 +271,7 @@ public class TestController {
 
         fileAttributeService.attachFileAttribute(attachAttributeDTO);
 
-        return"redirect:/";
+        return "redirect:/";
     }
 
 

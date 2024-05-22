@@ -11,6 +11,52 @@
     <link rel="stylesheet" href="/css/main.css">
     <!-- xlsx library 추가 -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <th:block layout:fragment="script">
+        <script>
+            function downloadExcel() {
+                // 서버로부터 전체 게시물 데이터를 가져옴
+                fetch('/ExcelApi', {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                    }
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data);
+                        // 데이터를 엑셀 형식에 맞게 변환
+                        var excelData = [];
+                        var excelheaderData = ['번호', '제목', '작성자', '조회수', '등록일'];// 헤더 추가
+                        excelData.push(excelheaderData);
+                        data.forEach(board => {
+                            excelData.push([
+
+                                board.id,
+                                board.title,
+                                board.userId,
+                                board.viewCount,
+                                board.createdAt
+                            ]);
+                        });
+                        console.log(excelData);
+
+                        // 엑셀 워크시트 생성
+                        var ws = XLSX.utils.aoa_to_sheet(excelData);
+
+                        // 엑셀 워크북 생성
+                        var wb = XLSX.utils.book_new();
+                        XLSX.utils.book_append_sheet(wb, ws, "게시물 목록");
+
+                        // 엑셀 파일 다운로드
+                        XLSX.writeFile(wb, "게시물_목록.xlsx");
+                    })
+                    .catch(error => {
+                        console.error('Error fetching data:', error);
+                    });
+
+            }
+        </script>
+    </th:block>
 </head>
 <body>
 <section class="notice">
@@ -113,34 +159,8 @@
 
         </div>
     </div>
+    <!-- 엑셀 다운로드 스크립트 -->
+
 </section>
-
-<!-- 엑셀 다운로드 스크립트 -->
-<script>
-    function downloadExcel() {
-        var data = []; // 엑셀에 포함될 데이터를 저장할 배열
-
-        // 테이블 데이터를 가져옴
-        var rows = document.querySelectorAll('.board-table tbody tr');
-        rows.forEach(function(row) {
-            var rowData = [];
-            row.querySelectorAll('td').forEach(function(cell) {
-                rowData.push(cell.innerText);
-            });
-            data.push(rowData);
-        });
-
-        // 엑셀 워크시트 생성
-        var ws = XLSX.utils.aoa_to_sheet(data);
-
-        // 엑셀 워크북 생성
-        var wb = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(wb, ws, "게시물 목록");
-
-        // 엑셀 파일 다운로드
-        XLSX.writeFile(wb, "게시물_목록.xlsx");
-    }
-</script>
-
 </body>
 </html>
