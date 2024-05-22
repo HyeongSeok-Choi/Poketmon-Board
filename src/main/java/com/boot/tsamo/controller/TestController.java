@@ -66,7 +66,7 @@ public class TestController {
 
     //게시물 목록(main페이지) 검색, 페이징 기능 포함
     @GetMapping(value = "/")
-    public String main(Model model,@PageableDefault(page=0,size = 3,sort = "id",
+    public String main(Model model,@PageableDefault(page=0,size = 10,sort = "id",
             direction = Sort.Direction.DESC) Pageable pageable, String searchvalue, String searchtype,String sort) {
 
 
