@@ -182,6 +182,7 @@ public class TestController {
 
         //확장자 받기
         List<Extension> extensions = fileService.getExtensions();
+        Integer maxUploadCnt = fileAttributeService.getMaxRequestCnt(1L);
 
 
         if(bindingResult.hasErrors()){
@@ -190,23 +191,12 @@ public class TestController {
             model.addAttribute("attachFileList", attachFileList);
             model.addAttribute("board", addBoarddto);
             model.addAttribute("extensions", extensions);
+            model.addAttribute("maxUploadCnt", maxUploadCnt);
             return "createBoard";
         }
 
 
-        //첨부파일이 없을 경우
-        if(attachFileList.get(0).isEmpty() && attachFileFormDto.getId()==null){
-            model.addAttribute("errorMessage", "첨부파일 입력 필요,최소 1개 이상 등록이 필요합니다.");
-            model.addAttribute("attachFileFormDto", attachFileFormDto);
-            model.addAttribute("hashTags", hashTags);
-            model.addAttribute("attachFileList", attachFileList);
-            model.addAttribute("board", addBoarddto);
-            model.addAttribute("extensions", extensions);
-            return "createBoard";
-        }
-
-
-            int maxsize =0 ;
+        int maxsize =0 ;
         for(MultipartFile attachFile : attachFileList){
             maxsize += attachFile.getSize();
 
@@ -219,6 +209,7 @@ public class TestController {
             model.addAttribute("attachFileList", attachFileList);
             model.addAttribute("board", addBoarddto);
             model.addAttribute("extensions", extensions);
+            model.addAttribute("maxUploadCnt", maxUploadCnt);
             return "createBoard";
 
         }
@@ -286,6 +277,7 @@ public class TestController {
                        model.addAttribute("attachFileList", attachFileList);
                        model.addAttribute("board", addBoarddto);
                        model.addAttribute("extensions", extensions);
+                       model.addAttribute("maxUploadCnt", maxUploadCnt);
 
                        return "createBoard";
                    }
@@ -306,7 +298,7 @@ public class TestController {
                 hashTagService.saveHashTags(hashTagValue,board);
             }else{
                 System.out.println("크리에이트");
-                board= save.get("create");
+                board = save.get("create");
                 hashTagService.saveHashTags(hashTagValue,board);
             }
 
@@ -328,6 +320,7 @@ public class TestController {
         String createOrmodify = "modify";
 
         List<Extension> extensions = fileService.getExtensions();
+        Integer maxUploadCnt = fileAttributeService.getMaxRequestCnt(1L);
 
         Board board = boardService.findById(id);
 
@@ -341,6 +334,7 @@ public class TestController {
         model.addAttribute("board", board);
         model.addAttribute("attachFileFormDto", new AttachFileFormDto());
         model.addAttribute("extensions", extensions);
+        model.addAttribute("maxUploadCnt", maxUploadCnt);
         model.addAttribute("hashTags", hashTags);
         model.addAttribute("createOrmodify",createOrmodify);
 

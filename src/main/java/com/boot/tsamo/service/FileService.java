@@ -52,7 +52,6 @@ public class FileService {
                     AttachfileRepository.save(attachFile);
 
                 } catch (IOException e) {
-                    // 예외 처리는 따로 해주는 게 좋습니다.
                     throw new RuntimeException(e);
                 }
 
