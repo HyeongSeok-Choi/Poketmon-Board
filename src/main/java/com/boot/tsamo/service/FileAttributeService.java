@@ -35,8 +35,6 @@ public class FileAttributeService {
 
         }
 
-
-
         AttachFileAttribute attachFileAttribute = new AttachFileAttribute();
 
         attachFileAttribute.setId(1L);
@@ -45,13 +43,14 @@ public class FileAttributeService {
 
         attachFileAttributeRepository.save(attachFileAttribute);
 
+    }
 
+    public Integer getMaxRequestSize(Long id){
+        return attachFileAttributeRepository.findMax_Upload_SizeById(id);
+    }
 
-
-
-
-
-
+    public Integer getMaxRequestCnt(Long id){
+        return attachFileAttributeRepository.findMax_Upload_CntById(id);
     }
 
 }
