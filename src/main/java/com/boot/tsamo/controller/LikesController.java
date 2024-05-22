@@ -2,7 +2,9 @@ package com.boot.tsamo.controller;
 
 
 import com.boot.tsamo.dto.addLikesDTO;
+import com.boot.tsamo.entity.Board;
 import com.boot.tsamo.repository.LikeRepository;
+import com.boot.tsamo.service.BoardService;
 import com.boot.tsamo.service.LikeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +19,7 @@ import java.security.Principal;
 public class LikesController {
 
     private final LikeService likeService;
+    private final BoardService boardService;
 
 
     @PostMapping
@@ -30,6 +33,21 @@ public class LikesController {
        boolean checkLikes= likeService.checklikes(likesDTO);
 
         return ResponseEntity.ok().body(checkLikes);
+
+
+    }
+
+    @PostMapping(value = "/getCounting")
+    public ResponseEntity<?> getLikeCount(@RequestBody addLikesDTO likesDTO) throws Exception{
+
+
+        Board board = boardService.findById(likesDTO.getBoardId());
+
+
+       int likeCount = likeService.countLike(board);
+
+
+        return ResponseEntity.ok().body(likeCount);
 
 
     }

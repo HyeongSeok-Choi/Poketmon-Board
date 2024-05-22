@@ -120,6 +120,7 @@ public class UserController {
         try {
             userService.deleteUser(userId);
             model.addAttribute("successMessage", "탈퇴 완료 되었습니다.");
+
         } catch (EntityNotFoundException e) {
             model.addAttribute("errorMessage", "존재하지 않는 아이디입니다.");
         }

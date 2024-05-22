@@ -165,7 +165,6 @@ public class TestController {
     public String createBoardRequest(@ModelAttribute addBoardDTO addBoarddto,
                                      @RequestParam("attachFile") List<MultipartFile> attachFileList,
                                      @RequestParam("hashTagValue")String hashTagValue,
-                                     @Valid AttachFileFormDto attachFileFormDto, BindingResult bindingResult,
                                      Model model,Principal principal,@RequestParam(value="boardid", required=false)Long boardId) throws Exception {
 
         model.addAttribute("fileMaxCnt",attachFileService.getMaxCnt());
@@ -180,21 +179,10 @@ public class TestController {
         List<Extension> extensions = fileService.getExtensions();
 
 
-        if(bindingResult.hasErrors()){
-            model.addAttribute("attachFileFormDto", attachFileFormDto);
-            model.addAttribute("hashTags", hashTags);
-            model.addAttribute("attachFileList", attachFileList);
-            model.addAttribute("board", addBoarddto);
-            model.addAttribute("extensions", extensions);
-            return "createBoard";
-        }
-
-
         //첨부파일이 없을 경우
-        if(attachFileList.get(0).isEmpty() && attachFileFormDto.getId()==null){
+        if(attachFileList.get(0).isEmpty()){
             hashTags = hashTagService.getHashTagsByHashTagValue(hashTagValue);
             model.addAttribute("errorMessage", "첨부파일 입력 필요,최소 1개 이상 등록이 필요합니다.");
-            model.addAttribute("attachFileFormDto", attachFileFormDto);
             model.addAttribute("hashTags", hashTags);
             model.addAttribute("attachFileList", attachFileList);
             model.addAttribute("board", addBoarddto);
@@ -214,7 +202,6 @@ public class TestController {
         if(maxsize > attachFileService.getMaxSize()*1024*1024){
             hashTags = hashTagService.getHashTagsByHashTagValue(hashTagValue);
             model.addAttribute("errorMessage", "최대 파일 업로드 용량을 초과하였습니다.");
-            model.addAttribute("attachFileFormDto", attachFileFormDto);
             model.addAttribute("hashTags", hashTags);
             model.addAttribute("attachFileList", attachFileList);
             model.addAttribute("board", addBoarddto);
@@ -231,7 +218,6 @@ public class TestController {
                    if (!attachFileService.isAllowedExtension(a.getOriginalFilename())) {
                        hashTags = hashTagService.getHashTagsByHashTagValue(hashTagValue);
                        model.addAttribute("errorMessage", "허용되지 않는 파일 형식입니다.");
-                       model.addAttribute("attachFileFormDto", attachFileFormDto);
                        model.addAttribute("hashTags", hashTags);
                        model.addAttribute("attachFileList", attachFileList);
                        model.addAttribute("board", addBoarddto);
