@@ -224,26 +224,24 @@ public class TestController {
 
         Board board;
 
-        if(save.get("modify") != null ? true : false){
+        if(save.get("modify") != null){
             System.out.println("모디파이");
-            board= save.get("modify");
+            board = save.get("modify");
             hashTagService.deleteHashTags(board);
             fileService.deleteAttachFile(board);
 
-                hashTagService.saveHashTags(hashTagValue,board);
-            }else{
-                System.out.println("크리에이트");
-                board = save.get("create");
-                hashTagService.saveHashTags(hashTagValue,board);
-            }
+            hashTagService.saveHashTags(hashTagValue,board);
+        }else{
+            System.out.println("크리에이트");
+            board = save.get("create");
+            hashTagService.saveHashTags(hashTagValue,board);
+        }
 
         fileService.saveAttachFileList(attachFileList,board);
 
-
-
         //연습끝
-
         return "redirect:/";
+
     }
 
     //게시물 수정 뷰
@@ -279,7 +277,7 @@ public class TestController {
 
     //게시물 상세보기
     @GetMapping(value = "/BoardDetailView")
-    public String BoardDetailView(Model model,@RequestParam Long id,Principal principal) {
+    public String BoardDetailView(Model model,@RequestParam Long id, Principal principal) {
 
         if(principal != null) {
             String userid = principal.getName();
