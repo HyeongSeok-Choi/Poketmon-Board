@@ -7,6 +7,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -34,6 +35,22 @@ public class HashTagService {
 
             }
         }
+    }
+
+    public List<HashTag> getHashTagsByHashTagValue(String hashTagValue) {
+
+        String arr[] = hashTagValue.split(",");
+        List<HashTag> hashTagList =new ArrayList<>();
+
+        for (int i = 0; i < arr.length; i++) {
+            HashTag hashTag = new HashTag();
+            if (arr[i].length() > 0) {
+                String hash = arr[i].substring(1);
+                hashTag.setHashTagContent(hash);
+                hashTagList.add(hashTag);
+            }
+        }
+        return hashTagList;
     }
 
     public List<HashTag> getHashTags(Board board) {
