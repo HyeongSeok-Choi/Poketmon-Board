@@ -17,9 +17,44 @@
 
         window.onload = () => {
             const like = document.querySelector('.fa');
-
+            let counting = 0;
             document.getElementById('btn-like').style.background = 'blue';
 
+            //게시물 조회시 좋아요버튼 상태 표시
+            viewLike();
+
+             function viewLike(){
+
+
+                var check = "check";
+                fetch(`http://localhost:8080/api/likes`, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body:
+                        JSON.stringify({
+                            boardId: document.getElementById("board-id").value,
+                            check: check
+                        })
+                    ,
+                    method: 'POST',
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        getCountingLike();
+                        if(!data){
+                            const like = document.querySelector('.fa');
+
+                            like.classList.toggle("fa-thumbs-down")
+
+                        }else{
+
+                        }
+                    });
+            }
+
+            //좋아요 클릭 이벤트
             like.addEventListener("click", (e) => {
                 var check = "getlike";
                 fetch(`http://localhost:8080/api/likes`, {
@@ -37,6 +72,10 @@
                 })
                     .then(response => response.json())
                     .then(data => {
+                        var countLike=document.getElementById("likeCount");
+                        getCountingLike();
+                        var countValue=counting;
+                        countLike.innerHTML=(`<p>좋아요수: ${countValue}</p>`);
 
                     });
 
@@ -44,13 +83,10 @@
             });
 
 
-
-            //게시물 조회시 좋아요버튼 상태 표시
-            viewLike();
-
-            function viewLike(){
+             //좋아요 수 조회
+             function  getCountingLike(){
                 var check = "check";
-                fetch(`http://localhost:8080/api/likes`, {
+                fetch(`http://localhost:8080/api/likes/getCounting`, {
                     headers: {
                         'Content-Type': 'application/json',
                         'Accept': 'application/json'
@@ -65,19 +101,16 @@
                 })
                     .then(response => response.json())
                     .then(data => {
-
-                        if(!data){
-                            const like = document.querySelector('.fa');
-
-                            like.classList.toggle("fa-thumbs-down")
-
-                        }else{
-
-                        }
+                         console.log(data);
+                        var countLike=document.getElementById("likeCount");
+                        countLike.innerHTML=(`<p>좋아요수: ${data}</p>`);
                     });
             }
 
+
         };
+
+        <!--좋아요 수 렌더링-->
 
     </script>
     <style>
@@ -131,7 +164,6 @@
                 <!--내용 입력-->
 
 
-
              </div>
                 <div class="mb-3">
                     <label for="content">내용</label>
@@ -142,7 +174,10 @@
                 <button id='btn-like'>
                     <i class="fa fa-thumbs-up"></i>
                 </button>
-                <p th:text="${LikeCount}"></p>
+                <!--좋아요 수 렌더링-->
+                <div id="likeCount">
+
+                </div>
                  <!--좋아요 버튼 끝-->
 
                 <hr class="mb-4">
