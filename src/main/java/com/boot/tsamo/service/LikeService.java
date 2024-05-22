@@ -55,6 +55,12 @@ public class LikeService {
         return checkLikes;
 
     }
+    
+    //뷰 카운트
+    public int countLike(Board board){
+        
+        return likeRepository.countLike(board);
+    }
 
 
 

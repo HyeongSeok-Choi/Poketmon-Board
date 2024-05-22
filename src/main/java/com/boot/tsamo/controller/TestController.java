@@ -12,18 +12,15 @@ import com.boot.tsamo.service.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +31,7 @@ import java.util.Map;
 public class TestController {
 
     private final AttachFileService attachFileService;
+    private final LikeService likeService;
 
     //댓글 리스트 조회
     @GetMapping(value = "/reply")
@@ -82,59 +80,59 @@ public class TestController {
 
         Page<Board> Boards = boardService.findAll(pageable);
 
-            if(searchvalue == null){
-                Boards = boardService.findAll(pageable);
+        if(searchvalue == null){
+            Boards = boardService.findAll(pageable);
 
-            }else{
-                //제목으로 검색하기
-                if(searchtype.equals("title")){
-                    Boards = boardService.findAllByTitle(pageable,searchvalue);
-                }else if(searchtype.equals("content")){
-                    //본문으로 검색하기
-                    Boards = boardService.findAllByContent(pageable,searchvalue);
-                }else if(searchtype.equals("userid")){
-                    //작성자으로 검색하기
-                    Boards = boardService.findAllByUserId(pageable,searchvalue);
-                }
+        }else{
+            //제목으로 검색하기
+            if(searchtype.equals("title")){
+                Boards = boardService.findAllByTitle(pageable,searchvalue);
+            }else if(searchtype.equals("content")){
+                //본문으로 검색하기
+                Boards = boardService.findAllByContent(pageable,searchvalue);
+            }else if(searchtype.equals("userid")){
+                //작성자으로 검색하기
+                Boards = boardService.findAllByUserId(pageable,searchvalue);
+            }
 
-                else if(searchtype.equals("hashTag")){
+            else if(searchtype.equals("hashTag")){
 
-                    Boards = boardService.findAllByHashTag(pageable,searchvalue);
-                    for(Board board : Boards){
-                        board.getId();
-                        board.getTitle();
-                        board.getReplies();
-
-                    }
+                Boards = boardService.findAllByHashTag(pageable,searchvalue);
+                for(Board board : Boards){
+                    board.getId();
+                    board.getTitle();
+                    board.getReplies();
 
                 }
 
             }
 
-            int nowPage = Boards.getPageable().getPageNumber()+1;
-            int startPage=Math.max(nowPage-4,1);
-            int endPage=Math.min(nowPage+5,Boards.getTotalPages());
+        }
 
-            if(!Boards.isEmpty()) {
-                model.addAttribute("boards", Boards);
-                model.addAttribute("nowPage", nowPage);
-                model.addAttribute("startPage", startPage);
-                model.addAttribute("endPage", endPage);
-                model.addAttribute("searchvalue", searchvalue);
-                model.addAttribute("searchtype", searchtype);
-                model.addAttribute("sort", sort);
-                return "main";
-            }
+        int nowPage = Boards.getPageable().getPageNumber()+1;
+        int startPage=Math.max(nowPage-4,1);
+        int endPage=Math.min(nowPage+5,Boards.getTotalPages());
 
-            model.addAttribute("nowPage", null);
-            model.addAttribute("startPage", null);
-            model.addAttribute("endPage", null);
+        if(!Boards.isEmpty()) {
+            model.addAttribute("boards", Boards);
+            model.addAttribute("nowPage", nowPage);
+            model.addAttribute("startPage", startPage);
+            model.addAttribute("endPage", endPage);
             model.addAttribute("searchvalue", searchvalue);
             model.addAttribute("searchtype", searchtype);
             model.addAttribute("sort", sort);
-
             return "main";
         }
+
+        model.addAttribute("nowPage", null);
+        model.addAttribute("startPage", null);
+        model.addAttribute("endPage", null);
+        model.addAttribute("searchvalue", searchvalue);
+        model.addAttribute("searchtype", searchtype);
+        model.addAttribute("sort", sort);
+
+        return "main";
+    }
 
 
     //게시물 등록 뷰
@@ -175,7 +173,7 @@ public class TestController {
         model.addAttribute("fileMaxCnt",attachFileService.getMaxCnt());
         model.addAttribute("fileMaxSize",attachFileService.getMaxSize());
 
-         
+
         //더미 해시값(해시 값이 없을 경우)
         List<HashTag> hashTags= new ArrayList<>();
         hashTags.add(new HashTag());
@@ -198,11 +196,14 @@ public class TestController {
 
         int maxsize =0 ;
         for(MultipartFile attachFile : attachFileList){
+            System.out.println(maxsize+"사이즈 본다잉");
+            System.out.println();
             maxsize += attachFile.getSize();
 
         }
 
-        if(Math.floor(maxsize / 1024 / 1024) > attachFileService.getMaxSize()){
+        if(maxsize > attachFileService.getMaxSize()*1024*1024){
+            hashTags = hashTagService.getHashTagsByHashTagValue(hashTagValue);
             model.addAttribute("errorMessage", "최대 파일 업로드 용량을 초과하였습니다.");
             model.addAttribute("attachFileFormDto", attachFileFormDto);
             model.addAttribute("hashTags", hashTags);
@@ -211,63 +212,12 @@ public class TestController {
             model.addAttribute("extensions", extensions);
             model.addAttribute("maxUploadCnt", maxUploadCnt);
             return "createBoard";
-
         }
-
-
-            //등록 수정을 포함하는 로직
-//        Map<String,Board> save = boardService.save(addBoarddto.toEntity(), principal,boardId);
-//
-//        Board board;
-//
-//        if(save.get("modify") != null ? true : false){
-//            board= save.get("modify");
-//            board.setHashTags(null);
-//            hashTagService.saveHashTags(hashTagValue,board);
-//        }else{
-//            board= save.get("create");
-//            hashTagService.saveHashTags(hashTagValue,board);
-//        }
-
-
-
-
-
-//        try{
-//            //등록 수정을 포함하는 로직
-//            Map<String,Board> save = boardService.save(addBoarddto.toEntity(), principal,boardId);
-//
-//            Board board;
-//
-//
-//            if(save.get("modify") != null ? true : false){
-//                System.out.println("모디파이");
-//                board= save.get("modify");
-//                hashTagService.deleteHashTags(board);
-//                fileService.deleteAttachFile(board);
-//
-//                hashTagService.saveHashTags(hashTagValue,board);
-//            }else{
-//                System.out.println("크리에이트");
-//                board= save.get("create");
-//                hashTagService.saveHashTags(hashTagValue,board);
-//            }
-//
-//            fileService.saveAttachFileList(attachFileList,board);
-//        } catch(Exception e){
-//            model.addAttribute("errorMessage", e.getMessage());
-//            model.addAttribute("attachFileFormDto", attachFileFormDto);
-//            model.addAttribute("hashTags", hashTags);
-//            model.addAttribute("attachFileList", attachFileList);
-//            model.addAttribute("board", addBoarddto);
-//            model.addAttribute("extensions", extensions);
-//            return "createBoard";
-//        }
 
         //연습
 
-            //로직을 밖으로 빼기
-            for(MultipartFile a : attachFileList) {
+        //로직을 밖으로 빼기
+        for(MultipartFile a : attachFileList) {
 
                if(a.getOriginalFilename() !="") {
                    if (!attachFileService.isAllowedExtension(a.getOriginalFilename())) {
@@ -279,21 +229,21 @@ public class TestController {
                        model.addAttribute("extensions", extensions);
                        model.addAttribute("maxUploadCnt", maxUploadCnt);
 
-                       return "createBoard";
-                   }
-               }
+                    return "createBoard";
+                }
             }
+        }
 
-            //등록 수정을 포함하는 로직
-            Map<String,Board> save = boardService.save(addBoarddto.toEntity(), principal,boardId);
+        //등록 수정을 포함하는 로직
+        Map<String,Board> save = boardService.save(addBoarddto.toEntity(), principal,boardId);
 
-            Board board;
+        Board board;
 
-            if(save.get("modify") != null ? true : false){
-                System.out.println("모디파이");
-                board= save.get("modify");
-                hashTagService.deleteHashTags(board);
-                fileService.deleteAttachFile(board);
+        if(save.get("modify") != null ? true : false){
+            System.out.println("모디파이");
+            board= save.get("modify");
+            hashTagService.deleteHashTags(board);
+            fileService.deleteAttachFile(board);
 
                 hashTagService.saveHashTags(hashTagValue,board);
             }else{
@@ -302,7 +252,7 @@ public class TestController {
                 hashTagService.saveHashTags(hashTagValue,board);
             }
 
-            fileService.saveAttachFileList(attachFileList,board);
+        fileService.saveAttachFileList(attachFileList,board);
 
 
 
@@ -366,6 +316,7 @@ public class TestController {
 
 
         Board detailBoard = boardService.findById(id);
+        model.addAttribute("LikeCount", likeService.countLike(detailBoard));
         model.addAttribute("attachFileFormDto", new AttachFileFormDto());
         model.addAttribute("board", detailBoard);
         model.addAttribute("hashTag", hashTagService.getHashTags(detailBoard));

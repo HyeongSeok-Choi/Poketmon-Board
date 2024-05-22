@@ -4,11 +4,69 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       layout:decorate="~{common/layouts/defaultLayout}"
-      layout:fragment="Content" >
+      layout:fragment="Content">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
     <link rel="stylesheet" href="/css/main.css">
+    <!-- xlsx library 추가 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <th:block layout:fragment="script">
+        <script>
+            function downloadExcel() {
+                // 서버로부터 전체 게시물 데이터를 가져옴
+                fetch('/ExcelApi', {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                    }
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data);
+                        // 데이터를 엑셀 형식에 맞게 변환
+                        var excelData = [];
+                        var excelheaderData = ['번호', '제목', '작성자', '조회수', '등록일'];// 헤더 추가
+                        excelData.push(excelheaderData);
+                        data.forEach(board => {
+
+                            excelData.push([
+
+                                board.id,
+                                board.title,
+                                board.userId,
+                                board.viewCount,
+                                board.createdAt
+                            ]);
+                        });
+                        console.log(excelData);
+
+                        // 엑셀 워크시트 생성
+                        var ws = XLSX.utils.aoa_to_sheet(excelData);
+
+                        // 엑셀 시트의 너비 조정
+                        ws["!cols"] = [
+                            {wch: 5}, // 번호 열의 너비를 5로 설정
+                            {wch: 40}, // 제목 열의 너비를 40으로 설정
+                            {wch: 20}, // 작성자 열의 너비를 20으로 설정
+                            {wch: 10}, // 조회수 열의 너비를 10으로 설정
+                            {wch: 20} // 등록일 열의 너비를 20으로 설정
+                        ];
+
+                        // 엑셀 워크북 생성
+                        var wb = XLSX.utils.book_new();
+                        XLSX.utils.book_append_sheet(wb, ws, "게시물 목록");
+
+                        // 엑셀 파일 다운로드
+                        XLSX.writeFile(wb, "게시물_목록.xlsx");
+                    })
+                    .catch(error => {
+                        console.error('Error fetching data:', error);
+                    });
+
+            }
+        </script>
+    </th:block>
 </head>
 <body>
 <section class="notice">
@@ -25,36 +83,36 @@
             <div class="container">
                 <img src="/img/movingCatgif.gif" />
                 <div class="search-window">
-                        <div class="search-wrap">
-                            <label for="searchvalue" class="blind">공지사항 내용 검색</label>
-                            <div>
-                                <select name ="searchtype">
-                                    <option value="title" th:selected="${searchtype} == 'title'">제목으로 검색</option>
-                                    <option value="content" th:selected="${searchtype} == 'content'">본문으로 검색</option>
-                                    <option value="userid" th:selected="${searchtype} == 'userid'">작성자로 검색</option>
-                                    <option value="hashTag" th:selected="${searchtype} == 'hashTag'">해시태그로 검색</option>
-                                </select>
-                            </div>
-                            <input id="searchvalue" name="searchvalue" type="search" placeholder="검색어를 입력해주세요." th:value="${searchvalue}">
-                            <button type="submit" class="btn btn-dark">검색</button>
+                    <div class="search-wrap">
+                        <label for="searchvalue" class="blind">공지사항 내용 검색</label>
+                        <div>
+                            <select name="searchtype">
+                                <option value="title" th:selected="${searchtype} == 'title'">제목으로 검색</option>
+                                <option value="content" th:selected="${searchtype} == 'content'">본문으로 검색</option>
+                                <option value="userid" th:selected="${searchtype} == 'userid'">작성자로 검색</option>
+                                <option value="hashTag" th:selected="${searchtype} == 'hashTag'">해시태그로 검색</option>
+                            </select>
                         </div>
+                        <input id="searchvalue" name="searchvalue" type="search" placeholder="검색어를 입력해주세요."
+                               th:value="${searchvalue}">
+                        <button type="submit" class="btn btn-dark">검색</button>
+                    </div>
                 </div>
             </div>
         </div>
     </form>
 
-
     <!-- board list area -->
-    <div id="board-list" >
+    <div id="board-list">
         <div class="container">
             <form th:action="@{/}" method="get">
-            <div>
-                <select name ="sort" onchange="this.form.submit()" >
-                    <option value="title" th:selected="${sort} == 'title'">제목</option>
-                    <option value="createdAt" th:selected="${sort} == 'createdAt'">작성일</option>
-                    <option value="userid" th:selected="${sort} == 'userid'">작성자</option>
-                </select>
-            </div>
+                <div>
+                    <select name="sort" onchange="this.form.submit()">
+                        <option value="title" th:selected="${sort} == 'title'">제목</option>
+                        <option value="createdAt" th:selected="${sort} == 'createdAt'">작성일</option>
+                        <option value="userid" th:selected="${sort} == 'userid'">작성자</option>
+                    </select>
+                </div>
             </form>
             <table class="board-table">
                 <colgroup>
@@ -67,47 +125,66 @@
                 <thead>
 
                 <tr>
-                    <th scope="col" class="th-num" >번호</th>
+                    <th scope="col" class="th-num">번호</th>
                     <th scope="col" class="th-title">제목</th>
-                    <th scope="col" class="th-author" >작성자</th>
-                    <th scope="col" class="th-viewCount" >조회수</th>
-                    <th scope="col" class="th-date" >등록일</th>
+                    <th scope="col" class="th-author">작성자</th>
+                    <th scope="col" class="th-viewCount">조회수</th>
+                    <th scope="col" class="th-date">등록일</th>
                 </tr>
                 </thead>
                 <tbody>
-                <!--게시물 목록 생성-->
-                <tr th:if="${boards == null}"><td></td><td>등록된 게시물이 없습니다.</td><td></td></tr>
-                <tr th:each="board : ${boards}" >
-                    <td th:text="${board.id}" >게시물 번호</td>
-                    <td><a th:href="@{/BoardDetailView(id=${board.id})}" th:text="*{board.title}">환영합니다. 자유롭게 글을 작성해주세요</a></td>
-                    <td th:text="${board.userid.userId}" >작성자</td>
-                    <td th:text="${board.viewCount}" >조회수</td>
-                    <td th:text="*{#temporals.format(board.createdAt, 'yyyy-MM-dd HH:mm:ss')}">등록일</td>
+                <!-- 게시물 목록 생성 -->
+                <tr th:if="${boards == null}">
+                    <td></td>
+                    <td>등록된 게시물이 없습니다.</td>
+                    <td></td>
+                </tr>
+                <tr th:each="board : ${boards}">
+                    <td th:text="${board.id}">게시물 번호</td>
+                    <td>
+                        <a th:href="@{/BoardDetailView(id=${board.id})}" th:text="*{board.title}">환영합니다. 자유롭게 글을
+                            작성해주세요</a>
+                    </td>
+                    <td th:text="${board.userid.userId}">작성자</td>
+                    <td th:text="${board.viewCount}">조회수</td>
+                    <td th:text="${#temporals.format(board.createdAt, 'yyyy-MM-dd HH:mm')}">등록일</td>
                 </tr>
                 </tbody>
             </table>
-            <!--페이징 처리 부분 -->
-            <div class="d-flex justify-content-center" th:if="${startPage != null && endPage != null && nowPage != null}" >
+            <!-- 페이징 처리 부분 -->
+            <div class="d-flex justify-content-center"
+                 th:if="${startPage != null && endPage != null && nowPage != null}">
 
                 <ul class="pagination">
 
-                <!--이전 버튼-->
-                <li class="page-item"><a class="page-link" th:if="${nowPage > 1}" th:href="@{/(page=${nowPage - 2},title=${param.title},sort=${param.sort},searchtype=${param.searchtype},searchvalue=${param.searchvalue})}">이전</a></li>
+                    <!-- 이전 버튼 -->
+                    <li class="page-item">
+                        <a class="page-link" th:if="${nowPage > 1}"
+                           th:href="@{/(page=${nowPage - 2},title=${param.title},sort=${param.sort},searchtype=${param.searchtype},searchvalue=${param.searchvalue})}">이전</a>
+                    </li>
 
-                <li class="page-item" th:each="page : ${#numbers.sequence(startPage, endPage)}">
-                    <a class="page-link" th:if="${page != nowPage}" th:href="@{/(page = ${page - 1},title=${param.title},sort=${param.sort},searchtype=${param.searchtype},searchvalue=${param.searchvalue})}" th:text="${page}"></a>
-                    <a class="page-link"  th:if="${page == nowPage}" th:text="${page}" style="color: red "></a>
-                </li>
+                    <li class="page-item" th:each="page : ${#numbers.sequence(startPage, endPage)}">
+                        <a class="page-link" th:if="${page != nowPage}"
+                           th:href="@{/(page = ${page - 1},title=${param.title},sort=${param.sort},searchtype=${param.searchtype},searchvalue=${param.searchvalue})}"
+                           th:text="${page}"></a>
+                        <a class="page-link" th:if="${page == nowPage}" th:text="${page}" style="color: red "></a>
+                    </li>
 
-                <!--다음 버튼-->
-                <li class="page-item"><a  class="page-link"th:if="${nowPage != endPage && endPage > 1} " th:href="@{/(page=${nowPage},title=${param.title},sort=${param.sort},searchtype=${param.searchtype},searchvalue=${param.searchvalue})}">다음</a></li>
+                    <!-- 다음 버튼 -->
+                    <li class="page-item">
+                        <a class="page-link" th:if="${nowPage != endPage && endPage > 1}"
+                           th:href="@{/(page=${nowPage},title=${param.title},sort=${param.sort},searchtype=${param.searchtype},searchvalue=${param.searchvalue})}">다음</a>
+                    </li>
                 </ul>
             </div>
-                 <button sec:authorize="isAuthenticated()" class="btn btn-dark" onclick="location.href='/createBoard'">등록</button>
+            <button sec:authorize="isAuthenticated()" class="btn btn-dark" onclick="location.href='/createBoard'">등록
+            </button>
+<!--            <button sec:authorize="isAuthenticated()" class="btn btn-excel" onclick="downloadExcel()">엑셀 다운로드</button>-->
+            <button sec:authorize="hasRole('ADMIN')" class="btn btn-excel" onclick="downloadExcel()">엑셀 다운로드</button>
         </div>
     </div>
+    <!-- 엑셀 다운로드 스크립트 -->
 
 </section>
-
 </body>
 </html>
