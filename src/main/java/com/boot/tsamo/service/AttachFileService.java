@@ -4,6 +4,7 @@ import com.boot.tsamo.entity.AttachFile;
 import com.boot.tsamo.entity.AttachFileAttribute;
 import com.boot.tsamo.entity.Board;
 import com.boot.tsamo.entity.Extension;
+import com.boot.tsamo.repository.AttachFileAttributeRepository;
 import com.boot.tsamo.repository.AttachFileRepository;
 import com.boot.tsamo.repository.ExtensionRepository;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +31,14 @@ public class AttachFileService {
     private String attachFileLocation;
     private final AttachFileRepository attachFileRepository;
     private final ExtensionRepository extensionRepository;
+    private final AttachFileAttributeRepository attachFileAttributeRepository;
+
+    @Transactional
+    public void deleteAttachFile(Board board) {
+
+        attachFileRepository.deleteByBoardId(board);
+
+    }
 
 
     public void saveAttachFileList(List<MultipartFile> attachFileList, Board boardId) throws Exception{
@@ -64,6 +73,7 @@ public class AttachFileService {
     // DB에서 확장자를 가져와 파일의 확장자가 존재하면 true 없으면 false 반환 메소드
     public boolean isAllowedExtension(String originalFileName) {
         String fileExtension = originalFileName.substring(originalFileName.lastIndexOf(".")+1);
+        System.out.println(fileExtension+"확장자뭔데");
         List<Extension> allowedExtensions = getExtensions();
 
         for (Extension extension : allowedExtensions) {
@@ -113,6 +123,13 @@ public class AttachFileService {
     public List<Extension> getExtensions() {
         return extensionRepository.findAll();
     }
+
+    //파일 최대 갯수
+    public int getMaxCnt(){return attachFileAttributeRepository.findById(1L).get().getMax_upload_cnt();}
+
+    //파일 최대 사이즈
+    public int getMaxSize(){return attachFileAttributeRepository.findById(1L).get().getMax_upload_size();}
+
 
     // 파일 확장자에 따라 미디어 타입 결정
     public MediaType determineMediaType(String fileName) {
