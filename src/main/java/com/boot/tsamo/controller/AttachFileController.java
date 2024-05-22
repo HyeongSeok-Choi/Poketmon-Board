@@ -5,6 +5,7 @@ import com.boot.tsamo.dto.ViewReplyDTO;
 import com.boot.tsamo.entity.AttachFile;
 import com.boot.tsamo.entity.Extension;
 import com.boot.tsamo.service.AttachFileService;
+import com.boot.tsamo.service.FileAttributeService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -22,14 +23,17 @@ import java.util.List;
 public class AttachFileController {
 
     private final AttachFileService fileService;
+    private final FileAttributeService fileAttributeService;
 
     @GetMapping(value = "/attachFile")
     public String attachFileForm(Model model){
 
         List<Extension> extensions = fileService.getExtensions();
+        Integer maxUploadCnt = fileAttributeService.getMaxRequestCnt(1L);
 
         model.addAttribute("attachFileFormDto", new AttachFileFormDto());
         model.addAttribute("extensions", extensions);
+        model.addAttribute("maxUploadCnt", maxUploadCnt);
         return "attachFile/attachFile";
 
 

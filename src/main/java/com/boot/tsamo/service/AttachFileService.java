@@ -1,5 +1,7 @@
 package com.boot.tsamo.service;
 
+import com.boot.tsamo.dto.AttachFileDto;
+import com.boot.tsamo.dto.AttachFileFormDto;
 import com.boot.tsamo.entity.AttachFile;
 import com.boot.tsamo.entity.AttachFileAttribute;
 import com.boot.tsamo.entity.Board;
@@ -18,8 +20,10 @@ import org.thymeleaf.util.StringUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor //

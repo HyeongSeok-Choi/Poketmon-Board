@@ -34,6 +34,19 @@
 <ul class="pagination" id="paging"></ul>
 
 <script>
+    //날짜 포멧
+    function formatDate(dateString) {
+        const date = new Date(dateString);
+        return new Intl.DateTimeFormat('ko-KR', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: 'numeric',
+            minute: 'numeric'
+        }).format(date);
+    }
+
+
     // 활성화된 답글 상태 저장 변수
     let activeReplies = {};
     let currentPage = 0; // 현재 페이지 번호를 저장할 전역 변수
@@ -78,7 +91,7 @@
                         <span class="writer_img"><img src="/img/BBANG.jpg" width="30" height="30" alt="기본 프로필 이미지"/></span>
                         <p class="writer">
                             <em>${data["content"][i].userid}</em>
-                            <span class="date">${data["content"][i].createdAt}</span>
+                            <span class="date">${formatDate(data["content"][i].createdAt)}</span>
                         </p>
                         <div class="cont"><input id="input-${replyId}" class="txt_con" value="${data["content"][i].content}" readonly></div>
                         <p class="func_btns">
@@ -140,10 +153,10 @@
                     replyHtml += `<hr/>
                     <div class="recomment">
                         <input type="hidden" value="${reply.id}">
-                        <span class="writer_img"><img src="/img/BBANG.jpg" width="30" height="30" alt="기본 프로필 이미지"/></span>
+                        <span class="writer_img"><img src="/img/racoon-pedro.gif" width="30" height="30" alt="기본 프로필 이미지"/></span>
                         <p class="writer">
                             <em>${reply.userid}</em>
-                            <span class="date">${reply.createdAt}</span>
+                            <span class="date">${formatDate(reply.createdAt)}</span>
                         </p>
                           <div class="cont">  <h1 style="display: inline;">⤷</h1> <input id="input2-${reply.id}" class="txt_con" value="${reply.content}" readonly></div>
                         <p class="func_btns">
@@ -194,7 +207,7 @@
                 <span class="writer_img"><img src="/img/BBANG.jpg" width="30" height="30" alt="기본 프로필 이미지"/></span>
                 <p class="writer">
                     <em>${data["content"][i].userid}</em>
-                    <span class="date">${data["content"][i].createdAt}</span>
+                    <span class="date">${formatDate(data["content"][i].createdAt)}</span>
                 </p>
                 <div class="cont"><input id="input-${replyId}" class="txt_con" value="${data["content"][i].content}" readonly></div>
                 <p class="func_btns">
@@ -208,7 +221,7 @@
                 }
 
                 $('#replySelectAll').append(comment);
-                reRequest(); // 댓글을 불러온 후 답글도 불러옴
+                loadReplies(); // 댓글을 불러온 후 답글도 불러옴
             });
     }
 

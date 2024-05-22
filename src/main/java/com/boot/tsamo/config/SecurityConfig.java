@@ -62,7 +62,7 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests((authorizeRequests) ->
                         authorizeRequests
-
+                                .requestMatchers("/downloadExcel").hasRole("ADMIN") // 엑셀 다운로드는 ADMIN 권한만 허용
                                 .requestMatchers("/css/**", "/js/**", "/img/**").permitAll()
                                 .requestMatchers("/main","/","/user/**","/createBoard","/BoardDetailView","/reply","/posts","/createBoard","createBoardRequest"
                                         ,"/api/addComment" ,"/attachFile", "/board/**", "/**","/error").permitAll()
