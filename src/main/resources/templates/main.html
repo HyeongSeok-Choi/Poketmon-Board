@@ -179,8 +179,8 @@
             </div>
             <button sec:authorize="isAuthenticated()" class="btn btn-dark" onclick="location.href='/createBoard'">등록
             </button>
-            <button sec:authorize="isAuthenticated()" class="btn btn-excel" onclick="downloadExcel()">엑셀 다운로드</button>
-
+<!--            <button sec:authorize="isAuthenticated()" class="btn btn-excel" onclick="downloadExcel()">엑셀 다운로드</button>-->
+            <button sec:authorize="hasRole('ADMIN')" class="btn btn-excel" onclick="downloadExcel()">엑셀 다운로드</button>
         </div>
     </div>
     <!-- 엑셀 다운로드 스크립트 -->
