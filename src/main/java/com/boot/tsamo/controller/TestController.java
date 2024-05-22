@@ -66,7 +66,7 @@ public class TestController {
 
     //게시물 목록(main페이지) 검색, 페이징 기능 포함
     @GetMapping(value = "/")
-    public String main(Model model,@PageableDefault(page=0,size = 3,sort = "id",
+    public String main(Model model,@PageableDefault(page=0,size = 10,sort = "id",
             direction = Sort.Direction.DESC) Pageable pageable, String searchvalue, String searchtype,String sort) {
 
 
@@ -98,12 +98,6 @@ public class TestController {
                 else if(searchtype.equals("hashTag")){
 
                     Boards = boardService.findAllByHashTag(pageable,searchvalue);
-                    for(Board board : Boards){
-                        board.getId();
-                        board.getTitle();
-                        board.getReplies();
-
-                    }
 
                 }
 
@@ -274,8 +268,11 @@ public class TestController {
             hashTags.add(new HashTag());
         }
 
+        List<AttachFile> attachFileList = attachFileService.getAttachFileByBoardId(id);
+
+
         model.addAttribute("board", board);
-        model.addAttribute("attachFileFormDto", new AttachFileFormDto());
+        model.addAttribute("attachFileFormDto", attachFileList);
         model.addAttribute("extensions", extensions);
         model.addAttribute("hashTags", hashTags);
         model.addAttribute("createOrmodify",createOrmodify);
@@ -287,6 +284,14 @@ public class TestController {
     //게시물 상세보기
     @GetMapping(value = "/BoardDetailView")
     public String BoardDetailView(Model model,@RequestParam Long id,Principal principal) {
+
+
+        if(boardService.findById(id).isDeleted()){
+
+            return "deletedWarning";
+
+        }
+
 
         if(principal != null) {
             String userid = principal.getName();
@@ -320,7 +325,8 @@ public class TestController {
     @PostMapping(value = "/deleteBoard")
     public String deleteBoard(Model model,@RequestParam Long id) {
 
-        boardService.deleteById(id);
+        boardService.deleteByIdbyboolean(id);
+        //boardService.deleteById(id);
 
         return"redirect:/";
     }
