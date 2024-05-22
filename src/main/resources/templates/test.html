@@ -32,7 +32,7 @@
         series: [
             {
                 name: 'Seoul',
-                data: [3, 3, 3, 0, 5, 5, 25],
+                data: [-3, -1, 4, 11, 17, 21, 25],
             }
         ],
     };
@@ -48,6 +48,13 @@
         el: lineChartContainer,
         data: lineChartData,
         options: commonOptions
-    })
+    });
 
+    // Radar 차트 생성 및 렌더링
+    const radarChartContainer = document.getElementById('radarChart');
+    const radarChart = new toastui.Chart.radarChart({
+        el: radarChartContainer,
+        data: radarChartData,
+        options: commonOptions
+    });
 </script>

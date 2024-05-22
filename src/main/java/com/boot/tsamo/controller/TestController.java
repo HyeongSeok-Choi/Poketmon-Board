@@ -25,7 +25,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
@@ -69,9 +68,9 @@ public class TestController {
     //게시물 목록(main페이지) 검색, 페이징 기능 포함
     @GetMapping(value = "/")
     public String main(Model model, @PageableDefault(page=0,size = 3,sort = "id",
-            direction = Sort.Direction.DESC) Pageable pageable, String searchvalue, String searchtype, String sort) {
+            direction = Sort.Direction.DESC) Pageable pageable, String searchvalue, String searchtype, String sort, HttpServletRequest request) {
 
-     /*   String ipAddress = request.getRemoteAddr();
+        String ipAddress = request.getRemoteAddr();
         LocalDate today = LocalDate.now();
 
         long totalVisitCount = visitCountRepository.count(); // 전체 방문자 수 조회
@@ -83,7 +82,7 @@ public class TestController {
             VisitCount visitCount = new VisitCount(ipAddress, today);
             visitCountRepository.save(visitCount);
         }
-*/
+
 
 
         if(sort == null || sort.equals("title")) {
@@ -150,55 +149,9 @@ public class TestController {
         return "main";
     }
 
-    @GetMapping(value = "/visitCount")
-    public String visitCountPage(Model model, HttpServletRequest request) {
-        String ipAddress = request.getRemoteAddr();
-        LocalDate today = LocalDate.now();
-        LocalDate sevenDaysAgo = today.minusDays(6);
-
-        // 전체 방문자 수 조회
-        long totalVisitCount = visitCountRepository.count();
-        model.addAttribute("totalVisitCount", totalVisitCount);
-
-        // 중복 방문 여부 확인
-        if (!visitCountRepository.findByIpAddressAndVisitDate(ipAddress, today).isPresent()) {
-            // 중복 방문이 아니라면, 방문 기록 저장
-            VisitCount visitCount = new VisitCount(ipAddress, today);
-            visitCountRepository.save(visitCount);
-        }
-
-        // 날짜별 방문자 수 조회
-        List<Object[]> visitCountsByDate = visitCountRepository.countVisitsByDateSince(sevenDaysAgo);
-        List<VisitCountByDate> visitCountByDateList = visitCountsByDate.stream()
-                .map(result -> new VisitCountByDate((LocalDate) result[0], (Long) result[1]))
-                .collect(Collectors.toList());
-
-        model.addAttribute("visitCountByDateList", visitCountByDateList);
-
-        return "test4";
-    }
-
-    // 날짜별 방문자 수를 담는 DTO 클래스
-    public static class VisitCountByDate {
-        private LocalDate visitDate;
-        private Long count;
-
-        public VisitCountByDate(LocalDate visitDate, Long count) {
-            this.visitDate = visitDate;
-            this.count = count;
-        }
-
-        public LocalDate getVisitDate() {
-            return visitDate;
-        }
-
-        public Long getCount() {
-            return count;
-        }
-    }
-
 
     //게시물 등록 뷰
+
     @GetMapping(value = "/createBoard")
     public String createBoard(Model model) {
 
