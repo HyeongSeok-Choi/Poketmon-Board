@@ -71,10 +71,13 @@ public class TestController {
     @GetMapping(value = "/")
     public String main(Model model, @PageableDefault(page = 0, size = 3, sort = "id",
             direction = Sort.Direction.DESC) Pageable pageable, String searchvalue,
-                       String searchtype, String sort, HttpServletRequest request, HttpSession session) {
+                       String searchtype, String sort, HttpServletRequest request) {
         // 추가된 부분: 방문자 수 기록
         String ipAddress = request.getRemoteAddr();
         LocalDate today = LocalDate.now();
+
+        long totalVisitCount = visitCountRepository.count(); // 전체 방문자 수 조회
+        model.addAttribute("totalVisitCount", totalVisitCount); // 모델에 방문자 수 추가
 
         // 중복 방문 여부 확인
         if (!visitCountRepository.findByIpAddressAndVisitDate(ipAddress, today).isPresent()) {
