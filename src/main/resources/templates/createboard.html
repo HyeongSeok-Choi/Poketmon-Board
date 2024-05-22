@@ -118,14 +118,12 @@
     // 내용 유효성 검사
     function validateContent() {
         const content = document.getElementById('content').value;
-        const personalInfoPattern = /\b\d{6}-\d{7}\b/g; // 주민등록번호 패턴
-        if (!personalInfoPattern.test(content)) {
+        if (content.includes('********')) {
             alert('민감한 정보가 포함되어 있습니다. 주의하세요!');
-            // return false;
+
         }
         return true;
     }
-
 
 
     $(document).on('click', '.hashTag li', function () {
