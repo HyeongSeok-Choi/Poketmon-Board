@@ -29,6 +29,7 @@
                         var excelheaderData = ['번호', '제목', '작성자', '조회수', '등록일'];// 헤더 추가
                         excelData.push(excelheaderData);
                         data.forEach(board => {
+
                             excelData.push([
 
                                 board.id,
@@ -42,6 +43,15 @@
 
                         // 엑셀 워크시트 생성
                         var ws = XLSX.utils.aoa_to_sheet(excelData);
+
+                        // 엑셀 시트의 너비 조정
+                        ws["!cols"] = [
+                            {wch: 5}, // 번호 열의 너비를 5로 설정
+                            {wch: 40}, // 제목 열의 너비를 40으로 설정
+                            {wch: 20}, // 작성자 열의 너비를 20으로 설정
+                            {wch: 10}, // 조회수 열의 너비를 10으로 설정
+                            {wch: 20} // 등록일 열의 너비를 20으로 설정
+                        ];
 
                         // 엑셀 워크북 생성
                         var wb = XLSX.utils.book_new();
@@ -81,7 +91,8 @@
                                 <option value="hashTag" th:selected="${searchtype} == 'hashTag'">해시태그로 검색</option>
                             </select>
                         </div>
-                        <input id="searchvalue" name="searchvalue" type="search" placeholder="검색어를 입력해주세요." th:value="${searchvalue}">
+                        <input id="searchvalue" name="searchvalue" type="search" placeholder="검색어를 입력해주세요."
+                               th:value="${searchvalue}">
                         <button type="submit" class="btn btn-dark">검색</button>
                     </div>
                 </div>
@@ -121,16 +132,18 @@
                 <tr th:each="board : ${boards}">
                     <td th:text="${board.id}">게시물 번호</td>
                     <td>
-                        <a th:href="@{/BoardDetailView(id=${board.id})}" th:text="*{board.title}">환영합니다. 자유롭게 글을 작성해주세요</a>
+                        <a th:href="@{/BoardDetailView(id=${board.id})}" th:text="*{board.title}">환영합니다. 자유롭게 글을
+                            작성해주세요</a>
                     </td>
                     <td th:text="${board.userid.userId}">작성자</td>
                     <td th:text="${board.viewCount}">조회수</td>
-                    <td th:text="*{board.createdAt}">등록일</td>
+                    <td th:text="${#temporals.format(board.createdAt, 'yyyy-MM-dd HH:mm')}">등록일</td>
                 </tr>
                 </tbody>
             </table>
             <!-- 페이징 처리 부분 -->
-            <div class="d-flex justify-content-center" th:if="${startPage != null && endPage != null && nowPage != null}">
+            <div class="d-flex justify-content-center"
+                 th:if="${startPage != null && endPage != null && nowPage != null}">
 
                 <ul class="pagination">
 
@@ -154,8 +167,9 @@
                     </li>
                 </ul>
             </div>
-            <button sec:authorize="isAuthenticated()" class="btn btn-dark" onclick="location.href='/createBoard'">등록</button>
-            <button sec:authorize="isAuthenticated()" class="btn btn-excel"  onclick="downloadExcel()">엑셀 다운로드</button>
+            <button sec:authorize="isAuthenticated()" class="btn btn-dark" onclick="location.href='/createBoard'">등록
+            </button>
+            <button sec:authorize="isAuthenticated()" class="btn btn-excel" onclick="downloadExcel()">엑셀 다운로드</button>
 
         </div>
     </div>
