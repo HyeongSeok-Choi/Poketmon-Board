@@ -115,7 +115,7 @@ public class UserController {
     }
 
     @PostMapping("/delete")
-    public String deleteUser(@RequestParam("id") String userId, HttpSession session, Model model) {
+    public String deleteUser(@RequestParam("id") String userId, Model model) {
         try {
             userService.deleteUser(userId);
             session.invalidate();

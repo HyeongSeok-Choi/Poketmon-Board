@@ -44,15 +44,16 @@
     <div class="input-form-backgroud row">
         <div class="input-form col-md-12 mx-auto">
 
-
             <h4 class="mb-3">게시물 등록</h4>
             <form class="validation-form"  enctype="multipart/form-data" method="post" action="/createBoardRequest" th:object="${attachFileFormDto}">
 
-                    <!--제목 입력-->
+                <input type="hidden" th:if="${param.id} !=null"  th:value="${param.id}" name="boardid">
+
+                <!--제목 입력-->
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="title">제목</label>
-                            <input th:value="${board.getContent()}" class="form-control" id="title" name="title">
+                            <input th:value="${board.getTitle}" class="form-control" id="title" name="title">
                         </div>
                     </div>
 
@@ -76,11 +77,9 @@
                     <div class="col-md-6 mb-3">
                         <label for="addValue">해시태그</label>
 
-                        <ul class='hashTag' id='hashTag' style="list-style-type: none"  th:each="hash:${hashTags}">
-                            <li th:if="${hash.getHashTagContent()} != null" th:text="'#'+${hash.getHashTagContent()}"></li>
+                        <ul class='hashTag' id='hashTag' style="list-style-type: none"  >
+                            <li th:each="hash:${hashTags}" th:if="${hash.getHashTagContent()} != null" th:text="'#'+${hash.getHashTagContent()}"></li>
                         </ul>
-
-
                         <input type='text' id='addValue' />
                         <input class="btn btn-primary btn-lg btn-block" type='button' value='추가' onclick='addList()' />
                     </div>

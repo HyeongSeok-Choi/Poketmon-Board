@@ -17,7 +17,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -30,7 +32,25 @@ public class BoardService {
 
 
     //게시물 저장
-    public Board save(Board board,Principal principal) {
+    public Map<String,Board> save(Board board, Principal principal, Long boardId) {
+
+        Map<String,Board> saves = new HashMap<>();
+
+            if(boardId != null){
+
+                Board existboard =boardRepository.findById(boardId).get();
+                Users user = userRepository.findById(existboard.getUserid().getUserId()).get();
+
+                board.setViewCount(existboard.getViewCount());
+                board.setId(boardId);
+                board.setUserid(user);
+                Board result = boardRepository.save(board);
+                String value ="modify";
+
+                saves.put(value,result);
+
+                return saves;
+            }
 
             Users user;
 
@@ -42,7 +62,10 @@ public class BoardService {
 
         Board result = boardRepository.save(board);
 
-        return result;
+        String value ="create";
+        saves.put(value,result);
+
+        return saves;
     }
 
     //모든 게시물 출력

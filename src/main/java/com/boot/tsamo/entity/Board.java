@@ -53,5 +53,4 @@ public class Board {
     private List<HashTag>hashTags= new ArrayList<HashTag>();
 
 
-
 }
