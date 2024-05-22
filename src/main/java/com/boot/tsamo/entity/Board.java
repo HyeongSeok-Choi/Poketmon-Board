@@ -29,6 +29,8 @@ public class Board {
 
     private String content;
 
+    private Long viewCount;
+
     @JoinColumn(name = "user_id")
     @ManyToOne
     private Users userid;
@@ -49,7 +51,6 @@ public class Board {
 
     @OneToMany(mappedBy = "boardId",fetch = FetchType.EAGER,cascade = CascadeType.REMOVE)
     private List<HashTag>hashTags= new ArrayList<HashTag>();
-
 
 
 }

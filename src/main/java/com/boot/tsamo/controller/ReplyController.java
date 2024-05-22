@@ -93,37 +93,6 @@ public class ReplyController {
     }
 
 
-    // 댓글 조회
-//    @GetMapping("/api/allcomments")
-//    public ResponseEntity<List<ViewReplyDTO>> getAllComments(Long id, Pageable pageable) {
-//
-//        id = 1L;
-//
-//        List<Reply> replieList = replyService.findAll(id);
-//
-//        List<ViewReplyDTO> replyDTOS = replieList.stream()
-//                .map(a -> new ViewReplyDTO(a))
-//                .collect(Collectors.toList());
-//
-//
-//        return ResponseEntity.ok().body(replyDTOS);
-//
-//    }
-
-
-
-//    //기존 댓글 수정
-//    @PatchMapping("/posts/{postId}/comments/{id}")
-//    public CommentDto updateComment(@PathVariable final Long postId, @PathVariable final Long id,
-//                                    @RequestBody final CommentDto dto, @LoginUser UserSessionDto userDto) {
-//
-//        dto.setMdfId(userDto.getUserId());
-//        log.debug("BoardDto :: {}", dto);
-//
-//        commentService.updateComment(dto);
-//        return commentService.findCommentById(id);
-//    }
-
     //대댓글 생성
     @PostMapping("/api/addReComment")
     public ResponseEntity<ReReply> saveReComment(
@@ -157,56 +126,25 @@ public class ReplyController {
     }
 
 
+    //대댓글 수정
+    @PostMapping("/api/Remodify")
+    public ResponseEntity<modifyReReplyDTO> updateReComment(@RequestBody modifyReReplyDTO dto) {
+
+        reReplyService.update(dto);
+
+        return ResponseEntity.ok().body(dto);
+    }
+
+    //대댓글 삭제
+    @DeleteMapping ("/api/redelete/{id}")
+    public ResponseEntity<Long> deleteRecomment(@PathVariable Long id) {
 
 
-//    // 상세 대댓글 조회
-//    @GetMapping("/api/allReComment")
-//    public ResponseEntity<List<ViewReReplyDTO>> getAllReComments() {
-//
-//        Long id = 1L;
-//
-//        List<ReReply> reReplieList = reReplyService.findByReplyId(id);
-//
-//        List<ViewReReplyDTO> reReplyDTOS = reReplieList.stream()
-//                .map(a -> new ViewReReplyDTO(a))
-//                .collect(Collectors.toList());
-//
-//        for (ViewReReplyDTO r : reReplyDTOS) {
-//            System.out.println(r.getUserid());
-//            System.out.println(r.getContent());
-//            System.out.println(r.getCreatedAt());
-//
-//        }
-//
-//
-//        return ResponseEntity.ok().body(reReplyDTOS);
-//
-//    }
+        System.out.println(id+"삭제 아이디 들어오나");
+        reReplyService.deleteById(id);
 
+        return ResponseEntity.ok().body(id);
+    }
 
-
-//    // 모든 대댓글 조회
-//    @GetMapping("/api/allReComment")
-//    public ResponseEntity<List<ViewReReplyDTO>> getAllReComments(Long id, Pageable pageable) {
-//
-//        id = 1L;
-//
-//        List<ReReply> reReplieList = reReplyService.findAll(id);
-//
-//        List<ViewReReplyDTO> reReplyDTOS = reReplieList.stream()
-//                .map(a -> new ViewReReplyDTO(a))
-//                .collect(Collectors.toList());
-//
-//       for (ViewReReplyDTO r : reReplyDTOS){
-//           System.out.println(r.getUserid());
-//           System.out.println(r.getContent());
-//           System.out.println(r.getCreatedAt());
-//
-//       }
-//
-//
-//        return ResponseEntity.ok().body(reReplyDTOS);
-//
-//    }
 
 }

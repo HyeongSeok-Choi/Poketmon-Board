@@ -16,5 +16,11 @@ public interface HashTagRepository extends JpaRepository<HashTag,Long> {
 
     List<HashTag> findByHashTagContentContaining(String hashTag);
 
+    List<HashTag> findByHashTagContentContains(String hashTag);
+
+    List<HashTag> findByHashTagContent(String hashTag);
+
+
+    Long deleteByBoardId(Board board);
 
 }

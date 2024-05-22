@@ -110,6 +110,7 @@
 <body>
 
 
+
 <div class="container">
     <div class="input-form-backgroud row">
         <div class="input-form col-md-12 mx-auto">
@@ -117,6 +118,7 @@
 
 
             <h4 class="mb-3">게시물 조회</h4>
+            <p th:text="'조회수: '+${board.getViewCount()}">조회수</p>
                     <!--제목 입력-->
                     <div class="row">
                         <div class="col-md-6 mb-3">
@@ -143,10 +145,14 @@
                  <!--좋아요 버튼 끝-->
 
                 <hr class="mb-4">
-            <div class="col-md-6 mb-3">
-            <form class="validation-form"  method="post" th:action="@{/modifyBoard(id=${board.id})}">
-                <button class="btn btn-primary btn btn-block" type="submit" >수정</button>
-            </form>
+
+            <h5 class="mb-3">해시태그</h5>
+            <ul style="list-style:none" >
+               <i th:each="hash:${hashTag}"><li  style="float: left; margin-right: 20px" th:text="'#'+${hash.getHashTagContent()}"></li></i>
+            </ul>
+
+            <div style="clear: both;" class="col-md-6 mb-3">
+                <hr class="mb-4" >
             </div>
             <div class="col-md-6 mb-3">
             <form class="validation-form"  method="post" th:action="@{/deleteBoard(id=${board.id})}">
@@ -158,6 +164,9 @@
 
 
             </div>
+            <form class="validation-form"  method="post" th:action="@{/modifyBoard(id=${board.id})}">
+                <button class="btn btn-primary btn btn-block" type="submit" >수정</button>
+            </form>
         </div>
 
     </div>

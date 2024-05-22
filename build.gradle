@@ -60,6 +60,10 @@ dependencies {
 
     //gson
     implementation 'com.google.code.gson:gson:2.9.0'
+
+    // excel download : poi
+    implementation 'org.apache.poi:poi:5.2.2'                // .xls 확장자
+    implementation 'org.apache.poi:poi-ooxml:5.2.2'          // .xlsx 확장자
 }
 
 tasks.named('test') {
