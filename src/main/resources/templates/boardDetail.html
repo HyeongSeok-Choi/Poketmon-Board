@@ -190,22 +190,14 @@
             </ul>
 
             <div style="clear: both;" class="col-md-6 mb-3">
-                <hr class="mb-4">
-            </div>
-            <div class="col-md-6 mb-3">
-                <form class="validation-form" method="post" th:action="@{/modifyBoard(id=${board.id})}">
-                    <button class="btn btn-primary btn btn-block" type="submit">수정</button>
-                </form>
-                <form class="validation-form" method="post" th:action="@{/deleteBoard(id=${board.id})}">
-                    <button class="btn btn-danger btn btn-block" type="submit">삭제</button>
+                <form class="validation-form"  method="post" th:action="@{/modifyBoard(id=${board.id})}">
+                    <button class="btn btn-primary btn btn-block" type="submit" >수정</button>
+                    <button class="btn btn-danger btn btn-block" type="submit" >삭제</button>
                 </form>
             </div>
             <!--댓글출현 !!-->
             <div class="input-form col-md-12 mx-auto" th:replace="~{/ReplyView.html}">
-
-
             </div>
-
         </div>
 
     </div>

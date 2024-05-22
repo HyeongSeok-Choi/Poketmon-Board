@@ -55,20 +55,20 @@
 </head>
 <body>
 
-<div class="card col-md-6 mb-1">
+<div class="card col-md-6 mb-1" th:if="${createOrModify != 'create'}">
     <div class="card-header">
         <button  class="btn btn-primary"><strong class="card-title" id="attachTitle">첨부 파일</strong></button>
     </div>
     <ul class="hidden" id="attachList">
         <li class="list-group-item" th:each="attachFile : ${attachFiles}">
-            <div th:if="${createOrmodify == null}" class="file-info">
+            <div th:if="${createOrModify != 'modify'}" class="file-info">
                 <span class="file-name" th:text="${attachFile.ori_fileName}"></span>
                 <button type="button" class="downloadBtn btn downloadBtn"
                         th:data-board-id="${attachFile.boardId.id}" th:data-file-id="${attachFile.id}">다운로드</button>
                 <button type="button" class="btn previewBtn"
                         th:data-board-id="${attachFile.boardId.id}" th:data-file-id="${attachFile.id}">미리보기</button>
             </div>
-            <div th:if="${createOrmodify != null}" class="file-info">
+            <div th:if="${createOrModify == 'modify'}" class="file-info">
                 <button type="button" class="downloadBtn btn downloadBtn"
                         th:data-board-id="${attachFile.boardId.id}" th:data-file-id="${attachFile.id}">파일삭제</button>
             </div>

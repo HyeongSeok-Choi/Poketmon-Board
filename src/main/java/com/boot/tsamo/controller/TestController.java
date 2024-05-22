@@ -177,19 +177,7 @@ public class TestController {
 
         //확장자 받기
         List<Extension> extensions = fileService.getExtensions();
-
-
-        //첨부파일이 없을 경우
-        if(attachFileList.get(0).isEmpty()){
-            hashTags = hashTagService.getHashTagsByHashTagValue(hashTagValue);
-            model.addAttribute("errorMessage", "첨부파일 입력 필요,최소 1개 이상 등록이 필요합니다.");
-            model.addAttribute("hashTags", hashTags);
-            model.addAttribute("attachFileList", attachFileList);
-            model.addAttribute("board", addBoarddto);
-            model.addAttribute("extensions", extensions);
-            return "createBoard";
-        }
-
+        Integer maxUploadCnt = fileAttributeService.getMaxRequestCnt(1L); 
 
         int maxsize =0 ;
         for(MultipartFile attachFile : attachFileList){
@@ -233,26 +221,24 @@ public class TestController {
 
         Board board;
 
-        if(save.get("modify") != null ? true : false){
+        if(save.get("modify") != null){
             System.out.println("모디파이");
-            board= save.get("modify");
+            board = save.get("modify");
             hashTagService.deleteHashTags(board);
             fileService.deleteAttachFile(board);
 
             hashTagService.saveHashTags(hashTagValue,board);
         }else{
             System.out.println("크리에이트");
-            board= save.get("create");
+            board = save.get("create");
             hashTagService.saveHashTags(hashTagValue,board);
         }
 
         fileService.saveAttachFileList(attachFileList,board);
 
-
-
         //연습끝
-
         return "redirect:/";
+
     }
 
     //게시물 수정 뷰
@@ -286,7 +272,7 @@ public class TestController {
 
     //게시물 상세보기
     @GetMapping(value = "/BoardDetailView")
-    public String BoardDetailView(Model model,@RequestParam Long id,Principal principal) {
+    public String BoardDetailView(Model model,@RequestParam Long id, Principal principal) {
 
         if(principal != null) {
             String userid = principal.getName();

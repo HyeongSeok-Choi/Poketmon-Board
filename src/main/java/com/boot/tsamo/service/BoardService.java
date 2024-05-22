@@ -31,23 +31,27 @@ public class BoardService {
     private final HashTagRepository hashTagRepository;
 
 
-    //게시물 저장
+    //
+    //게시물저장
     public Map<String,Board> save(Board board, Principal principal, Long boardId) {
 
         Map<String,Board> saves = new HashMap<>();
 
+            // 게시판 조회 및 수정의 경우 boardId가 null이 아닌 조건을 사용함.
             if(boardId != null){
 
+                // 존재하는 게시판과 해당하는 작성자를 repository를 통해 불러와서 변수에 저장.
                 Board existboard =boardRepository.findById(boardId).get();
                 Users user = userRepository.findById(existboard.getUserid().getUserId()).get();
 
+                // 파라미터로 가져온 게시물 객체에 1.게시판 id, 2. 작성자, 3. 조회수를 저장함.
                 board.setViewCount(existboard.getViewCount());
                 board.setId(boardId);
                 board.setUserid(user);
-                Board result = boardRepository.save(board);
-                String value ="modify";
+                Board value = boardRepository.save(board);
+                String key ="modify";
 
-                saves.put(value,result);
+                saves.put(key,value);
 
                 return saves;
             }
@@ -60,10 +64,10 @@ public class BoardService {
 
         board.setViewCount(0L);
 
-        Board result = boardRepository.save(board);
+        Board value = boardRepository.save(board);
 
-        String value ="create";
-        saves.put(value,result);
+        String key ="create";
+        saves.put(key,value);
 
         return saves;
     }
