@@ -29,11 +29,11 @@ public class AttachFileController {
     public String attachFileForm(Model model){
 
         List<Extension> extensions = fileService.getExtensions();
-        Integer maxUploadCnt = fileAttributeService.getMaxRequestCnt(1L);
+
 
         model.addAttribute("attachFileFormDto", new AttachFileFormDto());
         model.addAttribute("extensions", extensions);
-        model.addAttribute("maxUploadCnt", maxUploadCnt);
+
         return "attachFile/attachFile";
 
 
