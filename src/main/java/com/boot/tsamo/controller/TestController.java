@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -150,6 +151,27 @@ public class TestController {
 
     @GetMapping(value = "/visitCount")
     public String visitCountPage(Model model) {
+
+        LocalDate today = LocalDate.now();
+        LocalDate sevenDaysAgo = today.minusDays(6);
+
+        // 날짜별 방문자 수 조회
+        List<Object[]> visitCountsByDate = visitCountRepository.countVisitsByDateSince(sevenDaysAgo);
+
+
+        List<VisitCountByDate> visitCountByDateList = visitCountsByDate.stream()
+                .map(result -> new VisitCountByDate((LocalDate) result[0], (Long) result[1]))
+                .collect(Collectors.toList());
+
+        model.addAttribute("visitCountByDateList", visitCountByDateList);
+
+        return "visitCount";
+    }
+
+
+    @ResponseBody
+    @GetMapping(value = "/visitCountData")
+    public ResponseEntity<?> visitCountData(Model model) {
         /*String ipAddress = request.getRemoteAddr();
         LocalDate today = LocalDate.now();
 
@@ -169,13 +191,15 @@ public class TestController {
 
         // 날짜별 방문자 수 조회
         List<Object[]> visitCountsByDate = visitCountRepository.countVisitsByDateSince(sevenDaysAgo);
+
+
         List<VisitCountByDate> visitCountByDateList = visitCountsByDate.stream()
                 .map(result -> new VisitCountByDate((LocalDate) result[0], (Long) result[1]))
                 .collect(Collectors.toList());
 
-        model.addAttribute("visitCountByDateList", visitCountByDateList);
+//        model.addAttribute("visitCountByDateList", visitCountByDateList);
 
-        return "visitCount";
+        return ResponseEntity.ok(visitCountByDateList);
     }
 
     // 날짜별 방문자 수를 담는 DTO 클래스
