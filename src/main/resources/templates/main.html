@@ -70,12 +70,11 @@
     </th:block>
 </head>
 <body>
-<section class="notice">
-    <div class="page-title">
-        <div class="container">
-            <h3 th:if="${mainOrAdmin =='main'}">게시판</h3>
-            <h3 th:if="${mainOrAdmin =='admin'}">삭제 게시물 목록</h3>
-        </div>
+            <div class="img-container">
+                <h3 th:if="${mainOrAdmin =='main'}">게시판</h3>
+                <h3 th:if="${mainOrAdmin =='admin'}">삭제 게시물 목록</h3>
+                  <img src="/img/pika3.gif" >
+            </div>
 
     <!-- board seach area -->
     <input type="hidden" th:value="${mainOrAdmin}" name="mainOrAdmin">
@@ -227,12 +226,12 @@
             <button th:if="${mainOrAdmin =='main'}" sec:authorize="isAuthenticated()" class="btn btn-dark" onclick="location.href='/createBoard'">등록
             </button>
             <!--            <button sec:authorize="isAuthenticated()" class="btn btn-excel" onclick="downloadExcel()">엑셀 다운로드</button>-->
-            <button sec:authorize="hasRole('ADMIN')" th:if="${mainOrAdmin == 'admin'}" class="btn btn-excel" onclick="downloadExcel()">삭제 목록 다운로드</button>
+            <button  th:if="${mainOrAdmin == 'admin'}" class="btn btn-excel" onclick="downloadExcel()">삭제 목록 다운로드</button>
         </div>
     </div>
-    <!-- 엑셀 다운로드 스크립트 -->
 
-</section>
+
+
 <!--복구 설정 부분 -->
 
 <script>
