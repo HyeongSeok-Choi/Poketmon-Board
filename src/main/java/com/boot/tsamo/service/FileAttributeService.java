@@ -71,4 +71,8 @@ public class FileAttributeService {
         return attachAttributeDTO;
     }
 
+    public Integer getMaxRequestCnt(Long id){
+        return attachFileAttributeRepository.findMax_Upload_CntById(id);
+    }
+
 }
