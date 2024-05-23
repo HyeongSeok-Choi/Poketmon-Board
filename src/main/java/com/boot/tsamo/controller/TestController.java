@@ -68,10 +68,11 @@ public class TestController {
 
     //게시물 목록(main페이지) 검색, 페이징 기능 포함
     @GetMapping(value = "/")
-    public String main(Model model, @PageableDefault(page=0,size = 3,sort = "id",
-            direction = Sort.Direction.DESC) Pageable pageable, String searchvalue, String searchtype, String sort) {
+    public String main(Model model, @PageableDefault(page = 0, size = 3, sort = "id",
+            direction = Sort.Direction.DESC) Pageable pageable, String searchvalue,
+                       String searchtype, String sort, HttpServletRequest request) {
 
-     /*   String ipAddress = request.getRemoteAddr();
+        String ipAddress = request.getRemoteAddr();
         LocalDate today = LocalDate.now();
 
         long totalVisitCount = visitCountRepository.count(); // 전체 방문자 수 조회
@@ -83,38 +84,35 @@ public class TestController {
             VisitCount visitCount = new VisitCount(ipAddress, today);
             visitCountRepository.save(visitCount);
         }
-*/
 
 
-        if(sort == null || sort.equals("title")) {
+        if (sort == null || sort.equals("title")) {
             Sort.by(Sort.Direction.DESC, "title");
         } else if (sort.equals("createdAt")) {
             Sort.by(Sort.Direction.DESC, "createdAt");
-        }else if (sort.equals("userid")) {
+        } else if (sort.equals("userid")) {
             Sort.by(Sort.Direction.DESC, "userid");
         }
 
         Page<Board> Boards = boardService.findAll(pageable);
 
-        if(searchvalue == null){
+        if (searchvalue == null) {
             Boards = boardService.findAll(pageable);
 
-        }else{
+        } else {
             //제목으로 검색하기
-            if(searchtype.equals("title")){
-                Boards = boardService.findAllByTitle(pageable,searchvalue);
-            }else if(searchtype.equals("content")){
+            if (searchtype.equals("title")) {
+                Boards = boardService.findAllByTitle(pageable, searchvalue);
+            } else if (searchtype.equals("content")) {
                 //본문으로 검색하기
-                Boards = boardService.findAllByContent(pageable,searchvalue);
-            }else if(searchtype.equals("userid")){
+                Boards = boardService.findAllByContent(pageable, searchvalue);
+            } else if (searchtype.equals("userid")) {
                 //작성자으로 검색하기
-                Boards = boardService.findAllByUserId(pageable,searchvalue);
-            }
+                Boards = boardService.findAllByUserId(pageable, searchvalue);
+            } else if (searchtype.equals("hashTag")) {
 
-            else if(searchtype.equals("hashTag")){
-
-                Boards = boardService.findAllByHashTag(pageable,searchvalue);
-                for(Board board : Boards){
+                Boards = boardService.findAllByHashTag(pageable, searchvalue);
+                for (Board board : Boards) {
                     board.getId();
                     board.getTitle();
                     board.getReplies();
@@ -125,11 +123,11 @@ public class TestController {
 
         }
 
-        int nowPage = Boards.getPageable().getPageNumber()+1;
-        int startPage=Math.max(nowPage-4,1);
-        int endPage=Math.min(nowPage+5,Boards.getTotalPages());
+        int nowPage = Boards.getPageable().getPageNumber() + 1;
+        int startPage = Math.max(nowPage - 4, 1);
+        int endPage = Math.min(nowPage + 5, Boards.getTotalPages());
 
-        if(!Boards.isEmpty()) {
+        if (!Boards.isEmpty()) {
             model.addAttribute("boards", Boards);
             model.addAttribute("nowPage", nowPage);
             model.addAttribute("startPage", startPage);
@@ -151,10 +149,9 @@ public class TestController {
     }
 
     @GetMapping(value = "/visitCount")
-    public String visitCountPage(Model model, HttpServletRequest request) {
-        String ipAddress = request.getRemoteAddr();
+    public String visitCountPage(Model model) {
+        /*String ipAddress = request.getRemoteAddr();
         LocalDate today = LocalDate.now();
-        LocalDate sevenDaysAgo = today.minusDays(6);
 
         // 전체 방문자 수 조회
         long totalVisitCount = visitCountRepository.count();
@@ -166,6 +163,9 @@ public class TestController {
             VisitCount visitCount = new VisitCount(ipAddress, today);
             visitCountRepository.save(visitCount);
         }
+*/
+        LocalDate today = LocalDate.now();
+        LocalDate sevenDaysAgo = today.minusDays(6);
 
         // 날짜별 방문자 수 조회
         List<Object[]> visitCountsByDate = visitCountRepository.countVisitsByDateSince(sevenDaysAgo);
@@ -175,7 +175,7 @@ public class TestController {
 
         model.addAttribute("visitCountByDateList", visitCountByDateList);
 
-        return "test4";
+        return "visitCount";
     }
 
     // 날짜별 방문자 수를 담는 DTO 클래스
@@ -202,21 +202,21 @@ public class TestController {
     @GetMapping(value = "/createBoard")
     public String createBoard(Model model) {
 
-        model.addAttribute("fileMaxCnt",attachFileService.getMaxCnt());
-        model.addAttribute("fileMaxSize",attachFileService.getMaxSize());
+        model.addAttribute("fileMaxCnt", attachFileService.getMaxCnt());
+        model.addAttribute("fileMaxSize", attachFileService.getMaxSize());
 
         String createOrmodify = "create";
 
         List<Extension> extensions = fileService.getExtensions();
 
-        List<HashTag> hashTags =new ArrayList<>();
+        List<HashTag> hashTags = new ArrayList<>();
         hashTags.add(new HashTag());
 
         model.addAttribute("board", new Board());
         model.addAttribute("attachFileFormDto", new AttachFileFormDto());
         model.addAttribute("extensions", extensions);
         model.addAttribute("hashTags", hashTags);
-        model.addAttribute("createOrmodify",createOrmodify);
+        model.addAttribute("createOrmodify", createOrmodify);
 
         return "createBoard";
     }
@@ -226,23 +226,23 @@ public class TestController {
     @PostMapping(value = "/createBoardRequest")
     public String createBoardRequest(@ModelAttribute addBoardDTO addBoarddto,
                                      @RequestParam("attachFile") List<MultipartFile> attachFileList,
-                                     @RequestParam("hashTagValue")String hashTagValue,
+                                     @RequestParam("hashTagValue") String hashTagValue,
                                      @Valid AttachFileFormDto attachFileFormDto, BindingResult bindingResult,
-                                     Model model,Principal principal,@RequestParam(value="boardid", required=false)Long boardId) throws Exception {
+                                     Model model, Principal principal, @RequestParam(value = "boardid", required = false) Long boardId) throws Exception {
 
-        model.addAttribute("fileMaxCnt",attachFileService.getMaxCnt());
-        model.addAttribute("fileMaxSize",attachFileService.getMaxSize());
+        model.addAttribute("fileMaxCnt", attachFileService.getMaxCnt());
+        model.addAttribute("fileMaxSize", attachFileService.getMaxSize());
 
 
         //더미 해시값(해시 값이 없을 경우)
-        List<HashTag> hashTags= new ArrayList<>();
+        List<HashTag> hashTags = new ArrayList<>();
         hashTags.add(new HashTag());
 
         //확장자 받기
         List<Extension> extensions = fileService.getExtensions();
 
 
-        if(bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             model.addAttribute("attachFileFormDto", attachFileFormDto);
             model.addAttribute("hashTags", hashTags);
             model.addAttribute("attachFileList", attachFileList);
@@ -253,7 +253,7 @@ public class TestController {
 
 
         //첨부파일이 없을 경우
-        if(attachFileList.get(0).isEmpty() && attachFileFormDto.getId()==null){
+        if (attachFileList.get(0).isEmpty() && attachFileFormDto.getId() == null) {
             hashTags = hashTagService.getHashTagsByHashTagValue(hashTagValue);
             model.addAttribute("errorMessage", "첨부파일 입력 필요,최소 1개 이상 등록이 필요합니다.");
             model.addAttribute("attachFileFormDto", attachFileFormDto);
@@ -265,15 +265,15 @@ public class TestController {
         }
 
 
-        int maxsize =0 ;
-        for(MultipartFile attachFile : attachFileList){
-            System.out.println(maxsize+"사이즈 본다잉");
+        int maxsize = 0;
+        for (MultipartFile attachFile : attachFileList) {
+            System.out.println(maxsize + "사이즈 본다잉");
             System.out.println();
             maxsize += attachFile.getSize();
 
         }
 
-        if(maxsize > attachFileService.getMaxSize()*1024*1024){
+        if (maxsize > attachFileService.getMaxSize() * 1024 * 1024) {
             hashTags = hashTagService.getHashTagsByHashTagValue(hashTagValue);
             model.addAttribute("errorMessage", "최대 파일 업로드 용량을 초과하였습니다.");
             model.addAttribute("attachFileFormDto", attachFileFormDto);
@@ -287,9 +287,9 @@ public class TestController {
         //연습
 
         //로직을 밖으로 빼기
-        for(MultipartFile a : attachFileList) {
+        for (MultipartFile a : attachFileList) {
 
-            if(a.getOriginalFilename() !="") {
+            if (a.getOriginalFilename() != "") {
                 if (!attachFileService.isAllowedExtension(a.getOriginalFilename())) {
                     hashTags = hashTagService.getHashTagsByHashTagValue(hashTagValue);
                     model.addAttribute("errorMessage", "허용되지 않는 파일 형식입니다.");
@@ -305,25 +305,24 @@ public class TestController {
         }
 
         //등록 수정을 포함하는 로직
-        Map<String,Board> save = boardService.save(addBoarddto.toEntity(), principal,boardId);
+        Map<String, Board> save = boardService.save(addBoarddto.toEntity(), principal, boardId);
 
         Board board;
 
-        if(save.get("modify") != null ? true : false){
+        if (save.get("modify") != null ? true : false) {
             System.out.println("모디파이");
-            board= save.get("modify");
+            board = save.get("modify");
             hashTagService.deleteHashTags(board);
             fileService.deleteAttachFile(board);
 
-            hashTagService.saveHashTags(hashTagValue,board);
-        }else{
+            hashTagService.saveHashTags(hashTagValue, board);
+        } else {
             System.out.println("크리에이트");
-            board= save.get("create");
-            hashTagService.saveHashTags(hashTagValue,board);
+            board = save.get("create");
+            hashTagService.saveHashTags(hashTagValue, board);
         }
 
-        fileService.saveAttachFileList(attachFileList,board);
-
+        fileService.saveAttachFileList(attachFileList, board);
 
 
         //연습끝
@@ -333,9 +332,9 @@ public class TestController {
 
     //게시물 수정 뷰
     @PostMapping(value = "/modifyBoard")
-    public String modifyBoard(Model model,@RequestParam Long id) {
-        model.addAttribute("fileMaxCnt",attachFileService.getMaxCnt());
-        model.addAttribute("fileMaxSize",attachFileService.getMaxSize());
+    public String modifyBoard(Model model, @RequestParam Long id) {
+        model.addAttribute("fileMaxCnt", attachFileService.getMaxCnt());
+        model.addAttribute("fileMaxSize", attachFileService.getMaxSize());
 
         String createOrmodify = "modify";
 
@@ -343,10 +342,10 @@ public class TestController {
 
         Board board = boardService.findById(id);
 
-        List<HashTag> hashTags ;
+        List<HashTag> hashTags;
         hashTags = board.getHashTags();
 
-        if(hashTags.size() == 0) {
+        if (hashTags.size() == 0) {
             hashTags.add(new HashTag());
         }
 
@@ -354,7 +353,7 @@ public class TestController {
         model.addAttribute("attachFileFormDto", new AttachFileFormDto());
         model.addAttribute("extensions", extensions);
         model.addAttribute("hashTags", hashTags);
-        model.addAttribute("createOrmodify",createOrmodify);
+        model.addAttribute("createOrmodify", createOrmodify);
 
         return "createBoard";
     }
@@ -362,9 +361,9 @@ public class TestController {
 
     //게시물 상세보기
     @GetMapping(value = "/BoardDetailView")
-    public String BoardDetailView(Model model,@RequestParam Long id,Principal principal) {
+    public String BoardDetailView(Model model, @RequestParam Long id, Principal principal) {
 
-        if(principal != null) {
+        if (principal != null) {
             String userid = principal.getName();
             model.addAttribute("userid", userid);
         }
@@ -372,15 +371,14 @@ public class TestController {
 
         List<AttachFile> attachFiles = fileService.getAttachFileByBoardId(id);
 
-        for(AttachFile attachFile : attachFiles){
-            System.out.println(attachFile.getUuid_fileName()+"여기 있습니다.");
+        for (AttachFile attachFile : attachFiles) {
+            System.out.println(attachFile.getUuid_fileName() + "여기 있습니다.");
 
         }
 
         boardService.getViewCounting(id);
 
         model.addAttribute("attachFiles", attachFiles);
-
 
 
         Board detailBoard = boardService.findById(id);
@@ -394,22 +392,22 @@ public class TestController {
 
 
     @PostMapping(value = "/deleteBoard")
-    public String deleteBoard(Model model,@RequestParam Long id) {
+    public String deleteBoard(Model model, @RequestParam Long id) {
 
         boardService.deleteById(id);
 
-        return"redirect:/";
+        return "redirect:/";
     }
 
     @PostMapping(value = "/attachatt")
     public String attachatt(@RequestParam(required = false) List<String> extension, int maxcnt, int maxsize) {
 
         //null처리
-        if(extension == null){
+        if (extension == null) {
             extension = new ArrayList<>();
         }
 
-        if(extension == null){
+        if (extension == null) {
             extension = new ArrayList<>();
         }
 
@@ -420,7 +418,7 @@ public class TestController {
 
         fileAttributeService.attachFileAttribute(attachAttributeDTO);
 
-        return"redirect:/";
+        return "redirect:/";
     }
 
 
