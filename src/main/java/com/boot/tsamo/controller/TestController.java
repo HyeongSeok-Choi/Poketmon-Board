@@ -225,20 +225,21 @@ public class TestController {
     public String createBoard(Model model) {
 
         List<Extension> extensions = fileService.getExtensions();
+        Integer maxUploadCnt = fileAttributeService.getMaxRequestCnt(1L);
 
         Integer maxUploadCnt = fileAttributeService.getMaxRequestCnt(1L);
 
         List<HashTag> hashTags = new ArrayList<>();
         hashTags.add(new HashTag());
 
-        model.addAttribute("fileMaxCnt",attachFileService.getMaxCnt());
-        model.addAttribute("fileMaxSize",attachFileService.getMaxSize());
-        model.addAttribute("maxUploadCnt", maxUploadCnt);
         model.addAttribute("board", new Board());
-        model.addAttribute("attachFileFormDto", new ArrayList<>());
+        model.addAttribute("attachFileFormDto", new AttachFileFormDto());
         model.addAttribute("extensions", extensions);
+        model.addAttribute("maxUploadCnt", maxUploadCnt);
         model.addAttribute("hashTags", hashTags);
         model.addAttribute("createOrModify","create");
+        model.addAttribute("fileMaxCnt",attachFileService.getMaxCnt());
+        model.addAttribute("fileMaxSize",attachFileService.getMaxSize());
 
 
         return "createBoard";
@@ -254,6 +255,7 @@ public class TestController {
                                      @RequestParam("deleteRequestDTOList") String deleteRequestJson,
                                      Model model,Principal principal,
                                      @RequestParam(value="boardid", required=false)Long boardId) throws Exception {
+
 
         //더미 해시값(해시 값이 없을 경우)
         List<HashTag> hashTags = new ArrayList<>();
@@ -327,7 +329,6 @@ public class TestController {
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-                    System.out.println(e.getCause() + "여기서 에러");
                 }
             }
 

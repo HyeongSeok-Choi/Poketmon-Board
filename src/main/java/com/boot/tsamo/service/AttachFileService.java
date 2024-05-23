@@ -148,6 +148,12 @@ public class AttachFileService {
             return MediaType.APPLICATION_PDF;
         } else if (fileName.endsWith(".txt")) {
             return MediaType.TEXT_PLAIN;
+        } else if (fileName.endsWith(".avi")) {
+            return MediaType.valueOf("video/x-msvideo");
+        } else if (fileName.endsWith(".hwp")) {
+            return MediaType.valueOf("application/x-hwp");
+        } else if (fileName.endsWith(".ppt") || fileName.endsWith(".pptx")) {
+            return MediaType.valueOf("application/vnd.ms-powerpoint");
         } else {
             return MediaType.APPLICATION_OCTET_STREAM; // 기본값
         }
