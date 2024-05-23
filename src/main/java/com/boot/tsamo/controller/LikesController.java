@@ -28,13 +28,10 @@ public class LikesController {
         //뷰에서 받아온 정보에 로그인 아이디 대입
         likesDTO.setUserId(principal.getName());
 
-
         //좋아요 존재유무 확인(true라면 이미 존재, false라면 좋아요 없음)
        boolean checkLikes= likeService.checklikes(likesDTO);
 
         return ResponseEntity.ok().body(checkLikes);
-
-
     }
 
     @PostMapping(value = "/getCounting")

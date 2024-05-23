@@ -69,19 +69,17 @@
     </th:block>
 </head>
 <body>
-<section class="notice">
-    <div class="page-title">
-        <div class="container">
+
+        <div class="img-container">
             <h3>게시판</h3>
+            <img src="/img/pika3.gif" >
         </div>
-    </div>
 
     <!-- board seach area -->
 
     <form th:action="@{/}" method="get">
         <div id="board-search">
             <div class="container">
-                <img src="/img/movingCatgif.gif" />
                 <div class="search-window">
                     <div class="search-wrap">
                         <label for="searchvalue" class="blind">공지사항 내용 검색</label>
@@ -185,6 +183,5 @@
     </div>
     <!-- 엑셀 다운로드 스크립트 -->
 
-</section>
 </body>
 </html>

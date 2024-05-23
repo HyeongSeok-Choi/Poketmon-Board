@@ -2,10 +2,8 @@
 #btn-like{
     width: 100px;
     height: 100px;
-    background-color: blue;
-    color: white;
-    border-radius: 50px;
-    font-size: 60px;
+    background-color: white;
+    border: none;
     cursor: pointer;
     left: 200px;
     top: 100px;
