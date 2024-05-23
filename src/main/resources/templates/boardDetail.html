@@ -72,10 +72,16 @@
                 })
                     .then(response => response.json())
                     .then(data => {
+                        if(data){
+                            const like = document.querySelector('.fa');
+
+                            like.innerHTML=(`<p>바뀜</p>`)
+                        }else{
+                            like.innerHTML=(`<p>바뀜</p>`)
+                        }
+
                         var countLike=document.getElementById("likeCount");
                         getCountingLike();
-                        var countValue=counting;
-                        countLike.innerHTML=(`<p>좋아요수: ${countValue}</p>`);
 
                     });
 
