@@ -98,24 +98,24 @@ public class TestController {
             Sort.by(Sort.Direction.DESC, "userid");
         }
 
-        Page<Board> Boards = boardService.findAll(pageable);
+        Page<Board> Boards = boardService.findAll(pageable,mainOrAdmin);
 
         if (searchvalue == null) {
-            Boards = boardService.findAll(pageable);
+            Boards = boardService.findAll(pageable,mainOrAdmin);
 
         } else {
             //제목으로 검색하기
             if (searchtype.equals("title")) {
-                Boards = boardService.findAllByTitle(pageable, searchvalue);
+                Boards = boardService.findAllByTitle(pageable, searchvalue,mainOrAdmin);
             } else if (searchtype.equals("content")) {
                 //본문으로 검색하기
-                Boards = boardService.findAllByContent(pageable, searchvalue);
+                Boards = boardService.findAllByContent(pageable, searchvalue,mainOrAdmin);
             } else if (searchtype.equals("userid")) {
                 //작성자으로 검색하기
-                Boards = boardService.findAllByUserId(pageable, searchvalue);
+                Boards = boardService.findAllByUserId(pageable, searchvalue,mainOrAdmin);
             } else if (searchtype.equals("hashTag")) {
 
-                    Boards = boardService.findAllByHashTag(pageable,searchvalue);
+                    Boards = boardService.findAllByHashTag(pageable,searchvalue,mainOrAdmin);
 
 
             }
@@ -226,16 +226,20 @@ public class TestController {
 
         List<Extension> extensions = fileService.getExtensions();
 
+        Integer maxUploadCnt = fileAttributeService.getMaxRequestCnt(1L);
+
         List<HashTag> hashTags = new ArrayList<>();
         hashTags.add(new HashTag());
 
         model.addAttribute("fileMaxCnt",attachFileService.getMaxCnt());
         model.addAttribute("fileMaxSize",attachFileService.getMaxSize());
+        model.addAttribute("maxUploadCnt", maxUploadCnt);
         model.addAttribute("board", new Board());
         model.addAttribute("attachFileFormDto", new ArrayList<>());
         model.addAttribute("extensions", extensions);
         model.addAttribute("hashTags", hashTags);
         model.addAttribute("createOrModify","create");
+
 
         return "createBoard";
     }

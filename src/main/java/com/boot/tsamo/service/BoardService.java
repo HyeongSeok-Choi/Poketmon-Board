@@ -97,11 +97,6 @@ public class BoardService {
     }
 
     //게시물 삭제
-//    public void deleteById(Long id) {
-//        boardRepository.deleteById(id);
-//    }
-
-    //게시물 삭제
     public void deleteByIdbyboolean(Long id) {
         Board board = boardRepository.findById(id).get();
 
@@ -132,30 +127,56 @@ public class BoardService {
     }
 
     //모든 게시물 목록 출력
-    public Page<Board> findAll(Pageable pageable){
-        return boardRepository.findAll(pageable);
+    public Page<Board> findAll(Pageable pageable,String mainOrAdmin){
+
+        if(mainOrAdmin.equals("admin")){
+
+           return boardRepository.findAllByDeletedIsTrue(pageable);
+
+        }
+
+        return boardRepository.findAllByDeletedIsFalse(pageable);
     }
 
     //제목으로 검색 -리스트 출력
-    public Page<Board> findAllByTitle(Pageable pageable, String title){
-        return boardRepository.findByTitleContaining(title,pageable);
+    public Page<Board> findAllByTitle(Pageable pageable, String title,String mainOrAdmin){
+
+        if(mainOrAdmin.equals("admin")){
+
+            return boardRepository.findByTitleContainingAndDeletedIsTrue(title,pageable);
+
+        }
+        return boardRepository.findByTitleContainingAndDeletedIsFalse(title,pageable);
     }
 
     //본문으로 검색 -리스트 출력
-    public Page<Board> findAllByContent(Pageable pageable, String content){
-        return boardRepository.findByContentContaining(content,pageable);
+    public Page<Board> findAllByContent(Pageable pageable, String content,String mainOrAdmin){
+
+        if(mainOrAdmin.equals("admin")){
+
+            return boardRepository.findByContentContainingAndDeletedIsTrue(content,pageable);
+
+        }
+
+        return boardRepository.findByContentContainingAndDeletedIsFalse(content,pageable);
     }
 
     //작성자로 검색 -리스트 출력
-    public Page<Board> findAllByUserId(Pageable pageable, String userId){
+    public Page<Board> findAllByUserId(Pageable pageable, String userId,String mainOrAdmin){
        Users findByUserIdContaining= userRepository.findByUserIdAndIsDeletedFalse(userId);
 
-        return boardRepository.findByUserid(findByUserIdContaining,pageable);
+        if(mainOrAdmin.equals("admin")){
+
+            return boardRepository.findByUseridAndDeletedIsTrue(findByUserIdContaining,pageable);
+
+        }
+
+        return boardRepository.findByUseridAndDeletedIsFalse(findByUserIdContaining,pageable);
     }
 
 
     //해시태그로 검색 - 리스트 출력
-    public Page<Board> findAllByHashTag(Pageable pageable, String hashTag){
+    public Page<Board> findAllByHashTag(Pageable pageable, String hashTag,String mainOrAdmin){
 
         String[] hashvalues = hashTag.split("#");
 
@@ -178,14 +199,24 @@ public class BoardService {
 
         List<Board> boards_hashTag2 =boards_hashTag.stream().distinct().collect(Collectors.toList());
 
-        //List<Board> boards_hashTag3 = boards_hashTag2.stream().filter(board -> board.isDeleted() == false).collect(Collectors.toList());
+        List<Board> boards_hashTag3 = boards_hashTag2.stream().filter(board -> board.isDeleted() == false).collect(Collectors.toList());
 
+        List<Board> boards_hashTag4 = boards_hashTag2.stream().filter(board -> board.isDeleted() == true).collect(Collectors.toList());
+
+        if(mainOrAdmin.equals("admin")){
+            PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize());
+            int start = (int) pageRequest.getOffset();
+            int end = Math.min((start + pageRequest.getPageSize()), boards_hashTag4.size());
+            Page<Board> BoardhashList = new PageImpl<>(boards_hashTag4.subList(start, end), pageRequest, boards_hashTag4.size());
+
+            return BoardhashList;
+        }
 
         // 요청으로 들어온 page와 한 page당 원하는 데이터의 갯수
         PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize());
         int start = (int) pageRequest.getOffset();
-        int end = Math.min((start + pageRequest.getPageSize()), boards_hashTag2.size());
-        Page<Board> BoardhashList = new PageImpl<>(boards_hashTag2.subList(start, end), pageRequest, boards_hashTag2.size());
+        int end = Math.min((start + pageRequest.getPageSize()), boards_hashTag3.size());
+        Page<Board> BoardhashList = new PageImpl<>(boards_hashTag3.subList(start, end), pageRequest, boards_hashTag3.size());
 
         return BoardhashList;
 

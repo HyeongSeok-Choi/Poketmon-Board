@@ -16,19 +16,21 @@ import java.util.List;
 public interface BoardRepository extends JpaRepository<Board,Long> {
 
 
-//    Page<Board> findByTitleContainingAndDeletedIsFalse(String title, Pageable pageable);
-//
-//    Page<Board> findByContentContainingAndDeletedIsFalse(String content, Pageable pageable);
-//
-//    Page<Board> findByUseridAndDeletedIsFalse(Users userId, Pageable pageable);
-//
-//    Page<Board> findAllByDeletedIsFalse(Pageable pageable);
+    Page<Board> findByTitleContainingAndDeletedIsFalse(String title, Pageable pageable);
 
-    Page<Board> findByTitleContaining(String title, Pageable pageable);
+    Page<Board> findByContentContainingAndDeletedIsFalse(String content, Pageable pageable);
 
-    Page<Board> findByContentContaining(String content, Pageable pageable);
+    Page<Board> findByUseridAndDeletedIsFalse(Users userId, Pageable pageable);
 
-    Page<Board> findByUserid(Users userId, Pageable pageable);
+    Page<Board> findAllByDeletedIsFalse(Pageable pageable);
+
+    Page<Board> findByTitleContainingAndDeletedIsTrue(String title, Pageable pageable);
+
+    Page<Board> findByContentContainingAndDeletedIsTrue(String content, Pageable pageable);
+
+    Page<Board> findByUseridAndDeletedIsTrue(Users userId, Pageable pageable);
+
+    Page<Board> findAllByDeletedIsTrue(Pageable pageable);
 
 
     @Modifying

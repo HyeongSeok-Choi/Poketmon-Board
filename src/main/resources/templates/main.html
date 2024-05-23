@@ -104,7 +104,6 @@
     <form th:if="${mainOrAdmin =='admin'}" th:action="@{/admin/deletedBoard}" method="get">
         <div class="board-search" >
             <div class="container">
-                <img src="/img/movingCatgif.gif" />
                 <div class="search-window">
                     <div class="search-wrap">
                         <label for="searchvalue" class="blind">공지사항 내용 검색</label>
@@ -172,29 +171,17 @@
                     <td></td>
                 </tr>
                 <!--일반 게시물-->
-                <tr th:each="board : ${boards}" th:if="${!board.deleted && mainOrAdmin == 'main'}">
+                <tr id="restoreParent" th:each="board : ${boards}" >
                     <td th:text="${board.id}">게시물 번호</td>
                     <td>
                         <a th:href="@{/BoardDetailView(id=${board.id})}" th:text="*{board.title}">환영합니다. 자유롭게 글을
-                            작성해주세요</a>
+                            작성해주세요</a><p><button th:if="${mainOrAdmin == 'admin'}" class="btn btn-excel restore-button"  th:value="${board.id}">복구</button></p>
                     </td>
                     <td th:text="${board.userid.userId}">작성자</td>
                     <td th:text="${board.viewCount}">조회수</td>
                     <td th:text="${#temporals.format(board.createdAt, 'yyyy-MM-dd HH:mm')}">등록일</td>
                 </tr>
 
-
-                <!--삭제 게시물-->
-                <tr id="restoreParent" th:each="board : ${boards}" th:if="${board.deleted && mainOrAdmin == 'admin'}">
-                    <td th:text="${board.id}">게시물 번호</td>
-                    <td>
-                        <a th:href="@{/BoardDetailView(id=${board.id})}" th:text="*{board.title}">삭제된 게시물이 없습니다.
-                        </a><p><button class="btn btn-excel restore-button"  th:value="${board.id}">복구</button></p>
-                    </td>
-                    <td th:text="${board.userid.userId}">작성자</td>
-                    <td th:text="${board.viewCount}">조회수</td>
-                    <td th:text="${#temporals.format(board.createdAt, 'yyyy-MM-dd HH:mm')}">등록일</td>
-                </tr>
                 </tbody>
             </table>
             <!-- 페이징 처리 부분 -->
