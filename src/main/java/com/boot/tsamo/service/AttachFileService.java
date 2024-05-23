@@ -153,15 +153,16 @@ public class AttachFileService {
         }
     }
 
+    @Transactional
     public void deleteFile(long bno, long fno) {
         // 삭제할 파일의 저장 경로를 얻어온다.
-        String filePath = attachFileRepository.getAttachFileUrlByBoardIdIdAndId(bno, fno);
+        String filePath = attachFileRepository.getAttachFileUrlByBoardIdAndId(bno, fno);
 
         if (filePath != null) {
             File file = new File(filePath);
             if (file.exists()) {
                 if (file.delete()) {
-
+                    attachFileRepository.deleteByBoardIdAndFileId(bno, fno);
                 } else {
                     throw new RuntimeException("파일 삭제에 실패했습니다.");
                 }
