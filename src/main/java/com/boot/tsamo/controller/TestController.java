@@ -227,7 +227,6 @@ public class TestController {
         List<Extension> extensions = fileService.getExtensions();
         Integer maxUploadCnt = fileAttributeService.getMaxRequestCnt(1L);
 
-        Integer maxUploadCnt = fileAttributeService.getMaxRequestCnt(1L);
 
         List<HashTag> hashTags = new ArrayList<>();
         hashTags.add(new HashTag());
