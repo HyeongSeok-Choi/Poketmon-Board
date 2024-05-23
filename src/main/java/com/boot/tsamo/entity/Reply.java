@@ -8,6 +8,8 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -28,7 +30,7 @@ public class Reply {
     @JoinColumn(name = "board_id")
     private Board boardId;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private Users userid;
 
@@ -43,10 +45,12 @@ public class Reply {
     @UpdateTimestamp // UPDATE 시 자동으로 값을 채워줌
     private final LocalDateTime updatedAt = LocalDateTime.now();
 
+    @OneToMany(mappedBy = "replyId",fetch = FetchType.EAGER ,cascade=CascadeType.REMOVE)
+    private List<ReReply> rereplies= new ArrayList<ReReply>();
 
 
 
-    public void update(  String content) {
+    public void update(String content) {
         this.content = content;
     }
 

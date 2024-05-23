@@ -20,9 +20,6 @@ public class MyOAuth2UserService extends DefaultOAuth2UserService {
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
-        System.out.println("키햐오오오오");
-        System.out.println(userRequest.getAccessToken()+"들어오나");
-
         OAuth2User oAuth2User = super.loadUser(userRequest);
         try {
             System.out.println(new ObjectMapper().writeValueAsString(oAuth2User.getAttributes()));
@@ -42,6 +39,6 @@ public class MyOAuth2UserService extends DefaultOAuth2UserService {
 
         userRepository.save(user);
 
-        return new CustomOAuth2User(userId);
+        return user;
     }
 }

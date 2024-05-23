@@ -23,9 +23,9 @@ public class DownloadController {
     private final AttachFileService attachFileService;
 
     @GetMapping("/getAttach/{bno}/download/{fno}")
-    public ResponseEntity<UrlResource> downloadAttachFile(@PathVariable Long fno, @PathVariable Long bno){
+    public ResponseEntity<UrlResource> downloadAttachFile(@PathVariable Long bno, @PathVariable Long fno){
 
-        AttachFileDto attachFileDto = AttachFileDto.of(attachFileService.getAttachFile(fno, bno));
+        AttachFileDto attachFileDto = AttachFileDto.of(attachFileService.getAttachFile(bno, fno));
         UrlResource resource;
         try{
             resource = new UrlResource("file:"+ attachFileDto.getFileUrl());

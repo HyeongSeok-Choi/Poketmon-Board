@@ -4,16 +4,13 @@ import com.boot.tsamo.entity.Board;
 import com.boot.tsamo.entity.ReReply;
 import com.boot.tsamo.entity.Reply;
 import com.boot.tsamo.entity.Users;
+import com.boot.tsamo.entity.ReReply;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
-
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @TestPropertySource(locations = "classpath:application-test.properties")
@@ -22,7 +19,7 @@ class reReplyRepositoryTest {
     ReplyRepository replyRepository;
 
     @Autowired
-    reReplyRepository reReplyRepository;
+    ReReplyRepository reReplyRepository;
 
     @Autowired
     UserRepository userRepository;

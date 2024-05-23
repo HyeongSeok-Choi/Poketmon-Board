@@ -13,11 +13,4 @@ public class AddReplyDTO {
     private String userid;
     private String content;
 
-//    public Reply toEntity(Board board) {
-//        Reply reply = new Reply();
-//        reply.setBoardId(board);
-//        reply.setContent(content);
-//
-//        return reply;
-//    }
 }

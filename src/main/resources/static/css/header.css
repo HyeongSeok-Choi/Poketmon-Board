@@ -1,0 +1,19 @@
+header {
+    background-color: #ffffff;
+    color: #AED284FF;
+    text-align: center;
+    width: 100%;
+}
+
+.headerNav {
+    background-color: #AED284FF;
+    padding: 3px;
+}
+
+.headerNav a {
+    color: #fff;
+    text-decoration: none;
+    padding: 10px;
+    margin-right: 10px;
+    display: inline-block;
+}

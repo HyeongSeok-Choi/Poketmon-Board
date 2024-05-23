@@ -17,7 +17,7 @@ public class AttachFileAttribute {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    private Long id;
 
     private int max_upload_size;
 

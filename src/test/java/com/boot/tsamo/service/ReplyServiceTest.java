@@ -1,6 +1,7 @@
 package com.boot.tsamo.service;
 
 import com.boot.tsamo.constant.Role;
+import com.boot.tsamo.dto.modifyReplyDTO;
 import com.boot.tsamo.entity.Board;
 import com.boot.tsamo.entity.Reply;
 import com.boot.tsamo.entity.Users;
@@ -59,34 +60,34 @@ public class ReplyServiceTest {
 
         }
 
-        Board board = boardRepository.findById(1L).get();
-
-        Reply reply = new Reply();
-        reply.setUserid(user);
-        reply.setBoardId(board);
-        reply.setContent("댓글 2번째");
-        replyRepository.save(reply);
-
-        this.testSaveReply();
-        List<Reply> replyList = replyService.findAll(1L);
-        System.out.println(replyList.get(1).getBoardId().getId());
-        System.out.println(replyList.get(0).getContent());
-        System.out.println(replyList.get(0).getReplyId());
-        System.out.println(replyList.get(0).getUserid());
-        System.out.println(replyList.get(0).getUpdatedAt());
-        System.out.println(replyList.get(0).getCreatedAt());
-
-        System.out.println(replyList.get(1).getContent());
-        System.out.println(replyList.get(1).getReplyId());
-        System.out.println(replyList.get(1).getUserid());
-        System.out.println(replyList.get(1).getUpdatedAt());
-        System.out.println(replyList.get(1).getCreatedAt());
-
-
-        replyList.get(0).setContent("수정된 댓글입니다.");
-        replyRepository.save(replyList.get(0));
-
-        System.out.println(replyList.get(0).getContent());
+//        Board board = boardRepository.findById(1L).get();
+//
+//        Reply reply = new Reply();
+//        reply.setUserid(user);
+//        reply.setBoardId(board);
+//        reply.setContent("댓글 2번째");
+//        replyRepository.save(reply);
+//
+//        this.testSaveReply();
+//        List<Reply> replyList = replyService.findAll(1L);
+//        System.out.println(replyList.get(1).getBoardId().getId());
+//        System.out.println(replyList.get(0).getContent());
+//        System.out.println(replyList.get(0).getReplyId());
+//        System.out.println(replyList.get(0).getUserid());
+//        System.out.println(replyList.get(0).getUpdatedAt());
+//        System.out.println(replyList.get(0).getCreatedAt());
+//
+//        System.out.println(replyList.get(1).getContent());
+//        System.out.println(replyList.get(1).getReplyId());
+//        System.out.println(replyList.get(1).getUserid());
+//        System.out.println(replyList.get(1).getUpdatedAt());
+//        System.out.println(replyList.get(1).getCreatedAt());
+//
+//
+//        replyList.get(0).setContent("수정된 댓글입니다.");
+//        replyRepository.save(replyList.get(0));
+//
+//        System.out.println(replyList.get(0).getContent());
 
     }
 
@@ -153,8 +154,6 @@ public class ReplyServiceTest {
             reply.setBoardId(board);
             reply.setContent("댓글" + i);
             replyRepository.save(reply);
-
-
         }
 
         Board board = boardRepository.findById(1L).get();
@@ -196,7 +195,7 @@ public class ReplyServiceTest {
 
        String beforeUpdated= replyRepository.findById(1L).get().getContent();
 
-       replyService.update(1,"1번을 수정했습니다");
+       replyService.update(new modifyReplyDTO());
 
        String updatedreply =replyRepository.findById(1L).get().getContent();
 

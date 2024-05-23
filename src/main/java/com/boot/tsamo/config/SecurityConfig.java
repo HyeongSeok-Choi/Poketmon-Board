@@ -4,6 +4,7 @@ package com.boot.tsamo.config;
 import com.boot.tsamo.config.oauth.MyOAuth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.actuate.autoconfigure.observation.ObservationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -11,14 +12,16 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+
 import static org.springframework.boot.autoconfigure.security.servlet.PathRequest.toH2Console;
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-public class SecurityConfig   {
+public class SecurityConfig {
 
 
 /*    @Autowired
@@ -37,6 +40,11 @@ public class SecurityConfig   {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         http.csrf(AbstractHttpConfigurer::disable);
+        HttpSessionRequestCache requestCache = new HttpSessionRequestCache();
+        requestCache.setMatchingRequestParameterName("null");
+
+        http.requestCache((cache) -> cache
+                .requestCache(requestCache));
 
         http.formLogin((formLogin) ->
                         formLogin
@@ -55,10 +63,9 @@ public class SecurityConfig   {
                 .authorizeHttpRequests((authorizeRequests) ->
                         authorizeRequests
 
-
                                 .requestMatchers("/css/**", "/js/**", "/img/**").permitAll()
-                                .requestMatchers("/main","/","/user/**","/createBoard","/BoardDetailView","/reply","/posts","/createBoard","createBoard2"
-                                        ,"/api/addComment").permitAll()
+                                .requestMatchers("/main","/","/user/**","/createBoard","/BoardDetailView","/reply","/posts","/createBoard","createBoardRequest"
+                                        ,"/api/addComment" ,"/attachFile", "/board/**", "/**","/error").permitAll()
                                 .requestMatchers("/admin/**").hasRole("ADMIN")
                                 .anyRequest().authenticated()
 
@@ -73,14 +80,11 @@ public class SecurityConfig   {
     }
 
 
-
-
     @Bean
     public static BCryptPasswordEncoder passwordEncoder() {
 
         return new BCryptPasswordEncoder();
     }
-
 
 
 }

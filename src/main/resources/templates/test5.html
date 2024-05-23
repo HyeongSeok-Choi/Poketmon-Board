@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>방문자 수 조회</title>
+</head>
+<body>
+<h1>방문자 수 조회</h1>
+<p>누적 방문자 수: <span th:text="${totalVisitCount}"></span>명</p>
+<p>최근 7일 방문 날짜 및 방문자 수:</p>
+<ul>
+    <li th:each="visit : ${visitCountByDateList}">
+        날짜: <span th:text="${#temporals.format(visit.visitDate, 'yyyy-MM-dd')}"></span>, 방문자 수: <span th:text="${visit.count}"></span>
+    </li>
+</ul>
+<p><a href="/">메인 페이지로 돌아가기</a></p>
+</body>
+</html>
