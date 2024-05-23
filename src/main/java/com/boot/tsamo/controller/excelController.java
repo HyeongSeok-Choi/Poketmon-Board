@@ -24,12 +24,12 @@ public class excelController {
     @GetMapping(value = "/ExcelApi")
     public ResponseEntity<List<ExcelDTO>> getAllBoards() {
 
-       List<Board> allBoards = boardService.findAll();
+        List<Board> allBoards = boardService.getDeletedBoards();
 
         List<ExcelDTO> excelDTOS = allBoards.stream()
                 .map(a -> new ExcelDTO(a))
                 .collect(Collectors.toList());
 
-       return ResponseEntity.ok().body(excelDTOS);
+        return ResponseEntity.ok().body(excelDTOS);
     }
 }

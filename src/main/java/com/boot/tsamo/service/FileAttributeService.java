@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -47,6 +48,27 @@ public class FileAttributeService {
 
     public Integer getMaxRequestSize(Long id){
         return attachFileAttributeRepository.findMax_Upload_SizeById(id);
+    }
+
+    //저장된 첨부파일 속성 불러오기
+    public attachAttributeDTO getattachAttributedto(){
+
+       AttachFileAttribute attachFileAttribute= attachFileAttributeRepository.findById(1L).get();
+
+        attachAttributeDTO attachAttributeDTO = new attachAttributeDTO();
+        attachAttributeDTO.setMaxsize(attachFileAttribute.getMax_upload_size());
+        attachAttributeDTO.setMaxcnt(attachFileAttribute.getMax_upload_cnt());
+
+        List<Extension> extensions= extensionRepository.findAll();
+        List<String> savedExtentions = new ArrayList<>();
+
+        for (Extension extension:extensions){
+            savedExtentions.add(extension.getExtension());
+        }
+
+        attachAttributeDTO.setExtension(savedExtentions);
+
+        return attachAttributeDTO;
     }
 
     public Integer getMaxRequestCnt(Long id){

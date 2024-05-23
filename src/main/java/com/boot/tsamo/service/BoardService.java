@@ -97,8 +97,38 @@ public class BoardService {
     }
 
     //게시물 삭제
-    public void deleteById(Long id) {
-        boardRepository.deleteById(id);
+//    public void deleteById(Long id) {
+//        boardRepository.deleteById(id);
+//    }
+
+    //게시물 삭제
+    public void deleteByIdbyboolean(Long id) {
+        Board board = boardRepository.findById(id).get();
+
+        board.setDeleted(true);
+
+        boardRepository.save(board);
+    }
+
+    //삭제된 게시물 목록(엑셀 다운에 사용)
+    public List<Board> getDeletedBoards() {
+
+        List<Board> boards = boardRepository.findAllByDeleted(true);
+
+        return boards;
+    }
+
+    //삭제된 게시물 복구
+    public String restore(Long id){
+
+     Board restoredBoard=  boardRepository.findById(id).get();
+
+     restoredBoard.setDeleted(false);
+
+     boardRepository.save(restoredBoard);
+
+      return "복구되었습니다.";
+
     }
 
     //모든 게시물 목록 출력
@@ -147,6 +177,8 @@ public class BoardService {
         }
 
         List<Board> boards_hashTag2 =boards_hashTag.stream().distinct().collect(Collectors.toList());
+
+        //List<Board> boards_hashTag3 = boards_hashTag2.stream().filter(board -> board.isDeleted() == false).collect(Collectors.toList());
 
 
         // 요청으로 들어온 page와 한 page당 원하는 데이터의 갯수

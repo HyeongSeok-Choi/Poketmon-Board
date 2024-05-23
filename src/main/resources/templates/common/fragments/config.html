@@ -1,17 +1,18 @@
 
-<!--Thymeleaf, ConfigFragment 선언-->
-<html lang="en"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      th:fragment="ConfigFragment">
-<head>
+<head xmlns:th="http://www.thymeleaf.org"
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+th:fragment="ConfigFragment">
     <!--Common Head-->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="viewport"
           content="width=device-width, maximum-scale=1.0, minimum-scale=1, user-scalable=yes,initial-scale=1.0"/>
+
     <title></title>
+
+    <link rel="stylesheet" type="text/css" href="/css/header.css">
+    <link rel="stylesheet" type="text/css" href="/css/footer.css">
 
     <!--Common JS-->
     <script th:inline="javascript" type="text/javascript" th:src="@{/js/jquery-3.7.1.min.js}"></script>
@@ -27,4 +28,3 @@
     <th:block layout:fragment="script"></th:block>
     <th:block layout:fragment="css"></th:block>
 </head>
-</html>

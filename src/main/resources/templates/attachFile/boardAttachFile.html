@@ -46,13 +46,17 @@
             font-size: smaller;
             text-decoration: underline;
         }
+
+        .card-header {
+            background-color: white;
+        }
     </style>
 
 </head>
 <body>
 <div class="card col-md-6 mb-1">
     <div class="card-header">
-        <strong class="card-title" id="attachTitle">첨부 파일</strong>
+        <button  class="btn btn-primary"><strong class="card-title" id="attachTitle">첨부 파일</strong></button>
     </div>
     <ul class="hidden" id="attachList">
         <li class="list-group-item" th:each="attachFile : ${attachFiles}">

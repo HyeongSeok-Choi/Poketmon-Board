@@ -31,6 +31,8 @@ public class Board {
 
     private Long viewCount;
 
+    private boolean deleted;
+
     @JoinColumn(name = "user_id")
     @ManyToOne
     private Users userid;
