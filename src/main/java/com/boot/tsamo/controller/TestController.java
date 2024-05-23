@@ -254,7 +254,7 @@ public class TestController {
 
         //확장자 받기
         List<Extension> extensions = fileService.getExtensions();
-
+        // Integer maxUploadCnt = fileAttributeService.getMaxRequestCnt(1L);
 
         int maxsize = 0;
         for (MultipartFile attachFile : attachFileList) {

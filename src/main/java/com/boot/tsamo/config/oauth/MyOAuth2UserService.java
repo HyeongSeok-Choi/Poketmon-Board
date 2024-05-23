@@ -53,6 +53,6 @@ public class MyOAuth2UserService extends DefaultOAuth2UserService {
 
             //new DefaultOAuth2User(authorities, responseMap, userEmail);
 
-        return  new DefaultOAuth2User(authorities, responseMap, userEmail);
+        return  user;
     }
 }

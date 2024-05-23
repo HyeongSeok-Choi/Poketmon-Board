@@ -1,3 +1,4 @@
+
 header {
     background-color: #ffffff;
     color: #AED284FF;
@@ -6,7 +7,7 @@ header {
 }
 
 .headerNav {
-    background-color: #AED284FF;
+    background-color: #ffcd39;
     padding: 3px;
 }
 
@@ -16,4 +17,9 @@ header {
     padding: 10px;
     margin-right: 10px;
     display: inline-block;
+}
+
+/* 링크에 대한 호버 효과 */
+.headerNav a:hover {
+    color: #bd2130; /* 흰색으로 변경 */
 }
