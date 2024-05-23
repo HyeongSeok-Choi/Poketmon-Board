@@ -225,17 +225,19 @@ public class TestController {
     public String createBoard(Model model) {
 
         List<Extension> extensions = fileService.getExtensions();
+        Integer maxUploadCnt = fileAttributeService.getMaxRequestCnt(1L);
 
         List<HashTag> hashTags = new ArrayList<>();
         hashTags.add(new HashTag());
 
-        model.addAttribute("fileMaxCnt",attachFileService.getMaxCnt());
-        model.addAttribute("fileMaxSize",attachFileService.getMaxSize());
         model.addAttribute("board", new Board());
-        model.addAttribute("attachFileFormDto", new ArrayList<>());
+        model.addAttribute("attachFileFormDto", new AttachFileFormDto());
         model.addAttribute("extensions", extensions);
+        model.addAttribute("maxUploadCnt", maxUploadCnt);
         model.addAttribute("hashTags", hashTags);
         model.addAttribute("createOrModify","create");
+        model.addAttribute("fileMaxCnt",attachFileService.getMaxCnt());
+        model.addAttribute("fileMaxSize",attachFileService.getMaxSize());
 
         return "createBoard";
     }
