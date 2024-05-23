@@ -174,23 +174,12 @@ public class TestController {
                                      Model model,Principal principal,
                                      @RequestParam(value="boardid", required=false)Long boardId) throws Exception {
 
-        // JSON 문자열을 리스트로 변환
-        ObjectMapper objectMapper = new ObjectMapper();
-        List<DeleteFileRequestDTO> deleteRequestDTOList = objectMapper.readValue(deleteRequestJson, new TypeReference<List<DeleteFileRequestDTO>>() {});
 
         //더미 해시값(해시 값이 없을 경우)
         List<HashTag> hashTags= new ArrayList<>();
         hashTags.add(new HashTag());
 
         model.addAttribute("createOrModify", createOrModify);
-
-        //create 혹은 modify 각 메소드 차별화된 기능이 추가되는 경우 사용할 것.
-//        if(createOrModify.equals("create")){
-//            model.addAttribute("createOrModify","create");
-//        }
-//        else{
-//            model.addAttribute("createOrModify","modify");
-//        }
 
         //확장자 받기
         List<Extension> extensions = fileService.getExtensions();
@@ -244,12 +233,20 @@ public class TestController {
 
             board = save.get("modify");
             hashTagService.deleteHashTags(board);
-            try {
-                for (DeleteFileRequestDTO requestDTO : deleteRequestDTOList) {
-                    attachFileService.deleteFile(requestDTO.getBno(), requestDTO.getFno());
+
+            //create 혹은 modify 각 메소드 차별화된 기능이 추가되는 경우 사용할 것.
+            if(createOrModify.equals("modify")){
+
+                ObjectMapper objectMapper = new ObjectMapper();
+                List<DeleteFileRequestDTO> deleteRequestDTOList = objectMapper.readValue(deleteRequestJson, new TypeReference<List<DeleteFileRequestDTO>>() {});
+
+                try {
+                    for (DeleteFileRequestDTO requestDTO : deleteRequestDTOList) {
+                        attachFileService.deleteFile(requestDTO.getBno(), requestDTO.getFno());
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
             }
 
             hashTagService.saveHashTags(hashTagValue,board);
