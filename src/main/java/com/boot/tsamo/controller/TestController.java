@@ -111,11 +111,8 @@ public class TestController {
                 Boards = boardService.findAllByUserId(pageable, searchvalue);
             } else if (searchtype.equals("hashTag")) {
 
-                else if(searchtype.equals("hashTag")){
-
                     Boards = boardService.findAllByHashTag(pageable,searchvalue);
 
-                }
 
             }
 
