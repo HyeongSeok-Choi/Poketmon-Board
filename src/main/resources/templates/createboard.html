@@ -48,12 +48,13 @@
             <form class="validation-form"  enctype="multipart/form-data" method="post" action="/createBoardRequest" th:object="${attachFileFormDto}">
 
                 <input type="hidden" th:if="${param.id} !=null"  th:value="${param.id}" name="boardid">
+                <input type="hidden" class="modify-attach" th:each="attachfile:${attachFileFormDto}" th:value="${attachfile.fileUrl}">
 
                 <!--제목 입력-->
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="title">제목</label>
-                            <input th:value="${board.getTitle}" class="form-control" id="title" name="title">
+                            <input th:value="${board.getTitle}" class="form-control" id="title" name="title" required>
                         </div>
                     </div>
 
@@ -92,33 +93,8 @@
         </div>
     </div>
 </div>
-<script th:inline="javascript">
-
-    // var fileList = []
-    // [ th:each="attachFile : ${attachFileFormDto}"]
-    // fileList+= [[${attachFile.fileUrl}]];
-    // [/]
-    //
-    // [[${attachFileFormDto}]];
-
-    // Get a reference to our file input
-    const fileInput = document.querySelector('input[type="file"]');
-
-    // Create a new File object
-    const myFile = new File(['Hello World!'], 'myFile.txt', {
-        type: 'text/plain',
-        lastModified: new Date(),
-    });
-
-    // Now let's create a DataTransfer to get a FileList
-    const dataTransfer = new DataTransfer();
-    dataTransfer.items.add(myFile);
-    fileInput.files = dataTransfer.files;
-</script>
 
 <script>
-
-
 
     $(document).on('click','.hashTag li',function(){
 

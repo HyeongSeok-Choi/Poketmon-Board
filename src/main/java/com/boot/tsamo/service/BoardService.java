@@ -93,11 +93,11 @@ public class BoardService {
     }
 
     //게시물 삭제
-    public void deleteById(Long id) {
-        boardRepository.deleteById(id);
-    }
+//    public void deleteById(Long id) {
+//        boardRepository.deleteById(id);
+//    }
 
-    //아직 테스트중
+    //게시물 삭제
     public void deleteByIdbyboolean(Long id) {
         Board board = boardRepository.findById(id).get();
 
@@ -106,7 +106,7 @@ public class BoardService {
         boardRepository.save(board);
     }
 
-    //아직 테스트중
+    //삭제된 게시물 목록(엑셀 다운에 사용)
     public List<Board> getDeletedBoards() {
 
         List<Board> boards = boardRepository.findAllByDeleted(true);
@@ -114,26 +114,39 @@ public class BoardService {
         return boards;
     }
 
+    //삭제된 게시물 복구
+    public String restore(Long id){
+
+     Board restoredBoard=  boardRepository.findById(id).get();
+
+     restoredBoard.setDeleted(false);
+
+     boardRepository.save(restoredBoard);
+
+      return "복구되었습니다.";
+
+    }
+
     //모든 게시물 목록 출력
     public Page<Board> findAll(Pageable pageable){
-        return boardRepository.findAllByDeletedIsFalse(pageable);
+        return boardRepository.findAll(pageable);
     }
 
     //제목으로 검색 -리스트 출력
     public Page<Board> findAllByTitle(Pageable pageable, String title){
-        return boardRepository.findByTitleContainingAndDeletedIsFalse(title,pageable);
+        return boardRepository.findByTitleContaining(title,pageable);
     }
 
     //본문으로 검색 -리스트 출력
     public Page<Board> findAllByContent(Pageable pageable, String content){
-        return boardRepository.findByContentContainingAndDeletedIsFalse(content,pageable);
+        return boardRepository.findByContentContaining(content,pageable);
     }
 
     //작성자로 검색 -리스트 출력
     public Page<Board> findAllByUserId(Pageable pageable, String userId){
        Users findByUserIdContaining= userRepository.findByUserIdAndIsDeletedFalse(userId);
 
-        return boardRepository.findByUseridAndDeletedIsFalse(findByUserIdContaining,pageable);
+        return boardRepository.findByUserid(findByUserIdContaining,pageable);
     }
 
 
@@ -161,14 +174,14 @@ public class BoardService {
 
         List<Board> boards_hashTag2 =boards_hashTag.stream().distinct().collect(Collectors.toList());
 
-        List<Board> boards_hashTag3 = boards_hashTag2.stream().filter(board -> board.isDeleted() == false).collect(Collectors.toList());
+        //List<Board> boards_hashTag3 = boards_hashTag2.stream().filter(board -> board.isDeleted() == false).collect(Collectors.toList());
 
 
         // 요청으로 들어온 page와 한 page당 원하는 데이터의 갯수
         PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize());
         int start = (int) pageRequest.getOffset();
-        int end = Math.min((start + pageRequest.getPageSize()), boards_hashTag3.size());
-        Page<Board> BoardhashList = new PageImpl<>(boards_hashTag3.subList(start, end), pageRequest, boards_hashTag3.size());
+        int end = Math.min((start + pageRequest.getPageSize()), boards_hashTag2.size());
+        Page<Board> BoardhashList = new PageImpl<>(boards_hashTag2.subList(start, end), pageRequest, boards_hashTag2.size());
 
         return BoardhashList;
 

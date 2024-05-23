@@ -58,17 +58,16 @@ public class TestController {
         return "test";
     }
 
-    @GetMapping(value = "/admin")
-    public String admin() {
-
-        return "adminpage";
-    }
 
     //게시물 목록(main페이지) 검색, 페이징 기능 포함
     @GetMapping(value = "/")
     public String main(Model model,@PageableDefault(page=0,size = 10,sort = "id",
-            direction = Sort.Direction.DESC) Pageable pageable, String searchvalue, String searchtype,String sort) {
+            direction = Sort.Direction.DESC) Pageable pageable, String searchvalue, String searchtype,String sort,String mainOrAdmin) {
 
+
+        mainOrAdmin="main";
+
+        model.addAttribute("mainOrAdmin", mainOrAdmin);
 
         if(sort == null || sort.equals("title")) {
             Sort.by(Sort.Direction.DESC, "title");
@@ -145,7 +144,7 @@ public class TestController {
         hashTags.add(new HashTag());
 
         model.addAttribute("board", new Board());
-        model.addAttribute("attachFileFormDto", new AttachFileFormDto());
+        model.addAttribute("attachFileFormDto", new ArrayList<>());
         model.addAttribute("extensions", extensions);
         model.addAttribute("hashTags", hashTags);
         model.addAttribute("createOrmodify",createOrmodify);

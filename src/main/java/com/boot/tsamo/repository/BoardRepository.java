@@ -16,13 +16,20 @@ import java.util.List;
 public interface BoardRepository extends JpaRepository<Board,Long> {
 
 
-    Page<Board> findByTitleContainingAndDeletedIsFalse(String title, Pageable pageable);
+//    Page<Board> findByTitleContainingAndDeletedIsFalse(String title, Pageable pageable);
+//
+//    Page<Board> findByContentContainingAndDeletedIsFalse(String content, Pageable pageable);
+//
+//    Page<Board> findByUseridAndDeletedIsFalse(Users userId, Pageable pageable);
+//
+//    Page<Board> findAllByDeletedIsFalse(Pageable pageable);
 
-    Page<Board> findByContentContainingAndDeletedIsFalse(String content, Pageable pageable);
+    Page<Board> findByTitleContaining(String title, Pageable pageable);
 
-    Page<Board> findByUseridAndDeletedIsFalse(Users userId, Pageable pageable);
+    Page<Board> findByContentContaining(String content, Pageable pageable);
 
-    Page<Board> findAllByDeletedIsFalse(Pageable pageable);
+    Page<Board> findByUserid(Users userId, Pageable pageable);
+
 
     @Modifying
     @Query("update Board p set p.viewCount = p.viewCount + 1 where p.id = :id")
