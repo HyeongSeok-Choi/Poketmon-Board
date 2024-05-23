@@ -37,10 +37,12 @@
 
  <script>
 
-     var comment ;
+
      //댓글 조회 기능
 
          request();
+
+         var replyList = $('#replySelectAll');
 
 
          function request() {
@@ -55,6 +57,7 @@
 
                  .then(response => response.json())
                  .then(data => {
+                     var comment;
 
                      $.each(data, function (i) {
                          console.log(data);
@@ -75,13 +78,8 @@
                             </p>
                         </div>
                     `;
-
-
-                         $('#replySelectAll').append(comment);
                      })
-
-
-
+                     replyList.empty().append(comment);
                  });
 
          }
@@ -105,12 +103,12 @@
                      content: contents,
                      boardId: boardId,
                      userid: "qnftlstm",
-
                  })
 
              }).then(res => {
                  console.log("되노");
-                 $('#contents').val("");
+                 //$('#contents').val("");
+                 request();
              })
 
 
