@@ -171,19 +171,6 @@ public class TestController {
         model.addAttribute("fileMaxSize",attachFileService.getMaxSize());
 
 
-//        // 주민등록번호를 블러 처리할 정규표현식
-//        String regex = "\\d{6}-\\d{7}";
-//
-//        // 게시물 내용에서 주민등록번호 검사 및 블러 처리
-//        String content = addBoarddto.getContent();
-//        if (content != null && content.matches(regex)) {
-//            // 개인정보 블러 처리
-//            content = content.replaceAll(regex, "******-*******");
-//            // 경고 메시지 추가
-//            model.addAttribute("warningMessage", "주민등록번호와 같은 개인정보가 포함되어 있습니다.");
-//            // 블러 처리된 내용을 DTO에 다시 설정
-//            addBoarddto.setContent(content);
-//        }
 
         //더미 해시값(해시 값이 없을 경우)
         List<HashTag> hashTags= new ArrayList<>();
