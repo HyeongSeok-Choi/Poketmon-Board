@@ -140,15 +140,14 @@ public class TestController {
     @GetMapping(value = "/createBoard")
     public String createBoard(Model model) {
 
-        model.addAttribute("fileMaxCnt",attachFileService.getMaxCnt());
-        model.addAttribute("fileMaxSize",attachFileService.getMaxSize());
-
         List<Extension> extensions = fileService.getExtensions();
         Integer maxUploadCnt = fileAttributeService.getMaxRequestCnt(1L);
 
         List<HashTag> hashTags =new ArrayList<>();
         hashTags.add(new HashTag());
 
+        model.addAttribute("fileMaxCnt",attachFileService.getMaxCnt());
+        model.addAttribute("fileMaxSize",attachFileService.getMaxSize());
         model.addAttribute("board", new Board());
         model.addAttribute("attachFileFormDto", new AttachFileFormDto());
         model.addAttribute("extensions", extensions);
@@ -173,12 +172,15 @@ public class TestController {
         List<HashTag> hashTags= new ArrayList<>();
         hashTags.add(new HashTag());
 
-        if(createOrModify.equals("create")){
-            model.addAttribute("createOrModify","create");
-        }
-        else{
-            model.addAttribute("createOrModify","modify");
-        }
+        model.addAttribute("createOrModify", createOrModify);
+
+        //create 혹은 modify 각 메소드 차별화된 기능이 추가되는 경우 사용할 것.
+//        if(createOrModify.equals("create")){
+//            model.addAttribute("createOrModify","create");
+//        }
+//        else{
+//            model.addAttribute("createOrModify","modify");
+//        }
 
         //확장자 받기
         List<Extension> extensions = fileService.getExtensions();
@@ -299,8 +301,6 @@ public class TestController {
         boardService.getViewCounting(id);
 
         model.addAttribute("attachFiles", attachFiles);
-
-
 
         Board detailBoard = boardService.findById(id);
         model.addAttribute("LikeCount", likeService.countLike(detailBoard));

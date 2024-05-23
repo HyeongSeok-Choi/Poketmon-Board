@@ -152,14 +152,15 @@
 
             <h4 class="mb-3">게시물 조회</h4>
             <p th:text="'조회수: '+${board.getViewCount()}">조회수</p>
-                    <!--제목 입력-->
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label for="title">제목</label>
-                            <input type="text" class="form-control" id="title" name="title" th:value="${board.title}" readonly>
-                        </div>
-                        <div th:replace="~{/attachFile/boardAttachFile.html}">
-                    </div>
+            <!--제목 입력-->
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="title">제목</label>
+                    <input type="text" class="form-control" id="title" name="title" th:value="${board.title}" readonly>
+                </div>
+                <div th:replace="~{/attachFile/boardAttachFile.html}">
+                    <div th:with="createOrModify=${createOrModify}" th:remove="tag"></div>
+                </div>
 
                 <!--내용 입력-->
 
