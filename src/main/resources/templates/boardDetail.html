@@ -162,6 +162,7 @@
                     <input type="text" class="form-control" id="title" name="title" th:value="${board.title}" readonly>
                 </div>
                 <div th:replace="~{/attachFile/boardAttachFile.html}">
+                    <div th:with="createOrModify=${createOrModify}" th:remove="tag"></div>
                 </div>
 
                 <!--내용 입력-->

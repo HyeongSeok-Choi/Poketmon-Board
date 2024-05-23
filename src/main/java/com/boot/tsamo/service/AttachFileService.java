@@ -36,7 +36,6 @@ public class AttachFileService {
     private final AttachFileRepository attachFileRepository;
     private final ExtensionRepository extensionRepository;
     private final AttachFileAttributeRepository attachFileAttributeRepository;
-
     @Transactional
     public void deleteAttachFile(Board board) {
 
@@ -151,6 +150,27 @@ public class AttachFileService {
             return MediaType.TEXT_PLAIN;
         } else {
             return MediaType.APPLICATION_OCTET_STREAM; // 기본값
+        }
+    }
+
+    @Transactional
+    public void deleteFile(long bno, long fno) {
+        // 삭제할 파일의 저장 경로를 얻어온다.
+        String filePath = attachFileRepository.getAttachFileUrlByBoardIdAndId(bno, fno);
+
+        if (filePath != null) {
+            File file = new File(filePath);
+            if (file.exists()) {
+                if (file.delete()) {
+                    attachFileRepository.deleteByBoardIdAndFileId(bno, fno);
+                } else {
+                    throw new RuntimeException("파일 삭제에 실패했습니다.");
+                }
+            } else {
+                throw new RuntimeException("파일이 존재하지 않습니다.");
+            }
+        } else {
+            throw new RuntimeException("파일 경로가 null 입니다.");
         }
     }
 
