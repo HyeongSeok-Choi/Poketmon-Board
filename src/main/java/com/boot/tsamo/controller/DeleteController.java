@@ -7,11 +7,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -19,10 +18,13 @@ public class DeleteController {
 
     private final AttachFileService attachFileService;
 
+    // 비동기 api를 사용하여 파일 제거 로직
     @PostMapping("/api/deleteFile")
-    public ResponseEntity<String> fetchDeleteFile(@RequestBody DeleteFileRequestDTO requestDTO) {
+    public ResponseEntity<String> fetchDeleteFile(@RequestBody List<DeleteFileRequestDTO> requestDTOList) {
         try {
-            attachFileService.deleteFile(requestDTO.getBno(), requestDTO.getFno());
+            for (DeleteFileRequestDTO requestDTO : requestDTOList) {
+                attachFileService.deleteFile(requestDTO.getBno(), requestDTO.getFno());
+            }
             return ResponseEntity.ok("파일이 성공적으로 삭제되었습니다.");
         } catch (Exception e) {
             e.printStackTrace();

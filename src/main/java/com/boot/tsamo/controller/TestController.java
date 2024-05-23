@@ -2,6 +2,7 @@ package com.boot.tsamo.controller;
 
 
 import com.boot.tsamo.dto.AttachFileFormDto;
+import com.boot.tsamo.dto.DeleteFileRequestDTO;
 import com.boot.tsamo.dto.addBoardDTO;
 import com.boot.tsamo.dto.attachAttributeDTO;
 import com.boot.tsamo.entity.AttachFile;
@@ -9,12 +10,16 @@ import com.boot.tsamo.entity.Board;
 import com.boot.tsamo.entity.Extension;
 import com.boot.tsamo.entity.HashTag;
 import com.boot.tsamo.service.*;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -165,8 +170,13 @@ public class TestController {
                                      @RequestParam("attachFile") List<MultipartFile> attachFileList,
                                      @RequestParam("hashTagValue")String hashTagValue,
                                      @RequestParam("createOrModify") String createOrModify,
+                                     @RequestParam("deleteRequestDTOList") String deleteRequestJson,
                                      Model model,Principal principal,
                                      @RequestParam(value="boardid", required=false)Long boardId) throws Exception {
+
+        // JSON 문자열을 리스트로 변환
+        ObjectMapper objectMapper = new ObjectMapper();
+        List<DeleteFileRequestDTO> deleteRequestDTOList = objectMapper.readValue(deleteRequestJson, new TypeReference<List<DeleteFileRequestDTO>>() {});
 
         //더미 해시값(해시 값이 없을 경우)
         List<HashTag> hashTags= new ArrayList<>();
@@ -234,7 +244,13 @@ public class TestController {
 
             board = save.get("modify");
             hashTagService.deleteHashTags(board);
-            fileService.deleteAttachFile(board);
+            try {
+                for (DeleteFileRequestDTO requestDTO : deleteRequestDTOList) {
+                    attachFileService.deleteFile(requestDTO.getBno(), requestDTO.getFno());
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
             hashTagService.saveHashTags(hashTagValue,board);
         }else{

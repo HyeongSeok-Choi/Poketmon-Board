@@ -149,7 +149,7 @@
     });
 
     // 수정 시 삭제할 파일 저장 하는 필드 및 메소드
-    var deleteRequestDTO = [];
+    var deleteRequestDTOList = [];
 
     $('.deleteBtn').click(function () {
         var boardId = $(this).data('board-id');
@@ -157,7 +157,7 @@
 
         if (confirm('첨부파일 목록에서 지우시겠습니까?')) {
             // 삭제할 파일 정보를 DTO에 추가
-            deleteRequestDTO.push({
+            deleteRequestDTOList.push({
                 bno: boardId,
                 fno: fileId
             });
