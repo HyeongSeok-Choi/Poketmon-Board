@@ -67,7 +67,6 @@ public class ReplyController {
            System.out.println(rwe.getUserid()+"테스트");
        }
 
-
         return replyDTOPage;
 
     }

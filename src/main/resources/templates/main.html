@@ -76,7 +76,6 @@
             <h3 th:if="${mainOrAdmin =='main'}">게시판</h3>
             <h3 th:if="${mainOrAdmin =='admin'}">삭제 게시물 목록</h3>
         </div>
-    </div>
 
     <!-- board seach area -->
     <input type="hidden" th:value="${mainOrAdmin}" name="mainOrAdmin">
@@ -84,7 +83,6 @@
     <form th:if="${mainOrAdmin =='main'}" th:action="@{/}" method="get">
         <div class="board-search">
             <div class="container">
-                <img src="/img/movingCatgif.gif" />
                 <div class="search-window">
                     <div class="search-wrap">
                         <label for="searchvalue" class="blind">공지사항 내용 검색</label>

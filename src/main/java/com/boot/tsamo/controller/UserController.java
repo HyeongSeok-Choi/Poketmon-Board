@@ -50,10 +50,10 @@ public class UserController {
                     "2개의 패스워드가 일치하지 않습니다.");
             return "/user/userForm";
         }
-        try{
-             Users user = Users.createUser(userFormDto, passwordEncoder);
-             userService.saveUser(user);
-        }catch(UsernameNotFoundException e){
+        try {
+            Users user = Users.createUser(userFormDto, passwordEncoder);
+            userService.saveUser(user);
+        } catch (UsernameNotFoundException e) {
             model.addAttribute("errorMessage", e.getMessage());
             return "/user/userForm";
         }
@@ -107,7 +107,7 @@ public class UserController {
         return "/user/userLoginInfo";
     }
 
-    @PostMapping(value = "/loginInfo" )
+    @PostMapping(value = "/loginInfo")
     public String updateUserInfo(UserFormDto userFormDto, RedirectAttributes redirectAttributes) {
         userService.updateUser(userFormDto);
         redirectAttributes.addFlashAttribute("successMessage", "수정되었습니다.");
@@ -131,7 +131,7 @@ public class UserController {
 
 
     @GetMapping(value = "/auth/kakao/callback")
-    public String kakaoCallback(){
+    public String kakaoCallback() {
 
         return "createboard";
     }

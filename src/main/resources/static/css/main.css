@@ -2,19 +2,15 @@ table {
     border-collapse: collapse;
     border-spacing: 0;
 }
-section.notice {
-    padding: 80px 0;
-}
 
-.page-title {
-    margin-bottom: 60px;
-}
-.page-title h3 {
-    font-size: 28px;
-    color: #333333;
-    font-weight: 400;
-    text-align: center;
-}
+.img-container {
+    width: 90%;
+    max-width: 1100px;
+    margin: 0 auto;
+    text-align: center; /* 이미지를 가운데 정렬 */
+    background-color: #ffffff; /* 배경 색상을 흰색으로 설정 */
+    /*padding: 20px; !* 이미지와 배경 색상 간의 간격을 설정할 수 있음 *!*/
+    box-sizing: border-box;}
 
 .board-search .search-window {
     padding: 15px 0;
@@ -189,6 +185,5 @@ section.notice {
     transition: background-color 0.3s ease-in-out;
 }
 
-.btn-excel:hover {
-    background-color: #0056b3;
-}
+
+

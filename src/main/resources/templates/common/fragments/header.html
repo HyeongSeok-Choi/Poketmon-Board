@@ -1,18 +1,49 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      th:fragment="HeaderFragment">
+<head>
+    <meta charset="UTF-8">
+    <style>
 
-<div xmlns:th="http://www.thymeleaf.org"
-xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
-th:fragment="HeaderFragment">
+        header {
+            background-color: #ffffff;
+            color: #AED284FF;
+            text-align: center;
+            width: 100%;
+        }
+
+        .headerNav {
+            background-color: #ffcd39;
+            padding: 3px;
+        }
+
+        .headerNav a {
+            color: #fff;
+            text-decoration: none;
+            padding: 10px;
+            margin-right: 10px;
+            display: inline-block;
+        }
+
+        /* 링크에 대한 호버 효과 */
+        .headerNav a:hover {
+            color: #bd2130; /* 흰색으로 변경 */
+        }
+
+    </style>
+</head>
+<div>
     <nav class="headerNav">
 
-        <a href="/"><img src="/img/home.png"></a>
+        <a href="/"><img src="/img/pokeball.gif" width="80" height="80"></a>
         <a class="nav-link" sec:authorize="isAnonymous()" href="/user/login">로그인</a>
         <!-- 사용자가 로그인한 경우에만 환영 메시지 표시 -->
-        <a class="label" sec:authorize="isAuthenticated()" th:text="'환영합니다, [' + ${#authentication.principal.username} + '] 님'"></a>
+        <a class="label" sec:authorize="isAuthenticated()"
+           th:text="'환영합니다, [' + ${#authentication.principal.username} + '] 님'"></a>
 
-
-
-        <!--        &lt;!&ndash; 사용자가 로그인한 경우에만 환영 메시지 표시 &ndash;&gt;
-                    <a class="nav-link" sec:authorize="isAuthenticated()" href="#" th:text="'환영합니다, ' + ${#authentication.principal.nickName} + '님'"></a>-->
+        <a sec:authorize="hasRole('ADMIN')" href="/admin">관리자 페이지</a>
 
         <a class="nav-link" sec:authorize="isAuthenticated()" href="/user/logout">로그아웃</a>
 
@@ -22,10 +53,7 @@ th:fragment="HeaderFragment">
 
         <!--           th:href="@{'/loginInfo/' + ${userFormDto.userId}}">마이페이지</a>-->
 
-        <a class="nav-link" sec:authorize="hasAnyAuthority('ROLE_ADMIN')" href="/admin/attachFileAtt">관리자 페이지</a>
-
-        <a class="nav-link" href="/visitCount">방문자 수 조회</a>
-
     </nav>
 
 </div>
+</html>

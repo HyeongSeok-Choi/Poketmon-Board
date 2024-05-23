@@ -46,6 +46,9 @@ public class FileAttributeService {
 
     }
 
+    public Integer getMaxRequestSize(Long id){
+        return attachFileAttributeRepository.findMax_Upload_SizeById(id);
+    }
 
     //저장된 첨부파일 속성 불러오기
     public attachAttributeDTO getattachAttributedto(){
