@@ -50,7 +50,7 @@ public class Reply {
 
 
 
-    public void update(  String content) {
+    public void update(String content) {
         this.content = content;
     }
 
