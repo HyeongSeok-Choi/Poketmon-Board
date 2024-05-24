@@ -263,12 +263,9 @@ public class TestController {
         //확장자 받기
         List<Extension> extensions = fileService.getExtensions();
         Integer maxUploadCnt = fileAttributeService.getMaxRequestCnt(1L);
-        
-        hashTags = hashTagService.getHashTagsByHashTagValue(hashTagValue);
 
         model.addAttribute("fileMaxCnt",attachFileService.getMaxCnt());
         model.addAttribute("fileMaxSize",attachFileService.getMaxSize());
-        model.addAttribute("hashTags", hashTags);
         model.addAttribute("attachFileList", attachFileList);
         model.addAttribute("board", addBoarddto);
         model.addAttribute("extensions", extensions);
@@ -278,7 +275,9 @@ public class TestController {
         if(createOrModify.equals("modify")) {
             List<AttachFile> attachFiles = fileService.getAttachFileByBoardId(boardId);
             Board board = boardService.findById(boardId);
+            hashTags = hashTagService.getHashTagsByHashTagValue(hashTagValue);
 
+            model.addAttribute("hashTags", hashTags);
             model.addAttribute("board", board);
             model.addAttribute("attachFiles", attachFiles);
         }
@@ -293,7 +292,7 @@ public class TestController {
         }
 
         if (maxsize > attachFileService.getMaxSize() * 1024 * 1024) {
-            hashTags = hashTagService.getHashTagsByHashTagValue(hashTagValue);
+
 
             model.addAttribute("errorMessage", "최대 파일 업로드 용량을 초과하였습니다.");
 
