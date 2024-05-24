@@ -165,10 +165,10 @@
         });
     });
 
+    var deleteRequestDTOList = [];
 
     $('.deleteBtn').click(function () {
         // 수정 시 삭제할 파일 저장 하는 필드 및 메소드
-        var deleteRequestDTOList = [];
         var fileUploadSettings = document.getElementById('uploadSettings');
         var maxUploadCnt = parseInt(fileUploadSettings.getAttribute('data-max-upload-cnt'));
         var currentFileCount = parseInt(fileUploadSettings.getAttribute('data-current-file-count'));
@@ -196,6 +196,8 @@
                 fno: fileId
             });
 
+            console.log(deleteRequestDTOList)
+
             // 파일을 화면에서 숨기거나 제거하는 등의 작업을 수행할 수 있음
             var fileElement = $(this).closest('.file-info').parent(); // 해당 파일 요소의 부모 요소
             if (fileElement) {
@@ -211,22 +213,27 @@
                 addUploadInput();
             }
 
-            // 파일 업로드 제한 상태에 따라 안내 문구 변경
-            var uploadRestrictionMessage = $('#uploadRestrictionMessage');
+            // 파일 업로드 제한 상태에 따라 안내 문구 설정
+            var updateUploadRestrictionMessage = function(currentFileCount, maxUploadCnt, uploadFileExtensions, extensions) {
+                var uploadRestrictionMessage = $('#uploadRestrictionMessage');
+                var message = '';
 
-            if (currentFileCount >= maxUploadCnt || !uploadFileExtensions) {
-                // 파일 업로드가 제한되어 있는 경우에 대한 처리
-                uploadRestrictionMessage.text('파일 업로드가 제한되어 있습니다.');
-                uploadRestrictionMessage.css('color', 'red');
-                console.log(extensions)
-            } else {
-                // 파일 업로드가 제한되어 있지 않은 경우에 대한 처리
-                console.log(extensions)
-                var allowedExtensions = extensions.join(', '); // 확장자들을 쉼표로 구분하여 문자열로 변환
-                uploadRestrictionMessage.text(allowedExtensions + ' 파일들만 등록 가능합니다.');
-                uploadRestrictionMessage.css('color', 'red');
-                console.log(allowedExtensions)
-            }
+                if (currentFileCount >= maxUploadCnt || !uploadFileExtensions) {
+                    // 파일 업로드가 제한되어 있는 경우에 대한 처리
+                    uploadRestrictionMessage.text('파일 업로드가 제한되어 있습니다.');
+                    uploadRestrictionMessage.css('color', 'red');
+                } else {
+                    // 파일 업로드가 제한되어 있지 않은 경우에 대한 처리
+                    var allowedExtensions = extensions.join(', '); // 확장자들을 쉼표로 구분하여 문자열로 변환
+                    uploadRestrictionMessage.text(allowedExtensions + ' 파일들만 등록 가능합니다.');
+                    uploadRestrictionMessage.css('color', 'red');
+                    console.log(allowedExtensions)
+                }
+                uploadRestrictionMessage.text(message);
+            };
+
+            // 호출하여 안내 문구 설정
+            updateUploadRestrictionMessage(currentFileCount, maxUploadCnt, uploadFileExtensions, extensions);
         }
     });
 

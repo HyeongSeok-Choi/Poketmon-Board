@@ -23,3 +23,21 @@ header {
 .headerNav a:hover {
     color: #bd2130; /* 흰색으로 변경 */
 }
+
+.admin-menu-dropdown {
+    display: none;
+    position: absolute;
+    background-color: #ffcd39;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+.admin-settings {
+    position: relative; /* 상대적 위치 설정 */
+    margin-right: 10px; /* 관리자 설정과 방문자 수 조회 링크 사이 간격 추가 */
+}
+
+.admin-settings:hover .admin-menu-dropdown {
+    display: block;
+}

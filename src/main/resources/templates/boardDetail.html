@@ -19,7 +19,7 @@
             let counting = 0;
             document.getElementById('btn-like');
 
-            //게시물 조회시 좋아요버튼 상태 표시
+            // 게시물 조회시 좋아요 버튼 상태 표시
             viewLike();
 
             function viewLike() {
@@ -50,7 +50,7 @@
                     });
             }
 
-            //좋아요 클릭 이벤트
+            // 좋아요 클릭 이벤트
             like.addEventListener("click", (e) => {
                 var check = "getlike";
                 fetch(`http://localhost:8080/api/likes`, {
@@ -72,9 +72,9 @@
                         console.log(image);
                         console.log(data);
 
-                        if(data){
+                        if (data) {
                             image.src = "/img/poketball2.png";
-                        } else{
+                        } else {
                             image.src = "/img/loveball.png";
                         }
 
@@ -87,7 +87,7 @@
             });
 
 
-            //좋아요 수 조회
+            // 좋아요 수 조회
             function getCountingLike() {
                 var check = "check";
                 fetch(`http://localhost:8080/api/likes/getCounting`, {
@@ -114,7 +114,7 @@
 
         };
 
-        <!--좋아요 수 렌더링-->
+        <!-- 좋아요 수 렌더링 -->
 
     </script>
     <style>
@@ -123,96 +123,114 @@
         }
 
         .input-form {
-            max-width: 680px;
-
-            margin-top: 80px;
-            padding: 32px;
-
             background: #fff;
-
-            -webkit-border-radius: 10px;
-            -moz-border-radius: 10px;
             border-radius: 10px;
-            -webkit-box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.15);
-            -moz-box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.15);
-            box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.15)
+            box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.15);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 32px;
+        }
+
+        .title-input {
+            width: 1000px;
+        }
+
+        .content-textarea {
+            width: 1000px;
+            height: 400px; /* 내용 칸의 높이를 늘림 */
         }
 
         .err {
             color: #0b5ed7;
         }
+
+
+        #btn-like {
+            background: none;
+            border: none;
+        }
+
+        #likeCount {
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+        }
+
+        /*.like-section {*/
+        /*    margin-top: 30px; !* 내용 칸 아래로 간격을 늘림 *!*/
+        /*}*/
+
     </style>
 
 </head>
 <body>
-
 
 <div class="container">
     <div class="input-form-backgroud row">
         <div class="input-form col-md-12 mx-auto">
             <input type="hidden" id="board-id" th:value="${board.id}">
 
-
             <h4 class="mb-3">게시물 조회</h4>
             <p th:text="'조회수: '+${board.getViewCount()}">조회수</p>
-            <!--제목 입력-->
+
+            <!-- 제목 입력 -->
             <div class="row">
-                <div class="col-md-6 mb-3">
+                <div class="col-md-12 mb-3">
                     <label for="title">제목</label>
-                    <input type="text" class="form-control" id="title" name="title" th:value="${board.title}" readonly>
+                    <input type="text" class="form-control title-input" id="title" name="title"
+                           th:value="${board.title}" readonly>
                 </div>
-                <div th:replace="~{/attachFile/boardAttachFile.html}">
-                    <div th:with="createOrModify=${createOrModify}" th:remove="tag"></div>
-                </div>
-
-                <!--내용 입력-->
-
-
             </div>
+
+            <!-- 내용 입력 -->
             <div class="mb-3">
                 <label for="content">내용</label>
-                <textarea class="form-control" id="content" name="content" placeholder="프로젝트 내용을 입력해주세요"
-                          th:text="${board.content}" readonly></textarea>
+                <!-- 첨부 파일 -->
+                <div th:replace="~{/attachFile/boardAttachFile.html}"></div>
+                <div th:with="createOrModify=${createOrModify}" th:remove="tag"></div>
+                <!-- 첨부 파일 끝-->
+                <textarea class="form-control content-textarea" id="content" name="content"
+                          placeholder="프로젝트 내용을 입력해주세요" th:text="${board.content}" readonly></textarea>
             </div>
 
-            <!--좋아요 버튼-->
-<!--            <button id='btn-like'>-->
-<!--                <i class="fa fa-thumbs-up"></i>-->
-<!--            </button>-->
-
-            <button id='btn-like'>
-                <img id='like-img' src="/img/poketball2.png" class="fa fa-thumbs-up" alt="좋아요" style="width: 100px; height: 100px;">
-            </button>
-
-
-            <!--좋아요 수 렌더링-->
-            <div id="likeCount">
-
+            <!-- 좋아요 버튼과 수 -->
+            <div class="like-section">
+                <button id='btn-like'>
+                    <img id='like-img' src="/img/poketball2.png" class="fa fa-thumbs-up" alt="좋아요"
+                         style="width: 100px; height: 100px;">
+                </button>
+                <!-- 좋아요 수 렌더링 -->
+                <div id="likeCount"></div>
             </div>
-            <!--좋아요 버튼 끝-->
 
             <hr class="mb-4">
 
             <h5 class="mb-3">해시태그</h5>
-            <ul style="list-style:none">
-                <i th:each="hash:${hashTag}">
-                    <li style="float: left; margin-right: 20px" th:text="'#'+${hash.getHashTagContent()}"></li>
-                </i>
+            <ul style="list-style:none; padding: 0; display: flex; flex-wrap: wrap; justify-content: center;">
+                <li th:each="hash:${hashTag}" th:text="'#'+${hash.getHashTagContent()}" style="margin: 0 10px;"></li>
             </ul>
 
-            <div style="clear: both;" class="col-md-6 mb-3">
-                <form class="validation-form"  method="post" th:action="@{/modifyBoard(id=${board.id})}">
-                    <button class="btn btn-primary btn btn-block" type="submit" >수정</button>
+            <div class="button-group">
+                <form class="validation-form" method="post" th:action="@{/modifyBoard(id=${board.id})}">
+                    <button class="btn btn-primary" type="submit">수정</button>
                 </form>
-                <form method="post" th:action="@{/deleteBoard(id=${board.id})}">
-                    <button class="btn btn-danger btn btn-block" type="submit" >삭제</button>
+                <form class="validation-form" method="post" th:action="@{/deleteBoard(id=${board.id})}">
+                    <button class="btn btn-danger btn btn-block" type="submit">삭제</button>
                 </form>
             </div>
-            <!--댓글출현 !!-->
-            <div class="input-form col-md-12 mx-auto" th:replace="~{/ReplyView.html}">
-            </div>
-        </div>
 
+        </div>
+        <!-- 댓글출현 -->
+        <div class="reply-section">
+            <div th:replace="~{/ReplyView.html}"></div>
+        </div>
     </div>
 </div>
 
