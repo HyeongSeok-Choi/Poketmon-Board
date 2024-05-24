@@ -257,13 +257,14 @@ public class TestController {
         //더미 해시값(해시 값이 없을 경우)
         List<HashTag> hashTags = new ArrayList<>();
         hashTags.add(new HashTag());
-
-        model.addAttribute("createOrModify", createOrModify);
+        hashTags = hashTagService.getHashTagsByHashTagValue(hashTagValue);
 
         //확장자 받기
         List<Extension> extensions = fileService.getExtensions();
         Integer maxUploadCnt = fileAttributeService.getMaxRequestCnt(1L);
 
+        model.addAttribute("hashTags", hashTags);
+        model.addAttribute("createOrModify", createOrModify);
         model.addAttribute("fileMaxCnt",attachFileService.getMaxCnt());
         model.addAttribute("fileMaxSize",attachFileService.getMaxSize());
         model.addAttribute("attachFileList", attachFileList);
@@ -271,19 +272,21 @@ public class TestController {
         model.addAttribute("extensions", extensions);
         model.addAttribute("maxUploadCnt", maxUploadCnt);
 
+        int maxsize = 0;
 
         if(createOrModify.equals("modify")) {
             List<AttachFile> attachFiles = fileService.getAttachFileByBoardId(boardId);
             Board board = boardService.findById(boardId);
-            hashTags = hashTagService.getHashTagsByHashTagValue(hashTagValue);
 
-            model.addAttribute("hashTags", hashTags);
             model.addAttribute("board", board);
             model.addAttribute("attachFiles", attachFiles);
+
+//            for (AttachFile attachFile : attachFiles) {
+//
+//                maxsize += attachFile.getSize();
+//            }
         }
 
-
-        int maxsize = 0;
         for (MultipartFile attachFile : attachFileList) {
             System.out.println(maxsize + "사이즈 본다잉");
             System.out.println();
@@ -306,7 +309,6 @@ public class TestController {
 
                if(a.getOriginalFilename() !="") {
                    if (!attachFileService.isAllowedExtension(a.getOriginalFilename())) {
-                       hashTags = hashTagService.getHashTagsByHashTagValue(hashTagValue);
 
                        model.addAttribute("errorMessage", "허용되지 않는 파일 형식입니다.");
 
