@@ -12,6 +12,8 @@ import java.util.List;
 @AllArgsConstructor
 public class addBoardDTO {
 
+    private Long id;
+
     private String title;
 
     private List<AttachFileShowDto> attachFileShowList;

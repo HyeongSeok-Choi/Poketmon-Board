@@ -250,7 +250,7 @@ public class TestController {
                                      @RequestParam("hashTagValue")String hashTagValue,
                                      @RequestParam("createOrModify") String createOrModify,
                                      @RequestParam("deleteRequestDTOList") String deleteRequestJson,
-                                     @RequestParam("boardId") Long boardId,
+                                     @RequestParam(value = "boardId",required = false) Long boardId,
                                      Model model,Principal principal) throws Exception {
 
 
