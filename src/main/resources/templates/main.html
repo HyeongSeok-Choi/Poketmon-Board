@@ -68,6 +68,17 @@
             }
         </script>
     </th:block>
+    <script th:inline="javascript">
+        /* Thymeleaf로 successMessage 값 가져오기 */
+        var successMessage = /*[[${param.successMessage}]]*/ '';
+        /* successMessage 값이 있을 때만 알림창 생성 */
+        if (successMessage && !window.successMessageDisplayed) {
+            /* 알림창 표시 */
+            alert(successMessage);
+            /* 알림창이 표시되었음을 표시 */
+            window.successMessageDisplayed = true;
+        }
+    </script>
 </head>
 <body>
             <div class="img-container">
