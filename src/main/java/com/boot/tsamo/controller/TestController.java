@@ -263,7 +263,7 @@ public class TestController {
                                      @RequestParam("hashTagValue")String hashTagValue,
                                      @RequestParam("createOrModify") String createOrModify,
                                      @RequestParam("deleteRequestDTOList") String deleteRequestJson,
-                                     @RequestParam("boardId") Long boardId,
+                                     @RequestParam(value = "boardId",required = false) Long boardId,
                                      Model model,Principal principal) throws Exception {
 
 
@@ -272,12 +272,6 @@ public class TestController {
         hashTags.add(new HashTag());
 
         model.addAttribute("createOrModify", createOrModify);
-
-        if(createOrModify.equals("modify")) {
-
-            model.addAttribute("boardId", ModifyboardId);
-        }
-
 
         //확장자 받기
         List<Extension> extensions = fileService.getExtensions();
@@ -289,6 +283,7 @@ public class TestController {
         model.addAttribute("board", addBoarddto);
         model.addAttribute("extensions", extensions);
         model.addAttribute("maxUploadCnt", maxUploadCnt);
+
 
 
         if(createOrModify.equals("modify")) {
@@ -335,7 +330,7 @@ public class TestController {
         }
 
         //등록 수정을 포함하는 로직
-        Map<String, Board> save = boardService.save(addBoarddto.toEntity(), principal, ModifyboardId);
+        Map<String, Board> save = boardService.save(addBoarddto.toEntity(), principal, boardId);
 
         Board board;
 

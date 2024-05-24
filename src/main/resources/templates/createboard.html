@@ -49,10 +49,9 @@
                   th:object="${attachFileFormDto}">
 
                 <input type="hidden" th:if="${param.id} !=null"  th:value="${param.id}" name="boardid">
-                <input type="hidden" th:if="${createOrModify =='modify'}"  th:value="${boardId}" name="ModifyboardId">
                 <input type="hidden" name="createOrModify" th:value="${createOrModify}" />
                 <input type="hidden" id="deleteRequestDTOList" name="deleteRequestDTOList">
-                <input type="hidden" name="boardId" th:value="${board.id}">
+                <input  th:if="${board.id} != null" type="hidden" name="boardId" th:value="${board.id}">
 
                 <!--제목 입력-->
                     <div class="row">
