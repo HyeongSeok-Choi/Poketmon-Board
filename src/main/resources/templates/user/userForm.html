@@ -30,6 +30,11 @@
         .input-group form {
             text-align: center; /* 폼 내부 요소 가운데 정렬 */
         }
+
+        .check-button {
+            margin-left: 10px;
+            vertical-align: middle;
+        }
     </style>
 
 </head>
@@ -42,6 +47,30 @@
             if (errorMessage) {
                 alert(errorMessage);
             }
+
+            // 아이디 중복 확인 기능
+            $('#checkUserIdBtn').on('click', function () {
+                var userId = $('#userIdInput').val();
+                if (userId) {
+                    $.ajax({
+                        url: '/user/checkUserId', // 백엔드에서 아이디 중복 확인을 처리하는 엔드포인트
+                        type: 'GET',
+                        data: { userId: userId },
+                        success: function (response) {
+                            if (response.isDuplicate) {
+                                alert('아이디가 중복되었습니다. 다른 아이디를 입력해주세요.');
+                            } else {
+                                alert('사용 가능한 아이디입니다.');
+                            }
+                        },
+                        error: function () {
+                            alert('아이디 중복 확인 중 오류가 발생했습니다.');
+                        }
+                    });
+                } else {
+                    alert('아이디를 입력해주세요.');
+                }
+            });
         });
     </script>
 </th:block>
@@ -51,7 +80,8 @@
         <form action="/user/new" role="form" method="post" th:object="${userFormDto}">
             <div class="form-group">
                 <label>아이디
-                    <input type="text" th:field="*{userId}" class="form-control" placeholder="아이디를 입력해주세요">
+                    <input type="text" th:field="*{userId}" id="userIdInput" class="form-control" placeholder="아이디를 입력해주세요">
+                    <button type="button" id="checkUserIdBtn" class="btn btn-secondary check-button">중복 확인</button>
                 </label>
 
                 <p th:if="${#fields.hasErrors('userId')}" th:errors="*{userId}" class="fieldError">잘못된 데이터입니다.</p>

@@ -12,5 +12,7 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<Users,String> {
 
     Users findByUserIdAndIsDeletedFalse(String userId);
+    // 추가된 메서드: userId로 존재 여부 확인
+    boolean existsByUserId(String userId);
 
 }
