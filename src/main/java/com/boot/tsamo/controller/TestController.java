@@ -239,6 +239,9 @@ public class TestController {
         List<HashTag> hashTags = new ArrayList<>();
         hashTags.add(new HashTag());
 
+
+
+
         model.addAttribute("board", new Board());
         model.addAttribute("attachFileFormDto", new AttachFileFormDto());
         model.addAttribute("extensions", extensions);
@@ -261,7 +264,8 @@ public class TestController {
                                      @RequestParam("createOrModify") String createOrModify,
                                      @RequestParam("deleteRequestDTOList") String deleteRequestJson,
                                      Model model,Principal principal,
-                                     @RequestParam(value="boardid", required=false)Long boardId) throws Exception {
+                                     @RequestParam(value="boardid", required=false)Long boardId,
+                                     @RequestParam(value="ModifyboardId", required=false)Long ModifyboardId) throws Exception {
 
 
         //더미 해시값(해시 값이 없을 경우)
@@ -269,6 +273,12 @@ public class TestController {
         hashTags.add(new HashTag());
 
         model.addAttribute("createOrModify", createOrModify);
+
+        if(createOrModify.equals("modify")) {
+
+            model.addAttribute("boardId", ModifyboardId);
+        }
+
 
         //확장자 받기
         List<Extension> extensions = fileService.getExtensions();
@@ -283,6 +293,7 @@ public class TestController {
         model.addAttribute("maxUploadCnt", maxUploadCnt);
 
 
+
         int maxsize = 0;
         for (MultipartFile attachFile : attachFileList) {
             System.out.println(maxsize + "사이즈 본다잉");
@@ -294,7 +305,7 @@ public class TestController {
         if (maxsize > attachFileService.getMaxSize() * 1024 * 1024) {
             hashTags = hashTagService.getHashTagsByHashTagValue(hashTagValue);
             model.addAttribute("errorMessage", "최대 파일 업로드 용량을 초과하였습니다.");
-            return "createBoard";
+            return "createBoard?";
         }
 
         //연습
@@ -313,7 +324,7 @@ public class TestController {
         }
 
         //등록 수정을 포함하는 로직
-        Map<String, Board> save = boardService.save(addBoarddto.toEntity(), principal, boardId);
+        Map<String, Board> save = boardService.save(addBoarddto.toEntity(), principal, ModifyboardId);
 
         Board board;
 
@@ -370,6 +381,7 @@ public class TestController {
             hashTags.add(new HashTag());
         }
 
+        model.addAttribute("boardId", id);
         model.addAttribute("attachFiles", attachFiles);
         model.addAttribute("board", board);
         model.addAttribute("attachFileFormDto", new AttachFileFormDto());
