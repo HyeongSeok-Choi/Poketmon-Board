@@ -29,10 +29,13 @@ public class AttachFile {
 
     private String uuid_fileName;
 
+    private Long file_size;
+
     // 파일 원본 이름과 uuid으로 변경한 이름 + 파일 주소를 AttachFile 엔티티에 저장하는 메소드.
-    public void updateItemImg(String ori_fileName, String uuid_fileName, String fileUrl){
+    public void updateItemImg(String ori_fileName, String uuid_fileName, String fileUrl, Long fileSize){
         this.ori_fileName = ori_fileName;
         this.uuid_fileName = uuid_fileName;
         this.fileUrl = fileUrl;
+        this.file_size = fileSize;
     }
 }

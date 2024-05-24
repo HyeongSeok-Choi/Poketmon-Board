@@ -250,6 +250,7 @@ public class TestController {
                                      @RequestParam("hashTagValue")String hashTagValue,
                                      @RequestParam("createOrModify") String createOrModify,
                                      @RequestParam("deleteRequestDTOList") String deleteRequestJson,
+                                     @RequestParam(value = "attachFileTotalSize", required = false) Long attachFileTotalSize,
                                      @RequestParam(value = "boardId",required = false) Long boardId,
                                      Model model,Principal principal) throws Exception {
 
@@ -281,10 +282,11 @@ public class TestController {
             model.addAttribute("board", board);
             model.addAttribute("attachFiles", attachFiles);
 
-//            for (AttachFile attachFile : attachFiles) {
-//
-//                maxsize += attachFile.getSize();
-//            }
+            for (AttachFile attachFile : attachFiles) {
+                maxsize += attachFile.getFile_size();
+            }
+
+            maxsize -= attachFileTotalSize;
         }
 
         for (MultipartFile attachFile : attachFileList) {

@@ -52,6 +52,7 @@
                 <input type="hidden" name="createOrModify" th:value="${createOrModify}" />
                 <input type="hidden" id="deleteRequestDTOList" name="deleteRequestDTOList">
                 <input type="hidden" name="boardId" th:value="${board.id}">
+                <input type="hidden" id="attachFileTotalSize" name="attachFileTotalSize">
 
                 <!--제목 입력-->
                     <div class="row">
@@ -188,7 +189,7 @@
 
     /* class지정이 아닌 버튼에 onclick method를 추가하는 방법.
     function deleteFile(boardId, fileId) {
-        var deleteRequestDTO = {
+        let deleteRequestDTO = {
         bno: boardId,
         fno: fileId
     };
@@ -230,6 +231,7 @@
     $('.modifyBtn').click(function () {
         // 삭제할 파일 DTO 리스트를 JSON 문자열로 변환하여 숨겨진 필드에 저장
         $('#deleteRequestDTOList').val(JSON.stringify(deleteRequestDTOList));
+        $('#attachFileTotalSize').val(attachFileTotalSize);
 
         // 폼 제출
         $('#modifyForm').submit();
