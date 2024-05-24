@@ -136,4 +136,12 @@ public class UserController {
         return "createboard";
     }
 
+    @GetMapping(value = "/kakao/logout")
+    public String logout(HttpSession session) {
+
+        session.invalidate();
+
+        return "main";
+    }
+
 }

@@ -45,13 +45,13 @@ public class Board {
     @UpdateTimestamp // UPDATE 시 자동으로 값을 채워줌
     private final LocalDateTime updatedAt = LocalDateTime.now();
 
-    @OneToMany(mappedBy = "boardId",fetch = FetchType.EAGER ,cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "boardId",fetch = FetchType.LAZY ,cascade = CascadeType.REMOVE)
     private List<Reply>replies= new ArrayList<Reply>();
 
-    @OneToMany(mappedBy = "boardId",fetch = FetchType.EAGER,cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "boardId",fetch = FetchType.LAZY,cascade = CascadeType.REMOVE)
     private List<AttachFile>attachFileArrayList= new ArrayList<AttachFile>();
 
-    @OneToMany(mappedBy = "boardId",fetch = FetchType.EAGER,cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "boardId",fetch = FetchType.LAZY,cascade = CascadeType.REMOVE)
     private List<HashTag>hashTags= new ArrayList<HashTag>();
 
 

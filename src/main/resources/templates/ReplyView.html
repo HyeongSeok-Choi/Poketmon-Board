@@ -34,6 +34,10 @@
 <ul class="pagination" id="paging"></ul>
 
 <script>
+    const userid= document.getElementById("userId").value;
+
+    console.log(userid+"유저아이디");
+
     //날짜 포멧
     function formatDate(dateString) {
         const date = new Date(dateString);
@@ -85,7 +89,8 @@
                     const isRepliesVisible = activeReplies[replyId] ? 'block' : 'none';
                     const buttonLabel = activeReplies[replyId] ? '답글 닫기' : '답글 더보기';
 
-                    comment += `<hr/>
+                    if(userid == data["content"][i].userid) {
+                        comment += `<hr/>
                     <div class="comments" id="comment-${replyId}">
                         <input type="hidden" value="${replyId}">
                         <span class="writer_img"><img src="/img/eve-run.gif" width="30" height="30" alt="기본 프로필 이미지"/></span>
@@ -95,13 +100,31 @@
                         </p>
                         <div class="cont"><input id="input-${replyId}" class="txt_con" value="${data["content"][i].content}" readonly></div>
                         <p class="func_btns">
-                            <button type="button" id="${replyId}" class="modify btn btn-primary">수정</button>
-                            <button class="delete btn btn-danger" type="button" id="delete-${replyId}">삭제</button>
+                            <button type="button" id="${replyId}" class="modify btn btn-primary" data-user-id="${data["content"][i].userid}">수정</button>
+                            <button class="delete btn btn-danger" type="button" id="delete-${replyId}" data-user-id="${data["content"][i].userid}">삭제</button>
                             <button class="btn btn-warning" type="button" class="btns reply-btn" onclick="toggleReplyForm(${replyId});">답글 달기</button>
                             <button class="btn btn-secondary" type="button" id="loadRepliesBtn-${replyId}" onclick="toggleReplies(${replyId});">${buttonLabel}</button>
                         </p>
                         <div class="recomments" id="replies-${replyId}" style="display: ${isRepliesVisible};"></div>
                     </div>`;
+                    }else{
+                        comment += `<hr/>
+                    <div class="comments" id="comment-${replyId}">
+                        <input type="hidden" value="${replyId}">
+                        <span class="writer_img"><img src="/img/eve-run.gif" width="30" height="30" alt="기본 프로필 이미지"/></span>
+                        <p class="writer">
+                            <em>${data["content"][i].userid}</em>
+                            <span class="date">${formatDate(data["content"][i].createdAt)}</span>
+                        </p>
+                        <div class="cont"><input id="input-${replyId}" class="txt_con" value="${data["content"][i].content}" readonly></div>
+                        <p class="func_btns">
+                            <button class="btn btn-warning" type="button" class="btns reply-btn" onclick="toggleReplyForm(${replyId});">답글 달기</button>
+                            <button class="btn btn-secondary" type="button" id="loadRepliesBtn-${replyId}" onclick="toggleReplies(${replyId});">${buttonLabel}</button>
+                        </p>
+                        <div class="recomments" id="replies-${replyId}" style="display: ${isRepliesVisible};"></div>
+                    </div>`;
+
+                    }
                 }
 
                 replySelectAll.innerHTML = comment;
@@ -150,7 +173,9 @@
                 data.forEach(reply => {
                     console.log(reply);
                     console.log("대댓글");
-                    replyHtml += `<hr/>
+
+                    if(userid == reply.userid) {
+                        replyHtml += `<hr/>
                     <div class="recomment">
                         <input type="hidden" value="${reply.id}">
                         <span class="writer_img"><img src="/img/star.gif" width="30" height="30" alt="기본 프로필 이미지"/></span>
@@ -160,10 +185,22 @@
                         </p>
                           <div class="cont">  <h1 style="display: inline;">⤷</h1> <input id="input2-${reply.id}" class="txt_con" value="${reply.content}" readonly></div>
                         <p class="func_btns">
-                            <button class="btn btn-warning recomment-modify" type="button" id="recomment-modify-${reply.id}">수정</button>
-                            <button class="redelete btn btn-danger" type="button" id="redelete-${reply.id}">삭제</button>
+                            <button class="btn btn-warning recomment-modify" type="button" id="recomment-modify-${reply.id}" data-user-id="${reply.userid}">수정</button>
+                            <button class="redelete btn btn-danger" type="button" id="redelete-${reply.id}" data-user-id="${reply.userid}">삭제</button>
                         </p>
                     </div>`;
+                    }else{
+                        replyHtml += `<hr/>
+                    <div class="recomment">
+                        <input type="hidden" value="${reply.id}">
+                        <span class="writer_img"><img src="/img/star.gif" width="30" height="30" alt="기본 프로필 이미지"/></span>
+                        <p class="writer">
+                            <em>${reply.userid}</em>
+                            <span class="date">${formatDate(reply.createdAt)}</span>
+                        </p>
+                          <div class="cont">  <h1 style="display: inline;">⤷</h1> <input id="input2-${reply.id}" class="txt_con" value="${reply.content}" readonly></div>
+                    </div>`;
+                    }
                 });
                 repliesDiv.innerHTML = replyHtml;
             });
@@ -201,7 +238,8 @@
                     const isRepliesVisible = activeReplies[replyId] ? 'block' : 'none';
                     const buttonLabel = activeReplies[replyId] ? '답글 닫기' : '답글 더보기';
 
-                    comment += `<hr/>
+                    if(userid == data["content"][i].userid) {
+                        comment += `<hr/>
             <div class="comments" id="comment-${replyId}">
                 <input type="hidden" value="${replyId}">
                 <span class="writer_img"><img src="/img/eve-run.gif" width="30" height="30" alt="기본 프로필 이미지"/></span>
@@ -211,13 +249,32 @@
                 </p>
                 <div class="cont"><input id="input-${replyId}" class="txt_con" value="${data["content"][i].content}" readonly></div>
                 <p class="func_btns">
-                    <button type="button" id="${replyId}" class="modify btn btn-primary">수정</button>
-                    <button class="delete btn btn-danger" type="button" id="delete-${replyId}">삭제</button>
+                    <button type="button" id="${replyId}" data-user-id="${data["content"][i].userid}" class="modify btn btn-primary">수정</button>
+                    <button class="delete btn btn-danger" type="button" data-user-id="${data["content"][i].userid}" id="delete-${replyId}">삭제</button>
                     <button class="btn btn-warning" type="button" class="btns reply-btn" onclick="toggleReplyForm(${replyId});">답글 달기</button>
                     <button class="btn btn-secondary" type="button" id="loadRepliesBtn-${replyId}" onclick="toggleReplies(${replyId});">${buttonLabel}</button>
                 </p>
                 <div class="recomments" id="replies-${replyId}" style="display: ${isRepliesVisible};"></div>
             </div>`;
+                    }else{
+                        comment += `<hr/>
+            <div class="comments" id="comment-${replyId}">
+                <input type="hidden" value="${replyId}">
+                <span class="writer_img"><img src="/img/eve-run.gif" width="30" height="30" alt="기본 프로필 이미지"/></span>
+                <p class="writer">
+                    <em>${data["content"][i].userid}</em>
+                    <span class="date">${formatDate(data["content"][i].createdAt)}</span>
+                </p>
+                <div class="cont"><input id="input-${replyId}" class="txt_con" value="${data["content"][i].content}" readonly></div>
+                <p class="func_btns">
+                    <button class="btn btn-warning" type="button" class="btns reply-btn" onclick="toggleReplyForm(${replyId});">답글 달기</button>
+                    <button class="btn btn-secondary" type="button" id="loadRepliesBtn-${replyId}" onclick="toggleReplies(${replyId});">${buttonLabel}</button>
+                </p>
+                <div class="recomments" id="replies-${replyId}" style="display: ${isRepliesVisible};"></div>
+            </div>`;
+                    }
+
+
                 }
 
                 $('#replySelectAll').append(comment);

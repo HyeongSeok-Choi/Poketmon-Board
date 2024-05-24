@@ -442,11 +442,21 @@ public class TestController {
     }
 
 
-    @PostMapping(value = "/deleteBoard")
-    public String deleteBoard(Model model, @RequestParam Long id) {
+    //관리자 삭제
+    @PostMapping(value = "/deleteBoardAdmin")
+    public String deleteBoardAdmin(@RequestParam Long id) {
 
         boardService.deleteByIdbyboolean(id);
         //boardService.deleteById(id);
+
+        return "redirect:/";
+    }
+
+    //일반 삭제
+    @PostMapping(value = "/deleteBoard")
+    public String deleteBoard(@RequestParam Long id) {
+
+        boardService.deleteById(id);
 
         return "redirect:/";
     }
