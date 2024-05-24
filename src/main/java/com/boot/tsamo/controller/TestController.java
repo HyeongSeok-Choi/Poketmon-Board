@@ -12,6 +12,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.Valid;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -34,7 +35,9 @@ import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
+@Data
 public class TestController {
+    public  static String id ="아 왜 안나와";
 
     private final AttachFileService attachFileService;
     private final LikeService likeService;
@@ -70,7 +73,12 @@ public class TestController {
     @GetMapping(value = "/")
     public String main(Model model, @PageableDefault(page = 0, size = 3, sort = "id",
             direction = Sort.Direction.DESC) Pageable pageable, String searchvalue,
-                       String searchtype, String sort, HttpServletRequest request,String mainOrAdmin) {
+                       String searchtype, String sort, HttpServletRequest request,String mainOrAdmin,Principal principal) {
+
+
+        if(principal != null){
+            id = principal.getName();
+        }
 
         mainOrAdmin="main";
 
