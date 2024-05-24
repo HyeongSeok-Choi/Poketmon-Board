@@ -61,7 +61,7 @@ public class MyOAuth2UserService extends DefaultOAuth2UserService {
 
         String userEmail ="kakao_"+responseMap.get("email");
 
-        Users user = new Users("kakao_"+userId,userEmail);
+        Users user = new Users(userId,userEmail);
 
         userRepository.save(user);
 
