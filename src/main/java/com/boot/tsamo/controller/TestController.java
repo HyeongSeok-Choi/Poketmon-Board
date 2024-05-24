@@ -239,6 +239,9 @@ public class TestController {
         List<HashTag> hashTags = new ArrayList<>();
         hashTags.add(new HashTag());
 
+
+
+
         model.addAttribute("board", new Board());
         model.addAttribute("attachFileFormDto", new AttachFileFormDto());
         model.addAttribute("extensions", extensions);
@@ -283,6 +286,7 @@ public class TestController {
         model.addAttribute("maxUploadCnt", maxUploadCnt);
 
         int maxsize = 0;
+
 
         if(createOrModify.equals("modify")) {
             List<AttachFile> attachFiles = fileService.getAttachFileByBoardId(boardId);
@@ -385,6 +389,7 @@ public class TestController {
             hashTags.add(new HashTag());
         }
 
+        model.addAttribute("boardId", id);
         model.addAttribute("attachFiles", attachFiles);
         model.addAttribute("board", board);
         model.addAttribute("attachFileFormDto", new AttachFileFormDto());
