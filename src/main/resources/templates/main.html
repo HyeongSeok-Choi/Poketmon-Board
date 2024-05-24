@@ -84,7 +84,8 @@
             <div class="img-container">
                 <h3 th:if="${mainOrAdmin =='main'}">게시판</h3>
                 <h3 th:if="${mainOrAdmin =='admin'}">삭제 게시물 목록</h3>
-                  <img src="/img/pika3.gif" >
+                <img th:if="${mainOrAdmin == 'main'}" src="/img/pika3.gif" alt="피카츄">
+                <img th:if="${mainOrAdmin == 'admin'}" src="/img/OhTeacher.jpg" alt="오박사">
             </div>
 
     <!-- board seach area -->
