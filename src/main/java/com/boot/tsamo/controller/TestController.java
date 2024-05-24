@@ -260,8 +260,8 @@ public class TestController {
                                      @RequestParam("hashTagValue")String hashTagValue,
                                      @RequestParam("createOrModify") String createOrModify,
                                      @RequestParam("deleteRequestDTOList") String deleteRequestJson,
-                                     Model model,Principal principal,
-                                     @RequestParam(value="boardid", required=false)Long boardId) throws Exception {
+                                     @RequestParam(value = "boardId",required = false) Long boardId,
+                                     Model model,Principal principal) throws Exception {
 
 
         //더미 해시값(해시 값이 없을 경우)
@@ -276,11 +276,21 @@ public class TestController {
 
         model.addAttribute("fileMaxCnt",attachFileService.getMaxCnt());
         model.addAttribute("fileMaxSize",attachFileService.getMaxSize());
-        model.addAttribute("hashTags", hashTags);
         model.addAttribute("attachFileList", attachFileList);
         model.addAttribute("board", addBoarddto);
         model.addAttribute("extensions", extensions);
         model.addAttribute("maxUploadCnt", maxUploadCnt);
+
+
+        if(createOrModify.equals("modify")) {
+            List<AttachFile> attachFiles = fileService.getAttachFileByBoardId(boardId);
+            Board board = boardService.findById(boardId);
+            hashTags = hashTagService.getHashTagsByHashTagValue(hashTagValue);
+
+            model.addAttribute("hashTags", hashTags);
+            model.addAttribute("board", board);
+            model.addAttribute("attachFiles", attachFiles);
+        }
 
 
         int maxsize = 0;
@@ -292,8 +302,10 @@ public class TestController {
         }
 
         if (maxsize > attachFileService.getMaxSize() * 1024 * 1024) {
-            hashTags = hashTagService.getHashTagsByHashTagValue(hashTagValue);
+
+
             model.addAttribute("errorMessage", "최대 파일 업로드 용량을 초과하였습니다.");
+
             return "createBoard";
         }
 
@@ -305,6 +317,7 @@ public class TestController {
                if(a.getOriginalFilename() !="") {
                    if (!attachFileService.isAllowedExtension(a.getOriginalFilename())) {
                        hashTags = hashTagService.getHashTagsByHashTagValue(hashTagValue);
+
                        model.addAttribute("errorMessage", "허용되지 않는 파일 형식입니다.");
 
                     return "createBoard";
