@@ -41,8 +41,8 @@
             padding: 1px;
         }
 
-        .downloadBtn,
-        .previewBtn {
+
+        .attachBtn {
             font-size: smaller;
             text-decoration: underline;
         }
@@ -54,22 +54,22 @@
 
 </head>
 <body>
-
-<div class="card col-md-6 mb-1" th:if="${createOrModify != 'create'}">
+<div class="card col-md-6 mb-1">
     <div class="card-header">
-        <button  class="btn btn-primary"><strong class="card-title" id="attachTitle">첨부 파일</strong></button>
+        <a class="btn btn-primary"><strong class="card-title" id="attachTitle">첨부 파일</strong></a>
     </div>
     <ul class="hidden" id="attachList">
         <li class="list-group-item" th:each="attachFile : ${attachFiles}">
             <div th:if="${createOrModify != 'modify'}" class="file-info">
                 <span class="file-name" th:text="${attachFile.ori_fileName}"></span>
-                <button type="button" class="downloadBtn btn downloadBtn"
+                <button type="button" class="btn downloadBtn attachBtn"
                         th:data-board-id="${attachFile.boardId.id}" th:data-file-id="${attachFile.id}">다운로드</button>
-                <button type="button" class="btn previewBtn"
+                <button type="button" class="btn previewBtn attachBtn"
                         th:data-board-id="${attachFile.boardId.id}" th:data-file-id="${attachFile.id}">미리보기</button>
             </div>
             <div th:if="${createOrModify == 'modify'}" class="file-info">
-                <button type="button" class="downloadBtn btn downloadBtn"
+                <span class="file-name" th:text="${attachFile.ori_fileName}"></span>
+                <button type="button" class="btn deleteBtn attachBtn"
                         th:data-board-id="${attachFile.boardId.id}" th:data-file-id="${attachFile.id}">파일삭제</button>
             </div>
         </li>
@@ -150,6 +150,28 @@
                 previewModal.hide();
             });
         });
+    });
+
+    // 수정 시 삭제할 파일 저장 하는 필드 및 메소드
+    var deleteRequestDTOList = [];
+
+    $('.deleteBtn').click(function () {
+        var boardId = $(this).data('board-id');
+        var fileId = $(this).data('file-id');
+
+        if (confirm('첨부파일 목록에서 지우시겠습니까?')) {
+            // 삭제할 파일 정보를 DTO에 추가
+            deleteRequestDTOList.push({
+                bno: boardId,
+                fno: fileId
+            });
+
+            // 파일을 화면에서 숨기거나 제거하는 등의 작업을 수행할 수 있음
+            var fileElement = $(this).closest('.file-info').parent(); // 해당 파일 요소의 부모 요소
+            if (fileElement) {
+                fileElement.hide(); // 파일 숨기기
+            }
+        }
     });
 
     // 모달 창에 파일 미리보기 로드

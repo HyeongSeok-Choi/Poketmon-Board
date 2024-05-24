@@ -56,7 +56,7 @@ public class ReplyService {
 
         users.setEmail("qnftlstm@naver.com");
 
-        users.setRole(Role.pUSER);
+        users.setRole(Role.USER);
 
         users.setPassword("chl153");
 

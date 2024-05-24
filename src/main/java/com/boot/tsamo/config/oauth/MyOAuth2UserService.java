@@ -3,6 +3,7 @@ package com.boot.tsamo.config.oauth;
 import com.boot.tsamo.entity.Users;
 import com.boot.tsamo.repository.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -13,6 +14,7 @@ import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
+import java.net.http.HttpHeaders;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
@@ -35,24 +37,25 @@ public class MyOAuth2UserService extends DefaultOAuth2UserService {
         }
 
 
-        String userId ="kakao_"+ oAuth2User.getAttributes().get("id");
+        String userId =oAuth2User.getAttributes().get("id").toString();
+
 
         Map<String,Object> responseMap = (Map<String,Object>) oAuth2User.getAttributes().get("kakao_account");
 
+        Map<String,Object> responseMap1 = oAuth2User.getAttributes();
+
         String userEmail ="kakao_"+responseMap.get("email");
 
-        Users user = new Users(userId,userEmail);
+        Users user = new Users("kakao_"+userId,userEmail);
 
         userRepository.save(user);
-
 
         // 기본 권한 설정
         Set<GrantedAuthority> authorities;
 
             authorities = Collections.singleton(new SimpleGrantedAuthority("ROLE_ADMIN"));
 
-            //new DefaultOAuth2User(authorities, responseMap, userEmail);
 
-        return  user;
+        return  new DefaultOAuth2User(authorities, responseMap1, "id");
     }
 }

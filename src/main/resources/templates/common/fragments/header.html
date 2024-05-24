@@ -7,9 +7,8 @@
         <a class="nav-link" sec:authorize="isAnonymous()" href="/user/login">로그인</a>
         <!-- 사용자가 로그인한 경우에만 환영 메시지 표시 -->
         <a class="label" sec:authorize="isAuthenticated()"
-           th:text="'환영합니다, [' + ${#authentication.principal.username} + '] 님'"></a>
+           th:text="'환영합니다, [' + ${T(com.boot.tsamo.controller.TestController).id} + '] 님'"></a>
 
-        <a sec:authorize="hasRole('ADMIN')" href="/admin">관리자 페이지</a>
 
         <a class="nav-link" sec:authorize="isAuthenticated()" href="/user/logout">로그아웃</a>
 
@@ -18,6 +17,8 @@
         <a class="nav-link" sec:authorize="isAuthenticated()" href="/user/loginInfo">회원정보</a>
 
         <a class="nav-link" href="/visitCount">방문자 수 조회</a>
+
+        <a sec:authorize="hasRole('ADMIN')" href="/admin/attachFileAtt">관리자 페이지</a>
 
         <!--           th:href="@{'/loginInfo/' + ${userFormDto.userId}}">마이페이지</a>-->
 
