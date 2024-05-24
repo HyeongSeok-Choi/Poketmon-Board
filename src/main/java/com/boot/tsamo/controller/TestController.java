@@ -263,6 +263,8 @@ public class TestController {
         //확장자 받기
         List<Extension> extensions = fileService.getExtensions();
         Integer maxUploadCnt = fileAttributeService.getMaxRequestCnt(1L);
+        
+        hashTags = hashTagService.getHashTagsByHashTagValue(hashTagValue);
 
         model.addAttribute("fileMaxCnt",attachFileService.getMaxCnt());
         model.addAttribute("fileMaxSize",attachFileService.getMaxSize());
