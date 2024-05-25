@@ -185,5 +185,10 @@ table {
     transition: background-color 0.3s ease-in-out;
 }
 
-
+/*글꼴*/
+h3 {
+    font-family: "Bagel Fat One", system-ui;
+    font-weight: 500;
+    font-style: normal;
+}
 
