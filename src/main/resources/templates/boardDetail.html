@@ -13,7 +13,6 @@
     <title>Title</title>
 
     <script>
-
         window.onload = () => {
             const like = document.querySelector('.fa');
             let counting = 0;
@@ -111,10 +110,26 @@
                     });
             }
 
+            // 삭제 버튼 클릭 시 모달 창 표시
+            const deleteBtn = document.getElementById('deleteBtn'); // 삭제 버튼 요소 가져오기
+            const confirmDeleteModal = document.getElementById('confirmDeleteModal'); // 모달 요소 가져오기
+            const closeDeleteModal = document.querySelector('.close'); // 모달 내 닫기 버튼 요소 가져오기
 
+            deleteBtn.addEventListener('click', () => {
+                confirmDeleteModal.style.display = 'block';
+            });
+
+
+            closeDeleteModal.addEventListener('click', () => {
+                confirmDeleteModal.style.display = 'none';
+            });
+
+            window.onclick = function(event) {
+                if (event.target === confirmDeleteModal) {
+                    confirmDeleteModal.style.display = 'none';
+                }
+            };
         };
-
-        <!-- 좋아요 수 렌더링 -->
 
     </script>
     <style>
@@ -133,30 +148,18 @@
 
         }
 
-        /*.title-input {*/
-        /*    width: 1000px;*/
-        /*}*/
-
-        /*.content-textarea {*/
-        /*    width: 1000px;*/
-        /*    height: 400px; !* 내용 칸의 높이를 늘림 *!*/
-
-        /*}*/
-
         .title-input {
-            width: 50vw; /* Viewport width의 80% */
+            width: 50vw;
         }
 
         .content-textarea {
-            width: 50vw; /* Viewport width의 80% */
-            height: 40vh; /* Viewport height의 40% */
+            width: 50vw;
+            height: 40vh;
         }
-
 
         .err {
             color: #0b5ed7;
         }
-
 
         #btn-like {
             background: none;
@@ -175,9 +178,26 @@
             width: 100%;
         }
 
-        /*.like-section {*/
-        /*    margin-top: 30px; !* 내용 칸 아래로 간격을 늘림 *!*/
-        /*}*/
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            border-radius: 10px;
+        }
 
     </style>
 
@@ -236,9 +256,30 @@
                 <form class="validation-form" method="post" th:action="@{/deleteBoardAdmin(id=${board.id})}" sec:authorize="hasRole('ADMIN')">
                     <button class="btn btn-danger btn btn-block" type="submit">(관리자삭제)</button>
                 </form>
+
+                <!-- 삭제 버튼을 클릭하면 모달 창이 나타납니다. -->
                 <form class="validation-form" method="post" th:action="@{/deleteBoard(id=${board.id})}" sec:authorize="isAuthenticated()" th:if="${userid.equals(board.userid.getUserId())}">
-                    <button class="btn btn-danger btn btn-block" type="submit">삭제</button>
+                    <button id="deleteBtn" class="btn btn-danger btn btn-block" type="button">삭제</button>
+                    <!-- 모달창 -->
+                    <div id="confirmDeleteModal" class="modal">
+                        <!-- 모달 내용 -->
+                        <div class="modal-content">
+                            <!-- 삭제 확인 메시지 -->
+                            <div style="text-align: center;">
+                                <img src="/img/roket.webp" width="300" height="300">
+                                <p>영구 삭제하시겠습니까?</p>
+                            </div>
+                            <div class="button-group">
+                                <!-- 삭제 버튼 -->
+                                <button id="confirmDeleteBtn" class="btn btn-danger btn btn-block" type="submit">삭제</button>
+                                <!-- 모달 닫기 버튼 -->
+                                <span class="close btn btn-secondary btn-block">취소</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 모달창 끝 -->
                 </form>
+
             </div>
 
         </div>
@@ -251,3 +292,6 @@
 
 </body>
 </html>
+
+
+
