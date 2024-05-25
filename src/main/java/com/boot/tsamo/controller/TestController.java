@@ -494,5 +494,12 @@ public class TestController {
         return "redirect:/";
     }
 
+    @GetMapping(value = "/poketmon")
+    public String poketmon(Model model, Principal principal) {
+
+        return "poketmon";
+
+    }
+
 
 }

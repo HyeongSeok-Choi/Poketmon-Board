@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      layout:decorate="~{common/layouts/defaultLayout}"
+      layout:fragment="Content">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+
+<div id="poke-card">
+
+</div>
+
+
+
+
+
+<script>
+
+    var allPokemonData = [];
+
+    var poketmonImg =document.getElementById('poke-card');
+
+    for (let i = 1; i < 10; i++) {
+        poketmonImg.append(`<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${i}.png"/>`)
+    }
+
+
+    for (let i = 1; i < 10; i++) {
+
+
+        fetch(`https://pokeapi.co/api/v2/pokemon-species/${i}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            method: 'GET',
+        })
+            .then(response => response.json())
+            .then(poketmon => {
+
+                 //console.log(poketmon.names[2].name);
+                console.log(poketmon.names[2].name);
+                console.log(poketmon.genera[1].genus);
+                }
+            )
+
+        fetch(`https://pokeapi.co/api/v2/pokemon/${i}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            method: 'GET',
+        })
+            .then(response => response.json())
+            .then(poketmon => {
+
+                    let Heigt =(poketmon.height *0.1).toFixed(1);
+                    let weight = (poketmon.weight *0.1)
+                    //console.log(poketmon.names[2].name);
+                    console.log(Heigt+"M");
+                    console.log(weight+"KG");
+                }
+            )
+
+        fetch(`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${i}.png`, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            method: 'GET',
+        })
+            .then(response => response.json())
+            .then(poketmon => {
+
+
+
+                }
+            )
+
+
+    }
+
+</script>
+</body>
+</html>

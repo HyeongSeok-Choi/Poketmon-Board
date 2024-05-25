@@ -143,7 +143,7 @@ public class UserController {
         session.invalidate();
         MyOAuth2UserService.kakaoLogin= false;
 
-        return "main";
+        return "redirect:/";
     }
 
     @GetMapping(value = "/logout/1")
@@ -153,7 +153,7 @@ public class UserController {
 
         session.invalidate();
 
-        return "main";
+        return "redirect:/";
     }
 
 }
