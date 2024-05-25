@@ -96,7 +96,13 @@ public class BoardService {
        return board;
     }
 
-    //게시물 삭제
+    //일반 게시물 삭제
+    public void deleteById(Long id) {
+        boardRepository.deleteById(id);
+    }
+
+
+    //관리자 게시물 삭제
     public void deleteByIdbyboolean(Long id) {
         Board board = boardRepository.findById(id).get();
 

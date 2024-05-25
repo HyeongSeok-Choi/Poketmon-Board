@@ -188,6 +188,7 @@
     <div class="input-form-backgroud row">
         <div class="input-form col-md-12 mx-auto">
             <input type="hidden" id="board-id" th:value="${board.id}">
+            <input type="hidden" id="userId" th:value="${userid}">
 
             <h4 class="mb-3">게시물 조회</h4>
             <p th:text="'조회수: '+${board.getViewCount()}">조회수</p>
@@ -228,12 +229,14 @@
             <ul style="list-style:none; padding: 0; display: flex; flex-wrap: wrap; justify-content: center;">
                 <li th:each="hash:${hashTag}" th:text="'#'+${hash.getHashTagContent()}" style="margin: 0 10px;"></li>
             </ul>
-
             <div class="button-group">
-                <form class="validation-form" method="post" th:action="@{/modifyBoard(id=${board.id})}">
+                <form class="validation-form" method="post" th:action="@{/modifyBoard(id=${board.id})}" sec:authorize="isAuthenticated()" th:if="${userid.equals(board.userid.getUserId())}">
                     <button class="btn btn-primary" type="submit">수정</button>
                 </form>
-                <form class="validation-form" method="post" th:action="@{/deleteBoard(id=${board.id})}">
+                <form class="validation-form" method="post" th:action="@{/deleteBoardAdmin(id=${board.id})}" sec:authorize="hasRole('ADMIN')">
+                    <button class="btn btn-danger btn btn-block" type="submit">(관리자삭제)</button>
+                </form>
+                <form class="validation-form" method="post" th:action="@{/deleteBoard(id=${board.id})}" sec:authorize="isAuthenticated()" th:if="${userid.equals(board.userid.getUserId())}">
                     <button class="btn btn-danger btn btn-block" type="submit">삭제</button>
                 </form>
             </div>

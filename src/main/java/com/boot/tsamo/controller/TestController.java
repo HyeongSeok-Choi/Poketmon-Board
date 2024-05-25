@@ -1,6 +1,7 @@
 package com.boot.tsamo.controller;
 
 
+import com.boot.tsamo.config.oauth.MyOAuth2UserService;
 import com.boot.tsamo.dto.AttachFileFormDto;
 import com.boot.tsamo.dto.DeleteFileRequestDTO;
 import com.boot.tsamo.dto.addBoardDTO;
@@ -75,9 +76,15 @@ public class TestController {
             direction = Sort.Direction.DESC) Pageable pageable, String searchvalue,
                        String searchtype, String sort, HttpServletRequest request,String mainOrAdmin,Principal principal) {
 
+        if(principal != null && principal.getName().contains("kakao")){
+            MyOAuth2UserService.kakaoLogin = true;
+            System.out.println("카카오 ?");
+        }
+
 
         if(principal != null){
             id = principal.getName();
+            System.out.println(id+"아이디");
         }
 
         mainOrAdmin="main";
@@ -263,6 +270,7 @@ public class TestController {
                                      @RequestParam("hashTagValue")String hashTagValue,
                                      @RequestParam("createOrModify") String createOrModify,
                                      @RequestParam("deleteRequestDTOList") String deleteRequestJson,
+                                     @RequestParam(value = "attachFileTotalSize", required = false) Long attachFileTotalSize,
                                      @RequestParam(value = "boardId",required = false) Long boardId,
                                      Model model,Principal principal) throws Exception {
 
@@ -295,10 +303,11 @@ public class TestController {
             model.addAttribute("board", board);
             model.addAttribute("attachFiles", attachFiles);
 
-//            for (AttachFile attachFile : attachFiles) {
-//
-//                maxsize += attachFile.getSize();
-//            }
+            for (AttachFile attachFile : attachFiles) {
+                maxsize += attachFile.getFile_size();
+            }
+
+            maxsize -= attachFileTotalSize;
         }
 
         for (MultipartFile attachFile : attachFileList) {
@@ -444,11 +453,21 @@ public class TestController {
     }
 
 
-    @PostMapping(value = "/deleteBoard")
-    public String deleteBoard(Model model, @RequestParam Long id) {
+    //관리자 삭제
+    @PostMapping(value = "/deleteBoardAdmin")
+    public String deleteBoardAdmin(@RequestParam Long id) {
 
         boardService.deleteByIdbyboolean(id);
         //boardService.deleteById(id);
+
+        return "redirect:/";
+    }
+
+    //일반 삭제
+    @PostMapping(value = "/deleteBoard")
+    public String deleteBoard(@RequestParam Long id) {
+
+        boardService.deleteById(id);
 
         return "redirect:/";
     }
@@ -473,6 +492,13 @@ public class TestController {
         fileAttributeService.attachFileAttribute(attachAttributeDTO);
 
         return "redirect:/";
+    }
+
+    @GetMapping(value = "/poketmon")
+    public String poketmon(Model model, Principal principal) {
+
+        return "poketmon";
+
     }
 
 

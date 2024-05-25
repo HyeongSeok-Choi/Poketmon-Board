@@ -10,6 +10,7 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
     <!-- xlsx library 추가 -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <th:block layout:fragment="script">
@@ -98,7 +99,7 @@
                     <div class="search-wrap">
                         <label for="searchvalue" class="blind">공지사항 내용 검색</label>
                         <div>
-                            <select name="searchtype">
+                            <select class="form-select w-25 p-1"  name="searchtype">
                                 <option value="title" th:selected="${searchtype} == 'title'">제목으로 검색</option>
                                 <option value="content" th:selected="${searchtype} == 'content'">본문으로 검색</option>
                                 <option value="userid" th:selected="${searchtype} == 'userid'">작성자로 검색</option>
@@ -120,7 +121,7 @@
                     <div class="search-wrap">
                         <label for="searchvalue" class="blind">공지사항 내용 검색</label>
                         <div>
-                            <select name="searchtype">
+                            <select class="form-select w-25 p-1"   name="searchtype">
                                 <option value="title" th:selected="${searchtype} == 'title'">제목으로 검색</option>
                                 <option value="content" th:selected="${searchtype} == 'content'">본문으로 검색</option>
                                 <option value="userid" th:selected="${searchtype} == 'userid'">작성자로 검색</option>
@@ -141,7 +142,7 @@
         <div class="container">
             <form th:if="${mainOrAdmin =='main'}" th:action="@{/}" method="get">
                 <div>
-                    <select name="sort" onchange="this.form.submit()">
+                    <select class="form-select" style="width: 10%"   name="sort" onchange="this.form.submit()">
                         <option value="title" th:selected="${sort} == 'title'">제목</option>
                         <option value="createdAt" th:selected="${sort} == 'createdAt'">작성일</option>
                         <option value="userid" th:selected="${sort} == 'userid'">작성자</option>
@@ -150,7 +151,7 @@
             </form>
             <form th:if="${mainOrAdmin =='admin'}" th:action="@{/admin/deletedBoard}" method="get">
                 <div>
-                    <select name="sort" onchange="this.form.submit()">
+                    <select class="form-select" style="width: 10%"  name="sort" onchange="this.form.submit()">
                         <option value="title" th:selected="${sort} == 'title'">제목</option>
                         <option value="createdAt" th:selected="${sort} == 'createdAt'">작성일</option>
                         <option value="userid" th:selected="${sort} == 'userid'">작성자</option>
@@ -159,8 +160,8 @@
             </form>
             <table class="board-table">
                 <colgroup>
-                    <col width=10%>
-                    <col width=50%>
+                    <col width=30%>
+                    <col width=30%>
                     <col width=20%>
                     <col width=10%>
                     <col width=10%>
@@ -222,14 +223,11 @@
                     </li>
                 </ul>
             </div>
-            <button th:if="${mainOrAdmin =='main'}" sec:authorize="isAuthenticated()" class="btn btn-dark" onclick="location.href='/createBoard'">등록
-            </button>
+            <button th:if="${mainOrAdmin =='main'}" sec:authorize="isAuthenticated()" class="btn btn-dark" onclick="location.href='/createBoard'"><span>글쓰기</span></button>
             <!--            <button sec:authorize="isAuthenticated()" class="btn btn-excel" onclick="downloadExcel()">엑셀 다운로드</button>-->
             <button  th:if="${mainOrAdmin == 'admin'}" class="btn btn-excel" onclick="downloadExcel()">삭제 목록 다운로드</button>
         </div>
     </div>
-
-
 
 <!--복구 설정 부분 -->
 

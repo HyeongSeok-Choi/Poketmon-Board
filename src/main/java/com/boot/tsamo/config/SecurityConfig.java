@@ -58,15 +58,15 @@ public class SecurityConfig {
                 .logout((logoutConfig) ->
                         logoutConfig
                                 .logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))
-                                .logoutSuccessUrl("/"))
+                                .logoutSuccessUrl("/user/logout/1"))
 
                 .authorizeHttpRequests((authorizeRequests) ->
                         authorizeRequests
+                                .requestMatchers("/admin/**").hasRole("ADMIN")
                                 .requestMatchers("/downloadExcel").hasRole("ADMIN") // 엑셀 다운로드는 ADMIN 권한만 허용
                                 .requestMatchers("/css/**", "/js/**", "/img/**").permitAll()
                                 .requestMatchers("/main","/","/user/**","/createBoard","/BoardDetailView","/reply","/posts","/createBoard","createBoardRequest"
                                         ,"/api/addComment" ,"/attachFile", "/board/**", "/**","/error").permitAll()
-                                .requestMatchers("/admin/**").hasRole("ADMIN")
                                 .anyRequest().authenticated()
 
                 )

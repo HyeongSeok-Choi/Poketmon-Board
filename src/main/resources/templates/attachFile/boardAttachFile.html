@@ -83,7 +83,7 @@
             <div th:if="${createOrModify == 'modify'}" class="file-info">
                 <span class="file-name" th:text="${attachFile.ori_fileName}"></span>
                 <button type="button" class="btn deleteBtn attachBtn"
-                        th:data-board-id="${attachFile.boardId.id}" th:data-file-id="${attachFile.id}">파일삭제</button>
+                        th:data-board-id="${attachFile.boardId.id}" th:data-file-id="${attachFile.id}" th:data-file-size="${attachFile.getFile_size()}">파일삭제</button>
             </div>
         </li>
     </ul>
@@ -112,7 +112,7 @@
 
     // 첨부파일 제목 클릭 이벤트 정의(show/hide)
     document.getElementById("attachTitle").addEventListener("click", function() {
-        var ul = document.getElementById("attachList");
+        let ul = document.getElementById("attachList");
         if (ul.classList.contains("hidden")) {
             ul.classList.remove("hidden");
         } else {
@@ -165,26 +165,27 @@
         });
     });
 
-    var deleteRequestDTOList = [];
+    let attachFileTotalSize = 0;
+    let deleteRequestDTOList = [];
 
     $('.deleteBtn').click(function () {
         // 수정 시 삭제할 파일 저장 하는 필드 및 메소드
-        var fileUploadSettings = document.getElementById('uploadSettings');
-        var maxUploadCnt = parseInt(fileUploadSettings.getAttribute('data-max-upload-cnt'));
-        var currentFileCount = parseInt(fileUploadSettings.getAttribute('data-current-file-count'));
-        var uploadFileExtensions = fileUploadSettings.getAttribute('data-upload-file-extensions').split(',');
-        var boardId = $(this).data('board-id');
-        var fileId = $(this).data('file-id');
-
-        var extensions = []; // 확장자를 저장할 배열
+        let fileUploadSettings = document.getElementById('uploadSettings');
+        let maxUploadCnt = parseInt(fileUploadSettings.getAttribute('data-max-upload-cnt'));
+        let currentFileCount = parseInt(fileUploadSettings.getAttribute('data-current-file-count'));
+        let uploadFileExtensions = fileUploadSettings.getAttribute('data-upload-file-extensions').split(',');
+        let boardId = $(this).data('board-id');
+        let fileId = $(this).data('file-id');
+        let fileSize = $(this).data('file-size');
+        let extensions = []; // 확장자를 저장할 배열
 
         // 주어진 문자열 배열을 반복하여 확장자를 추출하여 extensions 배열에 추가
         uploadFileExtensions.forEach(function(item) {
-            var extensionStartIndex = item.indexOf('extension=');
+            let extensionStartIndex = item.indexOf('extension=');
             if (extensionStartIndex !== -1) { // 'extension='이 존재하는 경우에만 확장자 추출
-                var startIndex = extensionStartIndex + 'extension='.length;
-                var endIndex = item.indexOf(')', startIndex);
-                var extension = item.substring(startIndex, endIndex);
+                let startIndex = extensionStartIndex + 'extension='.length;
+                let endIndex = item.indexOf(')', startIndex);
+                let extension = item.substring(startIndex, endIndex);
                 extensions.push(extension);
             }
         });
@@ -196,10 +197,10 @@
                 fno: fileId
             });
 
-            console.log(deleteRequestDTOList)
+            attachFileTotalSize += fileSize;
 
             // 파일을 화면에서 숨기거나 제거하는 등의 작업을 수행할 수 있음
-            var fileElement = $(this).closest('.file-info').parent(); // 해당 파일 요소의 부모 요소
+            let fileElement = $(this).closest('.file-info').parent(); // 해당 파일 요소의 부모 요소
             if (fileElement) {
                 fileElement.hide(); // 파일 숨기기
                 currentFileCount--;
@@ -214,7 +215,7 @@
             }
 
             // 파일 업로드 제한 상태에 따라 안내 문구 변경
-            var uploadRestrictionMessage = $('#uploadRestrictionMessage');
+            let uploadRestrictionMessage = $('#uploadRestrictionMessage');
 
             if (currentFileCount >= maxUploadCnt || !uploadFileExtensions) {
                 // 파일 업로드가 제한되어 있는 경우에 대한 처리
@@ -222,7 +223,7 @@
                 uploadRestrictionMessage.css('color', 'red');
             } else {
                 // 파일 업로드가 제한되어 있지 않은 경우에 대한 처리
-                var allowedExtensions = extensions.join(', '); // 확장자들을 쉼표로 구분하여 문자열로 변환
+                let allowedExtensions = extensions.join(', '); // 확장자들을 쉼표로 구분하여 문자열로 변환
                 uploadRestrictionMessage.text(allowedExtensions + ' 파일들만 등록 가능합니다.');
                 uploadRestrictionMessage.css('color', 'red');
             }
@@ -230,7 +231,7 @@
     });
 
     function addUploadInput() {
-        var newUploadInput = `
+        let newUploadInput = `
         <div class="form-group">
             <div class="custom-file img-div">
                 <input type="file" class="custom-file-input" name="attachFile">
