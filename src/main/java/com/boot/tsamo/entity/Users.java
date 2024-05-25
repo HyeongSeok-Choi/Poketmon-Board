@@ -97,7 +97,7 @@ public class Users implements UserDetails, OAuth2User {
         String password = passwordEncoder.encode(userFormDto.getPassword());
         user.setPassword(password);
         user.setNickName(userFormDto.getNickName());
-        user.setRole(Role.ADMIN);
+        user.setRole(Role.USER);
         user.setDeleted(false); // 계정 생성 시 삭제되지 않음으로 설정
         user.setEnabled(true); // 계정 생성 시 활성화 상태로 설정
         return user;
