@@ -123,7 +123,7 @@ public class UserController {
             session.invalidate();
 
             redirectAttributes.addAttribute("successMessage", "탈퇴 완료 되었습니다.");
-            return "redirect:/user/login";
+            return "redirect:/";
         } catch (EntityNotFoundException e) {
             redirectAttributes.addAttribute("errorMessage", "존재하지 않는 아이디입니다.");
         }
