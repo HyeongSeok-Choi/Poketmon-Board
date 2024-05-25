@@ -9,7 +9,6 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -20,7 +19,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
 import java.security.Principal;
-import java.util.Collections;
 
 @RequestMapping("/user")
 @Controller
@@ -34,26 +32,26 @@ public class UserController {
     @GetMapping(value = "/new")
     public String userForm(Model model) {
         model.addAttribute("userFormDto", new UserFormDto());
-        return "/user/userForm";
+        return "user/userForm";
     }
 
     @PostMapping(value = "/new")
     public String newUser(@Valid UserFormDto userFormDto,
                           BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
-            return "/user/userForm";
+            return "user/userForm";
         }
         if (!userFormDto.getPassword().equals(userFormDto.getCheckPassword())) {
             bindingResult.rejectValue("checkPassword", "passwordInCorrect",
                     "2개의 패스워드가 일치하지 않습니다.");
-            return "/user/userForm";
+            return "user/userForm";
         }
         try {
             Users user = Users.createUser(userFormDto, passwordEncoder);
             userService.saveUser(user);
         } catch (UsernameNotFoundException e) {
             model.addAttribute("errorMessage", e.getMessage());
-            return "/user/userForm";
+            return "user/userForm";
         }
 
         return "redirect:/user/login";
@@ -78,13 +76,13 @@ public class UserController {
 
     @GetMapping(value = "/login")
     public String loginUser() {
-        return "/user/userLoginForm";
+        return "user/userLoginForm";
     }
 
     @GetMapping(value = "/login/error")
     public String loginError(Model model) {
         model.addAttribute("loginErrorMsg", "아이디 또는 비밀번호를 확인해주세요");
-        return "/user/userLoginForm";
+        return "user/userLoginForm";
     }
 
     @GetMapping("/loginInfo")
@@ -99,10 +97,10 @@ public class UserController {
             // 사용자가 존재하지 않을 때 처리합니다.
             model.addAttribute("errorMessage", "존재하지 않는 아이디입니다.");
             model.addAttribute("userFormDto", new UserFormDto());
-            return "/user/userLoginInfo";
+            return "user/userLoginInfo";
         }
         // 수정 페이지를 반환합니다.
-        return "/user/userLoginInfo";
+        return "user/userLoginInfo";
     }
 
     @PostMapping(value = "/loginInfo")
@@ -133,7 +131,7 @@ public class UserController {
     @GetMapping(value = "/auth/kakao/callback")
     public String kakaoCallback() {
 
-        return "createboard";
+        return "createBoard";
     }
 
     @GetMapping(value = "/kakao/logout")
