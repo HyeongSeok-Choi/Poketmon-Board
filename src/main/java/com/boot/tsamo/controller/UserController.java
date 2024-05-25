@@ -148,17 +148,12 @@ public class UserController {
     @GetMapping(value = "/logout/1")
     public String NormalLogout(HttpSession session) {
 
-        MyOAuth2UserService.kakaoLogin= false;
+        MyOAuth2UserService.kakaoLogin = false;
 
         session.invalidate();
 
         return "redirect:/";
-    // 추가된 부분: 아이디 중복 확인 엔드포인트
-    @GetMapping("/checkUserId")
-    @ResponseBody
-    public ResponseEntity<?> checkUserId(@RequestParam("userId") String userId) {
-        boolean isDuplicate = userRepository.existsByUserId(userId); // userRepository에서 해당 ID 존재 여부를 확인
-        return ResponseEntity.ok().body(Collections.singletonMap("isDuplicate", isDuplicate));
+
     }
 
 }
