@@ -1,5 +1,6 @@
 package com.boot.tsamo.controller;
 
+import com.boot.tsamo.config.oauth.MyOAuth2UserService;
 import com.boot.tsamo.dto.UserFormDto;
 import com.boot.tsamo.entity.Users;
 import com.boot.tsamo.repository.UserRepository;
@@ -138,6 +139,17 @@ public class UserController {
 
     @GetMapping(value = "/kakao/logout")
     public String logout(HttpSession session) {
+
+        session.invalidate();
+        MyOAuth2UserService.kakaoLogin= false;
+
+        return "main";
+    }
+
+    @GetMapping(value = "/logout/1")
+    public String NormalLogout(HttpSession session) {
+
+        MyOAuth2UserService.kakaoLogin= false;
 
         session.invalidate();
 

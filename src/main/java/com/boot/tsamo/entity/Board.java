@@ -3,6 +3,7 @@ package com.boot.tsamo.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.apache.commons.collections4.keyvalue.MultiKey;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -53,6 +54,10 @@ public class Board {
 
     @OneToMany(mappedBy = "boardId",fetch = FetchType.LAZY,cascade = CascadeType.REMOVE)
     private List<HashTag>hashTags= new ArrayList<HashTag>();
+
+
+    @OneToMany(mappedBy = "multikey.boardId",fetch = FetchType.LAZY,cascade = CascadeType.REMOVE)
+    private List<Likes> likesList= new ArrayList<Likes>();
 
 
 }

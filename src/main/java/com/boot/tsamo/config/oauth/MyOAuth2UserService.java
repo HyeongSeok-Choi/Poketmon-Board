@@ -5,6 +5,7 @@ import com.boot.tsamo.repository.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.actuate.autoconfigure.observation.ObservationProperties;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -22,51 +23,51 @@ import java.util.*;
 public class MyOAuth2UserService extends DefaultOAuth2UserService {
 
 
-    public boolean kakaoLogin = false;
+    public static boolean kakaoLogin = false;
 
    private final UserRepository userRepository;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
 
+
+        //카카오 로그인 온
         kakaoLogin = true;
 
         OAuth2User oAuth2User = super.loadUser(userRequest);
-        try {
-            System.out.println(new ObjectMapper().writeValueAsString(oAuth2User.getAttributes()));
 
-        }catch (Exception e) {
-            e.printStackTrace();
-        }
-
-
+        //카카오 고유 아이디
         String userId =oAuth2User.getAttributes().get("id").toString();
 
 
-
+        //카카오 계정 정보
         Map<String,Object> responseMap = (Map<String,Object>) oAuth2User.getAttributes().get("kakao_account");
 
-        Map<String,Object> responseMap1 = new HashMap<>();
-        responseMap1=  oAuth2User.getAttributes();
+        //카카오 전체 속성
+        Map<String, Object> attributes = new HashMap<>();
 
+        attributes.put("kakao_id", "kakao_"+userId);
 
+        attributes.putAll(oAuth2User.getAttributes());
 
-
-        System.out.println(responseMap1.get("id")+"뭐라뜨노");
 
 
 
         String userEmail ="kakao_"+responseMap.get("email");
 
-        Users user = new Users(userId,userEmail);
+        //존재하지 않는다면
+        if(!userRepository.findById(userId).isPresent()){
 
-        userRepository.save(user);
+            Users user = new Users("kakao_"+userId, userEmail);
 
+            userRepository.save(user);
+        }
         // 기본 권한 설정
         Set<GrantedAuthority> authorities;
 
-            authorities = Collections.singleton(new SimpleGrantedAuthority("ROLE_ADMIN"));
+        authorities = Collections.singleton(new SimpleGrantedAuthority("ROLE_ADMIN"));
 
-        return  new DefaultOAuth2User(authorities, responseMap1, "id");
+
+        return  new DefaultOAuth2User(authorities, attributes, "kakao_id");
     }
 }

@@ -1,6 +1,7 @@
 package com.boot.tsamo.controller;
 
 
+import com.boot.tsamo.config.oauth.MyOAuth2UserService;
 import com.boot.tsamo.dto.AttachFileFormDto;
 import com.boot.tsamo.dto.DeleteFileRequestDTO;
 import com.boot.tsamo.dto.addBoardDTO;
@@ -75,9 +76,15 @@ public class TestController {
             direction = Sort.Direction.DESC) Pageable pageable, String searchvalue,
                        String searchtype, String sort, HttpServletRequest request,String mainOrAdmin,Principal principal) {
 
+        if(principal != null && principal.getName().contains("kakao")){
+            MyOAuth2UserService.kakaoLogin = true;
+            System.out.println("카카오 ?");
+        }
+
 
         if(principal != null){
             id = principal.getName();
+            System.out.println(id+"아이디");
         }
 
         mainOrAdmin="main";

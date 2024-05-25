@@ -58,7 +58,7 @@ public class SecurityConfig {
                 .logout((logoutConfig) ->
                         logoutConfig
                                 .logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))
-                                .logoutSuccessUrl("/"))
+                                .logoutSuccessUrl("/user/logout/1"))
 
                 .authorizeHttpRequests((authorizeRequests) ->
                         authorizeRequests

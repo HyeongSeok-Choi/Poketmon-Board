@@ -7,23 +7,30 @@
         <a class="nav-link" sec:authorize="isAnonymous()" href="/user/login">로그인</a>
         <!-- 사용자가 로그인한 경우에만 환영 메시지 표시 -->
 
-        <a class="label" sec:authorize="isAuthenticated()"
-           th:text="'환영합니다, [' + ${T(com.boot.tsamo.controller.TestController).id} + '] 님'"></a>
+        <a th:if="${T(com.boot.tsamo.config.oauth.MyOAuth2UserService).kakaoLogin== false}" class="label" sec:authorize="isAuthenticated()"
+           th:text="'환영합니다, [' + ${#authentication.principal.username} + '] 님'"></a>
+
+        <a th:if="${T(com.boot.tsamo.config.oauth.MyOAuth2UserService).kakaoLogin== true}" class="label" sec:authorize="isAuthenticated()"
+           th:text="'환영합니다, [' + ${#authentication.principal.attributes['kakao_id']} + '] 님'"></a>
 
         <!--
-        <a class="label" sec:authorize="isAuthenticated()"
-           th:text="'환영합니다, [' + ${#authentication.principal.username} + '] 님'"></a>
-         -->
+                <a th:if="${#authentication.principal.username != null}" class="label" sec:authorize="isAuthenticated()"
+                   th:text="'환영합니다, [' + ${#authentication.principal.username} + '] 님'"></a>
 
-        <a class="nav-link" sec:authorize="isAuthenticated()" href="/user/logout">로그아웃</a>
+                <a th:if="${#authentication.principal.attributes['properties']['nickname'] != null}" class="label" sec:authorize="isAuthenticated()"
+                   th:text="'환영합니다, [' + ${#authentication.principal.attributes['properties']['nickname']} + '] 님'"></a>
+        -->
+                <a class="nav-link"  sec:authorize="isAuthenticated()" th:if="${T(com.boot.tsamo.config.oauth.MyOAuth2UserService).kakaoLogin== false}" href="/user/logout">로그아웃</a>
 
-        <a class="nav-link" sec:authorize="isAnonymous()" href="/user/new">회원가입</a>
+                 <a class="nav-link"  sec:authorize="isAuthenticated()" th:if="${T(com.boot.tsamo.config.oauth.MyOAuth2UserService).kakaoLogin== true}" href="https://kauth.kakao.com/oauth/logout?client_id=9739812df088ab6e1028c14756aa0072&logout_redirect_uri=http://localhost:8080/user/kakao/logout">로그아웃</a>
 
-        <a class="nav-link" sec:authorize="isAuthenticated()" href="/user/loginInfo">회원정보</a>
+                <a class="nav-link" sec:authorize="isAnonymous()" href="/user/new">회원가입</a>
 
-        <a class="nav-link" href="/visitCount">방문자 수 조회</a>
+                <a class="nav-link" sec:authorize="isAuthenticated()" href="/user/loginInfo">회원정보</a>
 
-        <!-- 관리자 설정란 -->
+                <a class="nav-link" href="/visitCount">방문자 수 조회</a>
+
+                <!-- 관리자 설정란 -->
 
         <div class="admin-settings" sec:authorize="hasRole('ADMIN')" style="display: inline-block">
             <a href="#" class="admin-menu">관리자 설정</a>
