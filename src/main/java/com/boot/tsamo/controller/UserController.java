@@ -15,15 +15,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.PathVariable; // import PathVariable
-import org.springframework.web.bind.annotation.RequestParam; // import RequestParam for update
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
 import java.security.Principal;
+import java.util.Collections;
 
 @RequestMapping("/user")
 @Controller
@@ -131,6 +128,8 @@ public class UserController {
     }
 
 
+
+
     @GetMapping(value = "/auth/kakao/callback")
     public String kakaoCallback() {
 
@@ -154,6 +153,12 @@ public class UserController {
         session.invalidate();
 
         return "redirect:/";
+    // 추가된 부분: 아이디 중복 확인 엔드포인트
+    @GetMapping("/checkUserId")
+    @ResponseBody
+    public ResponseEntity<?> checkUserId(@RequestParam("userId") String userId) {
+        boolean isDuplicate = userRepository.existsByUserId(userId); // userRepository에서 해당 ID 존재 여부를 확인
+        return ResponseEntity.ok().body(Collections.singletonMap("isDuplicate", isDuplicate));
     }
 
 }

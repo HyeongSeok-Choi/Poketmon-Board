@@ -1,6 +1,6 @@
 package com.boot.tsamo.service;
 
-import com.boot.tsamo.dto.UserFormDto;
+import com.boot.tsamo.constant.Role;
 import com.boot.tsamo.entity.Users;
 import com.boot.tsamo.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,14 +13,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-import jakarta.persistence.EntityNotFoundException;
-import java.util.Optional;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class UserServiceTest {
+class UserServiceTest1 {
 
     @Mock
     private UserRepository userRepository;
@@ -37,6 +34,7 @@ class UserServiceTest {
         testUser.setPassword("testPassword");
         testUser.setEmail("test@example.com");
         testUser.setNickName("Test User");
+        testUser.setRole(Role.USER);
     }
 
     @Test
