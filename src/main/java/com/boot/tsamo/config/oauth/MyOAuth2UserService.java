@@ -30,7 +30,7 @@ public class MyOAuth2UserService extends DefaultOAuth2UserService {
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
 
-
+        System.out.println("여기로 안올수도 있나?");
         //카카오 로그인 온
         kakaoLogin = true;
 
@@ -60,10 +60,13 @@ public class MyOAuth2UserService extends DefaultOAuth2UserService {
 
             Users user = new Users("kakao_"+userId, userEmail);
 
+
             userRepository.save(user);
         }
         // 기본 권한 설정
         Set<GrantedAuthority> authorities;
+
+
 
         authorities = Collections.singleton(new SimpleGrantedAuthority("ROLE_ADMIN"));
 
