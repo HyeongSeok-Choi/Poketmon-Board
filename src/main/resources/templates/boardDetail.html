@@ -206,7 +206,7 @@
             <div class="mb-3">
                 <label for="content">내용</label>
                 <!-- 첨부 파일 -->
-                <div th:replace="~{/attachFile/boardAttachFile.html}"></div>
+                <div th:replace="~{attachFile/boardAttachFile.html}"></div>
                 <div th:with="createOrModify=${createOrModify}" th:remove="tag"></div>
                 <!-- 첨부 파일 끝-->
                 <textarea class="form-control content-textarea" id="content" name="content"
@@ -244,7 +244,7 @@
         </div>
         <!-- 댓글출현 -->
         <div class="reply-section">
-            <div th:replace="~{/ReplyView.html}"></div>
+            <div th:replace="~{ReplyView.html}"></div>
         </div>
     </div>
 </div>

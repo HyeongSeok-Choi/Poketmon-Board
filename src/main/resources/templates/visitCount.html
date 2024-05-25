@@ -17,7 +17,7 @@
 <ul id="visitCountList"></ul>
 
 <!-- 차트 크기는 부모 크기를 조절하면 거기에 맞게 자동으로 맹글어짐 -->
-<div style="width:90vw;height:200vh;border:none">
+<div style="width:100vw;height:50vh;border:none; display: flex; justify-content: center; align-items: center;">
     <!-- 차트 그릴 위치 지정 canvas webGL(그래픽엔진) 사용 -->
     <canvas id="myChart"></canvas>
 </div>
@@ -62,8 +62,8 @@
                                 label: '방문자 수 조회',
                                 data: limitedCounts,
                                 borderWidth: 1,
-                                backgroundColor: 'rgba(255, 206, 86, 0.2)',
-                                borderColor: 'rgba(255, 206, 86, 1)',
+                                backgroundColor: 'rgba(255,210,105,0.2)',
+                                borderColor: 'rgb(245,213,60)',
                                 datalabels: {
                                     align: 'end',
                                     anchor: 'end',
