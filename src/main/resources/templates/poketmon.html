@@ -13,81 +13,82 @@
     <title>Document</title>
 </head>
 <body>
-
-<div id="poke-card">
-
+<div class="d-flex justify-content-center">
+<img src="/img/Pokemon-device.png" >
 </div>
 
-
-
-
+<div class="container">
+    <div id="poke-card" class="row">
+    </div>
+</div>
 
 <script>
 
-    var allPokemonData = [];
-
     var poketmonImg =document.getElementById('poke-card');
+    var poketmonNum = 50;
 
-    for (let i = 1; i < 10; i++) {
-        poketmonImg.append(`<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${i}.png"/>`)
-    }
-
-
-    for (let i = 1; i < 10; i++) {
-
-
-        fetch(`https://pokeapi.co/api/v2/pokemon-species/${i}`, {
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            },
-            method: 'GET',
-        })
-            .then(response => response.json())
-            .then(poketmon => {
-
-                 //console.log(poketmon.names[2].name);
-                console.log(poketmon.names[2].name);
-                console.log(poketmon.genera[1].genus);
-                }
-            )
-
-        fetch(`https://pokeapi.co/api/v2/pokemon/${i}`, {
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            },
-            method: 'GET',
-        })
-            .then(response => response.json())
-            .then(poketmon => {
-
-                    let Heigt =(poketmon.height *0.1).toFixed(1);
-                    let weight = (poketmon.weight *0.1)
-                    //console.log(poketmon.names[2].name);
-                    console.log(Heigt+"M");
-                    console.log(weight+"KG");
-                }
-            )
-
-        fetch(`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${i}.png`, {
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            },
-            method: 'GET',
-        })
-            .then(response => response.json())
-            .then(poketmon => {
+    a1();
+   async function a1() {
+       var innerhtml = ''
+       for (let i = 1; i <= poketmonNum; i++) {
+           innerhtml += `
+                        <div class="col-2 card" id="${i}">
+                        <h4 style="font-style: italic;">Num.${i}</h4>
+                             <img class="card-img-top" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${i}.png" width="200" height="200"/>
+                           </div>`
+           poketmonImg.innerHTML = innerhtml;
+       }
 
 
+       for (let i = 1; i <= poketmonNum; i++) {
+           fetch(`https://pokeapi.co/api/v2/pokemon-species/${i}`, {
+               headers: {
+                   'Content-Type': 'application/json',
+                   'Accept': 'application/json'
+               },
+               method: 'GET',
+               async: false
+           })
 
-                }
-            )
+               .then(response => response.json())
+               .then(poketmon => {
 
 
-    }
+                       var innerhtml2 = ''
+                       innerhtml2 += `<div class="card-title" >이름: ${poketmon.names[2].name}</div>
+                                            <div class="card-subtitle mb-2 text-muted" style="color: #0a58ca">종: ${poketmon.genera[1].genus}</div>`
+                       $('#' + `${i}`).append(innerhtml2);
+                   }
+               )
 
+
+       }
+
+       for (let i = 1; i <= poketmonNum; i++) {
+           fetch(`https://pokeapi.co/api/v2/pokemon/${i}`, {
+               headers: {
+                   'Content-Type': 'application/json',
+                   'Accept': 'application/json'
+               },
+               method: 'GET',
+               async: false
+           })
+               .then(response => response.json())
+               .then(poketmon => {
+
+                       let Heigt = (poketmon.height * 0.1).toFixed(1);
+                       let weight = (poketmon.weight * 0.1).toFixed(1)
+
+                       var innerhtml3 = ''
+                       innerhtml3 += `<p style="color: #0a58ca">키: ${Heigt}M</p>
+                                            <p style="color: #0a58ca">몸무게: ${weight}kg</p>`
+                       $('#' + `${i}`).append(innerhtml3);
+
+                   }
+               )
+
+       }
+   }
 </script>
 </body>
 </html>
