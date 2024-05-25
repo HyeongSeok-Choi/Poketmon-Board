@@ -63,13 +63,14 @@ public class AttachFileService {
         String oriImgName = multipartFile.getOriginalFilename();
         String attachFileName="";
         String attachFileUrl = "";
+        Long fileSize = multipartFile.getSize();
 
         if(!StringUtils.isEmpty(oriImgName)){
             attachFileName = uploadFile(attachFileLocation, oriImgName, multipartFile.getBytes());
             attachFileUrl = attachFileLocation + "/" + attachFileName;
         }
 
-        attachFile.updateItemImg(oriImgName, attachFileName, attachFileUrl);
+        attachFile.updateItemImg(oriImgName, attachFileName, attachFileUrl, fileSize);
         attachFileRepository.save(attachFile);
     }
 
@@ -148,12 +149,6 @@ public class AttachFileService {
             return MediaType.APPLICATION_PDF;
         } else if (fileName.endsWith(".txt")) {
             return MediaType.TEXT_PLAIN;
-        } else if (fileName.endsWith(".avi")) {
-            return MediaType.valueOf("video/x-msvideo");
-        } else if (fileName.endsWith(".hwp")) {
-            return MediaType.valueOf("application/x-hwp");
-        } else if (fileName.endsWith(".ppt") || fileName.endsWith(".pptx")) {
-            return MediaType.valueOf("application/vnd.ms-powerpoint");
         } else {
             return MediaType.APPLICATION_OCTET_STREAM; // 기본값
         }

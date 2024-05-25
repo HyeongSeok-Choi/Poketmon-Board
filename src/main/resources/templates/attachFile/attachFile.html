@@ -15,7 +15,7 @@
                     </div>
                 </div>
 
-                <p id="uploadRestrictionMessage"
+                <p
                    th:if="${#lists.isEmpty(extensions)|| maxUploadCnt == null || maxUploadCnt<=0}"
                    th:style="'color: red'"
                 >파일 업로드가 제한되어 있습니다.
@@ -47,7 +47,7 @@
                     <input type="file" class="custom-file-input" name="attachFile" style="display:none;">
                 </div>
 
-                <p th:if="${#lists.isEmpty(extensions)|| maxUploadCnt == null || maxUploadCnt<=0 || maxUploadCnt <= #lists.size(attachFiles)}" th:style="'color: red'">
+                <p id="uploadRestrictionMessage" th:if="${#lists.isEmpty(extensions)|| maxUploadCnt == null || maxUploadCnt<=0 || maxUploadCnt <= #lists.size(attachFiles)}" th:style="'color: red'">
                     파일 업로드가 제한되어 있습니다.
                 </p>
                 <p th:unless="${#lists.isEmpty(extensions)|| maxUploadCnt == null || maxUploadCnt<=0 || maxUploadCnt <= #lists.size(attachFiles)}" th:style="'color: red'">
