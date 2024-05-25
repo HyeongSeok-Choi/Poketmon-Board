@@ -81,7 +81,6 @@ public class TestController {
             System.out.println("카카오 ?");
         }
 
-
         if(principal != null){
             id = principal.getName();
             System.out.println(id+"아이디");
