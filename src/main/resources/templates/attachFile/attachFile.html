@@ -7,7 +7,7 @@
         <div id="board-attachfile">
 
             <!--            게시판 등록              -->
-            <div th:if="${attachFiles == null || #lists.isEmpty(extensions)|| maxUploadCnt == null || maxUploadCnt<=0}">
+            <div th:if="${attachFiles == null && (#lists.isEmpty(extensions)|| maxUploadCnt == null || maxUploadCnt<=0)}">
                 <div class="form-group" th:each="num: ${#numbers.sequence(1,maxUploadCnt)}">
                     <div class="custom-file img-div">
                         <input type="file" class="custom-file-input form-control" name="attachFile">
