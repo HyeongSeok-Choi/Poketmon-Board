@@ -178,7 +178,7 @@
             width: 100%;
         }
 
-        .modal {
+        .modal2 {
             display: none;
             position: fixed;
             z-index: 1;
@@ -261,7 +261,7 @@
                 <form class="validation-form" method="post" th:action="@{/deleteBoard(id=${board.id})}" sec:authorize="isAuthenticated()" th:if="${userid.equals(board.userid.getUserId())}">
                     <button id="deleteBtn" class="btn btn-danger btn btn-block" type="button">삭제</button>
                     <!-- 모달창 -->
-                    <div id="confirmDeleteModal" class="modal">
+                    <div id="confirmDeleteModal" class="modal2">
                         <!-- 모달 내용 -->
                         <div class="modal-content">
                             <!-- 삭제 확인 메시지 -->
