@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.boot.actuate.autoconfigure.observation.ObservationProperties;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
@@ -30,7 +31,7 @@ public class MyOAuth2UserService extends DefaultOAuth2UserService {
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
 
-
+        System.out.println("여기로 안올수도 있나?");
         //카카오 로그인 온
         kakaoLogin = true;
 
@@ -55,15 +56,29 @@ public class MyOAuth2UserService extends DefaultOAuth2UserService {
 
         String userEmail ="kakao_"+responseMap.get("email");
 
+
+
+        //일단 들어오면서 유저 객체 만듦
+        Users user = new Users("kakao_"+userId, userEmail);
+
+
         //존재하지 않는다면
-        if(!userRepository.findById(userId).isPresent()){
-
-            Users user = new Users("kakao_"+userId, userEmail);
-
+        if(!userRepository.findById("kakao_"+userId).isPresent()){
+            System.out.println("존재하면 여기오면 안되지");
             userRepository.save(user);
+        }else{
+            //존재하는데 탈퇴회원이다 ?
+            if(userRepository.findByUserIdAndIsDeletedFalse("kakao_"+userId) == null){
+                throw new UsernameNotFoundException("탈퇴한 회원입니다.");
+            }
+
         }
+
+
         // 기본 권한 설정
         Set<GrantedAuthority> authorities;
+
+
 
         authorities = Collections.singleton(new SimpleGrantedAuthority("ROLE_ADMIN"));
 

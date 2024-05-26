@@ -49,41 +49,44 @@
                     });
             }
 
-            // 좋아요 클릭 이벤트
-            like.addEventListener("click", (e) => {
-                var check = "getlike";
-                fetch(`http://localhost:8080/api/likes`, {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    },
-                    body:
-                        JSON.stringify({
-                            boardId: document.getElementById("board-id").value,
-                            check: check
-                        })
-                    ,
-                    method: 'POST',
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        var image = document.getElementById("like-img");
-                        console.log(image);
-                        console.log(data);
 
-                        if (data) {
-                            image.src = "/img/poketball2.png";
-                        } else {
-                            image.src = "/img/loveball.png";
-                        }
+            if(!document.getElementById('userId').value =="") {
+                // 좋아요 클릭 이벤트
+                like.addEventListener("click", (e) => {
+                    var check = "getlike";
+                    fetch(`http://localhost:8080/api/likes`, {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json'
+                        },
+                        body:
+                            JSON.stringify({
+                                boardId: document.getElementById("board-id").value,
+                                check: check
+                            })
+                        ,
+                        method: 'POST',
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            var image = document.getElementById("like-img");
+                            console.log(image);
+                            console.log(data);
 
-                        var countLike = document.getElementById("likeCount");
-                        getCountingLike();
-                        var countValue = counting;
-                    });
+                            if (data) {
+                                image.src = "/img/poketball2.png";
+                            } else {
+                                image.src = "/img/loveball.png";
+                            }
 
-                // e.target.classList.toggle("fa-thumbs-down");
-            });
+                            var countLike = document.getElementById("likeCount");
+                            getCountingLike();
+                            var countValue = counting;
+                        });
+
+                    // e.target.classList.toggle("fa-thumbs-down");
+                });
+            }
 
 
             // 좋아요 수 조회
@@ -226,11 +229,11 @@
             <div class="mb-3">
                 <label for="content">내용</label>
                 <!-- 첨부 파일 -->
-                <div th:replace="~{/attachFile/boardAttachFile.html}"></div>
+                <div th:replace="~{attachFile/boardAttachFile.html}"></div>
                 <div th:with="createOrModify=${createOrModify}" th:remove="tag"></div>
                 <!-- 첨부 파일 끝-->
                 <textarea class="form-control content-textarea" id="content" name="content"
-                          placeholder="프로젝트 내용을 입력해주세요" th:text="${board.content}" readonly></textarea>
+                          placeholder="작성된 내용이 없습니다." th:text="${board.content}" readonly></textarea>
             </div>
 
             <!-- 좋아요 버튼과 수 -->
@@ -247,7 +250,7 @@
 
             <h5 class="mb-3">해시태그</h5>
             <ul style="list-style:none; padding: 0; display: flex; flex-wrap: wrap; justify-content: center;">
-                <li th:each="hash:${hashTag}" th:text="'#'+${hash.getHashTagContent()}" style="margin: 0 10px;"></li>
+                <li class="badge bg-warning" th:each="hash:${hashTag}" th:text="'#'+${hash.getHashTagContent()}" style="margin: 0 10px;"></li>
             </ul>
             <div class="button-group">
                 <form class="validation-form" method="post" th:action="@{/modifyBoard(id=${board.id})}" sec:authorize="isAuthenticated()" th:if="${userid.equals(board.userid.getUserId())}">
@@ -285,7 +288,7 @@
         </div>
         <!-- 댓글출현 -->
         <div class="reply-section">
-            <div th:replace="~{/ReplyView.html}"></div>
+            <div th:replace="~{ReplyView.html}"></div>
         </div>
     </div>
 </div>

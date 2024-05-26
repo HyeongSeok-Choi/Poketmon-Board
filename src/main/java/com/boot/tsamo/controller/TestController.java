@@ -81,7 +81,6 @@ public class TestController {
             System.out.println("카카오 ?");
         }
 
-
         if(principal != null){
             id = principal.getName();
             System.out.println(id+"아이디");
@@ -106,11 +105,13 @@ public class TestController {
 
 
         if (sort == null || sort.equals("title")) {
-            Sort.by(Sort.Direction.DESC, "title");
+            Sort.by(Sort.Direction.ASC, "title");
         } else if (sort.equals("createdAt")) {
-            Sort.by(Sort.Direction.DESC, "createdAt");
+            Sort.by(Sort.Direction.ASC, "createdAt");
         } else if (sort.equals("userid")) {
-            Sort.by(Sort.Direction.DESC, "userid");
+            Sort.by(Sort.Direction.ASC, "userid");
+        } else{
+            Sort.by(Sort.Direction.DESC, "createdAt");
         }
 
         Page<Board> Boards = boardService.findAll(pageable,mainOrAdmin);
