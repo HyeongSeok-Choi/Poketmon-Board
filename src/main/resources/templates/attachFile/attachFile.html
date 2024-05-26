@@ -3,22 +3,23 @@
     <div class="mb-3">
 
         <label for="board-attachfile">첨부파일 업로드</label>
-
         <div id="board-attachfile">
 
+            <p
+                    th:if="${#lists.isEmpty(extensions) || maxUploadCnt == null || maxUploadCnt<=0}"
+                    th:style="'color: red'"
+            >파일 업로드가 제한되어 있습니다.
+            </p>
+
             <!--            게시판 등록              -->
-            <div th:if="${attachFiles == null && (#lists.isEmpty(extensions)|| maxUploadCnt == null || maxUploadCnt<=0)}">
-                <div class="form-group" th:each="num: ${#numbers.sequence(1,maxUploadCnt)}">
+            <div th:if="${attachFiles == null}">
+                <div class="form-group"
+                     th:unless="${#lists.isEmpty(extensions)|| maxUploadCnt == null || maxUploadCnt<=0}"
+                     th:each="num: ${#numbers.sequence(1,maxUploadCnt)}">
                     <div class="custom-file img-div">
                         <input type="file" class="custom-file-input form-control" name="attachFile">
                     </div>
                 </div>
-
-                <p
-                   th:if="${#lists.isEmpty(extensions) || maxUploadCnt == null || maxUploadCnt<=0}"
-                   th:style="'color: red'"
-                >파일 업로드가 제한되어 있습니다.
-                </p>
 
                 <p th:unless="${#lists.isEmpty(extensions)|| maxUploadCnt == null || maxUploadCnt<=0}" th:style="'color: red'">
                     <th:block th:each="extension : ${extensions}">

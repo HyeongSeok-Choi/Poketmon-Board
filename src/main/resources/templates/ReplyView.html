@@ -19,7 +19,7 @@
     <fieldset>
         <legend class="skipinfo">댓글 입력</legend>
         <div class="cm_input">
-            <p><textarea id="contents" name="contents" cols="60" rows="4" placeholder="댓글을 입력해 주세요."></textarea></p>
+            <p><textarea id="contents" col-md-12 mb-3 name="contents" cols="60" rows="4" placeholder="댓글을 입력해 주세요."></textarea></p>
             <span><button type="button" class="btn btn-primary" onclick="saveComment();">등 록</button></span>
         </div>
     </fieldset>
@@ -64,7 +64,7 @@
 
         const boardnumbr = document.getElementById("board-id").value;
 
-        fetch(`http://localhost:8080/api/allcomments/${boardnumbr}?page=${page}`, {
+        fetch(`http://222.119.100.90:8215/api/allcomments/${boardnumbr}?page=${page}`, {
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json'
@@ -160,7 +160,7 @@
         const repliesDiv = document.getElementById(`replies-${replyId}`);
         repliesDiv.innerHTML = ''; // 기존 답글 초기화
 
-        fetch(`http://localhost:8080/api/allReComment/${replyId}`, {
+        fetch(`http://222.119.100.90:8215/api/allReComment/${replyId}`, {
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json'
@@ -214,7 +214,7 @@
         // 페이지가 변경될 때 activeReplies 초기화
         activeReplies = {};
 
-        fetch(`http://localhost:8080/api/allcomments/${boardnumbr}?page=${page}`, {
+        fetch(`http://222.119.100.90:8215/api/allcomments/${boardnumbr}?page=${page}`, {
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json'

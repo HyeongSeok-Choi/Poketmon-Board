@@ -23,7 +23,7 @@
 
             function viewLike() {
                 var check = "check";
-                fetch(`http://localhost:8080/api/likes`, {
+                fetch(`http://222.119.100.90:8215/api/likes`, {
                     headers: {
                         'Content-Type': 'application/json',
                         'Accept': 'application/json'
@@ -54,7 +54,7 @@
                 // 좋아요 클릭 이벤트
                 like.addEventListener("click", (e) => {
                     var check = "getlike";
-                    fetch(`http://localhost:8080/api/likes`, {
+                    fetch(`http://222.119.100.90:8215/api/likes`, {
                         headers: {
                             'Content-Type': 'application/json',
                             'Accept': 'application/json'
@@ -92,7 +92,7 @@
             // 좋아요 수 조회
             function getCountingLike() {
                 var check = "check";
-                fetch(`http://localhost:8080/api/likes/getCounting`, {
+                fetch(`http://222.119.100.90:8215/api/likes/getCounting`, {
                     headers: {
                         'Content-Type': 'application/json',
                         'Accept': 'application/json'
@@ -228,12 +228,13 @@
             <!-- 내용 입력 -->
             <div class="mb-3">
                 <label for="content">내용</label>
-                <!-- 첨부 파일 -->
-                <div th:replace="~{attachFile/boardAttachFile.html}"></div>
-                <div th:with="createOrModify=${createOrModify}" th:remove="tag"></div>
-                <!-- 첨부 파일 끝-->
                 <textarea class="form-control content-textarea" id="content" name="content"
                           placeholder="작성된 내용이 없습니다." th:text="${board.content}" readonly></textarea>
+                <!-- 첨부 파일 -->
+                <label for="attachFile">첨부파일</label>
+                <div id="attachFile" th:replace="~{attachFile/boardAttachFile.html}"></div>
+                <div th:with="createOrModify=${createOrModify}" th:remove="tag"></div>
+                <!-- 첨부 파일 끝-->
             </div>
 
             <!-- 좋아요 버튼과 수 -->

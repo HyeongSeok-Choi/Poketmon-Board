@@ -12,7 +12,7 @@
 
                 <a class="nav-link"  sec:authorize="isAuthenticated()" th:if="${#strings.contains(#authentication.principal,'User Attributes') == false}" href="/user/logout">로그아웃</a>
 
-                 <a class="nav-link"  sec:authorize="isAuthenticated()" th:if="${#strings.contains(#authentication.principal,'User Attributes') == true}" href="https://kauth.kakao.com/oauth/logout?client_id=9739812df088ab6e1028c14756aa0072&logout_redirect_uri=http://localhost:8080/user/kakao/logout">로그아웃</a>
+                 <a class="nav-link"  sec:authorize="isAuthenticated()" th:if="${#strings.contains(#authentication.principal,'User Attributes') == true}" href="https://kauth.kakao.com/oauth/logout?client_id=9739812df088ab6e1028c14756aa0072&logout_redirect_uri=http://222.119.100.90:8215/user/kakao/logout">로그아웃</a>
 
                 <a class="nav-link" sec:authorize="isAnonymous()" href="/user/new">회원가입</a>
 
