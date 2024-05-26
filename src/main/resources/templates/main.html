@@ -227,7 +227,7 @@
                 </li>
             </ul>
         </div>
-        <button th:if="${mainOrAdmin =='main'}" sec:authorize="isAuthenticated()" class="btn btn-dark" onclick="location.href='/createBoard'"><span>글쓰기</span></button>
+        <button th:if="${mainOrAdmin =='main'}" sec:authorize="isAuthenticated()" class="btn btn-dark" onclick="location.href='createBoard'"><span>글쓰기</span></button>
         <!--            <button sec:authorize="isAuthenticated()" class="btn btn-excel" onclick="downloadExcel()">엑셀 다운로드</button>-->
         <button  th:if="${mainOrAdmin == 'admin'}" class="btn btn-excel" onclick="downloadExcel()">삭제 목록 다운로드</button>
     </div>
