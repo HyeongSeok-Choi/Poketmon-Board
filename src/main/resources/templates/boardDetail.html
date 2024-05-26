@@ -230,7 +230,7 @@
                 <div th:with="createOrModify=${createOrModify}" th:remove="tag"></div>
                 <!-- 첨부 파일 끝-->
                 <textarea class="form-control content-textarea" id="content" name="content"
-                          placeholder="프로젝트 내용을 입력해주세요" th:text="${board.content}" readonly></textarea>
+                          placeholder="작성된 내용이 없습니다." th:text="${board.content}" readonly></textarea>
             </div>
 
             <!-- 좋아요 버튼과 수 -->
@@ -247,7 +247,7 @@
 
             <h5 class="mb-3">해시태그</h5>
             <ul style="list-style:none; padding: 0; display: flex; flex-wrap: wrap; justify-content: center;">
-                <li th:each="hash:${hashTag}" th:text="'#'+${hash.getHashTagContent()}" style="margin: 0 10px;"></li>
+                <li class="badge bg-warning" th:each="hash:${hashTag}" th:text="'#'+${hash.getHashTagContent()}" style="margin: 0 10px;"></li>
             </ul>
             <div class="button-group">
                 <form class="validation-form" method="post" th:action="@{/modifyBoard(id=${board.id})}" sec:authorize="isAuthenticated()" th:if="${userid.equals(board.userid.getUserId())}">

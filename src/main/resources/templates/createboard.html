@@ -95,7 +95,7 @@
                     <div class="col-md-6 mb-3">
                         <label for="addValue">해시태그</label>
 
-                        <ul class='hashTag' id='hashTag' style="list-style-type: none">
+                        <ul class='hashTag list-group' id='hashTag' style="list-style-type: none">
                             <li th:each="hash:${hashTags}" th:if="${hash.getHashTagContent()} != null"
                                 th:text="'#'+${hash.getHashTagContent()}"></li>
                         </ul>

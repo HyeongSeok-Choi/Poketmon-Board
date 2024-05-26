@@ -7,12 +7,7 @@
         <a class="nav-link" sec:authorize="isAnonymous()" href="/user/login">로그인</a>
         <!-- 사용자가 로그인한 경우에만 환영 메시지 표시 -->
 
-
-        <a sec:authorize="isAuthenticated()" th:if="${T(com.boot.tsamo.config.oauth.MyOAuth2UserService).kakaoLogin== false}" class="label"
-           th:text="'환영합니다, [' + ${#authentication.principal.username} + '] 님'"></a>
-
-        <a sec:authorize="isAuthenticated()" th:if="${T(com.boot.tsamo.config.oauth.MyOAuth2UserService).kakaoLogin== true}" class="label"
-           th:text="'환영합니다, [' + ${#authentication.principal.getName} + '] 님'"></a>
+        <a sec:authorize="isAuthenticated()"  class="label" >환영합니다, [<span sec:authentication="name"></span>] 님</a>
 
         <!--
                 <a th:if="${#authentication.principal.username != null}" class="label" sec:authorize="isAuthenticated()"

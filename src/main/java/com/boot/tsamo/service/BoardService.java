@@ -169,7 +169,7 @@ public class BoardService {
 
     //작성자로 검색 -리스트 출력
     public Page<Board> findAllByUserId(Pageable pageable, String userId,String mainOrAdmin){
-       Users findByUserIdContaining= userRepository.findByUserIdAndIsDeletedFalse(userId);
+       Users findByUserIdContaining= userRepository.findByUserIdContainingAndIsDeletedFalse(userId);
 
         if(mainOrAdmin.equals("admin")){
 
