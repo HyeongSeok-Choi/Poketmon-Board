@@ -80,7 +80,7 @@ public class MyOAuth2UserService extends DefaultOAuth2UserService {
 
 
 
-        authorities = Collections.singleton(new SimpleGrantedAuthority("ROLE_ADMIN"));
+        authorities = Collections.singleton(new SimpleGrantedAuthority("ROLE_USER"));
 
 
         return  new DefaultOAuth2User(authorities, attributes, "kakao_id");

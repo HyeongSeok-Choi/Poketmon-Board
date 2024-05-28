@@ -107,7 +107,7 @@ public class Users implements UserDetails, OAuth2User {
     public Users(String userId, String email) {
         this.email = email;
         this.userId = userId;
-        this.role = Role.ADMIN;
+        this.role = Role.USER;
         this.setDeleted(false);
         this.setEnabled(true);
     }
