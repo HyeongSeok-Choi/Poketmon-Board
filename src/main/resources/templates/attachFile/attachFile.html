@@ -6,7 +6,7 @@
         <div id="board-attachfile">
 
             <p
-                    th:if="${#lists.isEmpty(extensions) || maxUploadCnt == null || maxUploadCnt<=0}"
+                    th:if="${#lists.isEmpty(extensions) || fileMaxSize<=0 || maxUploadCnt<=0}"
                     th:style="'color: red'"
             >파일 업로드가 제한되어 있습니다.
             </p>
@@ -14,14 +14,14 @@
             <!--            게시판 등록              -->
             <div th:if="${attachFiles == null}">
                 <div class="form-group"
-                     th:unless="${#lists.isEmpty(extensions)|| maxUploadCnt == null || maxUploadCnt<=0}"
+                     th:unless="${#lists.isEmpty(extensions)|| fileMaxSize<=0 || maxUploadCnt<=0}"
                      th:each="num: ${#numbers.sequence(1,maxUploadCnt)}">
                     <div class="custom-file img-div">
                         <input type="file" class="custom-file-input form-control" name="attachFile">
                     </div>
                 </div>
 
-                <p th:unless="${#lists.isEmpty(extensions)|| maxUploadCnt == null || maxUploadCnt<=0}" th:style="'color: red'">
+                <p th:unless="${#lists.isEmpty(extensions)|| fileMaxSize<=0 || maxUploadCnt<=0}" th:style="'color: red'">
                     <th:block th:each="extension : ${extensions}">
                         <span th:text="${extension.extension}" th:if="${!#strings.isEmpty(extension.extension)}"></span>
                         <span th:unless="${extension == extensions[extensions.size() - 1]}">, </span>
@@ -47,10 +47,10 @@
                     <input type="file" class="custom-file-input" name="attachFile" style="display:none;">
                 </div>
 
-                <p id="uploadRestrictionMessage" th:if="${#lists.isEmpty(extensions)|| maxUploadCnt == null || maxUploadCnt<=0 || maxUploadCnt <= #lists.size(attachFiles)}" th:style="'color: red'">
+                <p id="uploadRestrictionMessage" th:if="${#lists.isEmpty(extensions)|| fileMaxSize<=0 || maxUploadCnt<=0 || maxUploadCnt <= #lists.size(attachFiles)}" th:style="'color: red'">
                     파일 업로드가 제한되어 있습니다.
                 </p>
-                <p th:unless="${#lists.isEmpty(extensions)|| maxUploadCnt == null || maxUploadCnt<=0 || maxUploadCnt <= #lists.size(attachFiles)}" th:style="'color: red'">
+                <p th:unless="${#lists.isEmpty(extensions)|| fileMaxSize<=0 || maxUploadCnt<=0 || maxUploadCnt <= #lists.size(attachFiles)}" th:style="'color: red'">
                     <th:block th:each="extension : ${extensions}">
                         <span th:text="${extension.extension}" th:if="${!#strings.isEmpty(extension.extension)}"></span>
                         <span th:unless="${extension == extensions[extensions.size() - 1]}">, </span>
